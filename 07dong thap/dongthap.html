@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đồng Tháp - Học Tiếng Anh Tương Tác</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/Common.css" />
+    <style>
+        .vocab-cloud {
+            max-height: 900px !important;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 glass border-b border-slate-200 px-4 py-3 shadow-soft">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-gradient-to-br from-blue-600 to-cyan-700 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">🌺</div>
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight text-slate-800 block leading-none">Đồng Tháp</span>
+                    <span class="text-[9px] text-blue-600 font-bold tracking-widest uppercase">Interactive Learning</span>
+                </div>
+            </div>
+            <div class="flex gap-1 md:gap-3 text-sm font-medium mt-2 sm:mt-0 flex-wrap items-center">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active px-3 py-1.5 rounded-lg transition">Tổng Quan</button>
+                <button onclick="switchTab('reading')" id="btn-reading" class="nav-btn px-3 py-1.5 rounded-lg transition">Bài Đọc</button>
+                <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-btn px-3 py-1.5 rounded-lg transition">Từ Vựng</button>
+                <button onclick="switchTab('grammar')" id="btn-grammar" class="nav-btn px-3 py-1.5 rounded-lg transition">Ngữ Pháp</button>
+                <button onclick="switchTab('practice')" id="btn-practice" class="nav-btn px-3 py-1.5 rounded-lg transition">Luyện Tập</button>
+                <button onclick="switchTab('analysis')" id="btn-analysis" class="nav-btn px-3 py-1.5 rounded-lg transition">🔍 Phân tích câu</button>
+                <button onclick="toggleDarkMode()" class="dark-toggle text-xl ml-2 p-1 rounded-full hover:bg-blue-100/30 transition">🌙</button>
+                <button onclick="toggleFullscreen()" class="fullscreen-btn text-xl ml-1 p-1 rounded-full hover:bg-blue-100/30 transition" title="Toàn màn hình (F11)">⛶</button>
+                <button onclick="exportData()" class="text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition ml-1" title="Xuất dữ liệu">📤</button>
+                <button onclick="document.getElementById('import-input').click()" class="text-xs font-bold text-cyan-700 bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl transition ml-1" title="Nhập dữ liệu">📥</button>
+                <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)" />
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
+
+        <!-- ===== TAB TỔNG QUAN ===== -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 via-white to-cyan-50/70 p-6 md:p-10 border border-blue-100 shadow-soft-lg">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <span class="inline-block bg-blue-100 text-blue-700 text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">🌺 Đồng Tháp</span>
+                        <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-[1.2]">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">Dong Thap Province</span>
+                        </h1>
+                        <p class="text-slate-600 text-base max-w-xl leading-relaxed">
+                            Khám phá xứ sở sông nước và hoa kiểng – Đồng Tháp. Học từ vựng, ngữ pháp và luyện tập qua 7 dạng bài tương tác.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="switchTab('reading')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg hover:shadow-blue-200/50 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <span>Bắt đầu đọc</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                            <button onclick="switchTab('practice')" class="bg-white hover:bg-slate-50 text-slate-700 font-semibold px-7 py-3.5 rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center gap-2">📝 Luyện tập ngay</button>
+                        </div>
+                    </div>
+                    <div class="hero-img relative h-56 md:h-72 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="tramchim.jpg" alt="Vườn quốc gia Tràm Chim - Đồng Tháp" class="w-full h-full object-cover" onerror="this.src='tramchim.png'" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold text-slate-700 shadow-lg flex items-center gap-2">
+                            <span>🌿</span> Vườn quốc gia Tràm Chim
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hàng 2: Bài đọc + Tiến độ -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-soft overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-50 to-cyan-50/50 px-6 py-4 border-b border-slate-200 flex items-center justify-between flex-wrap gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📖</span>
+                            <span class="font-bold text-slate-700">Bài đọc: Dong Thap Province – The Land of Rivers and Flowers</span>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button id="btn-play-loop" class="btn-play-loop text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">🔁 Nghe lặp</button>
+                            <button id="btn-stop-loop" class="btn-stop-loop hidden text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">⏹ Dừng</button>
+                            <button id="btn-record-full" class="btn-record-full text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md" onclick="toggleFullRecording()">🎤 Ghi âm</button>
+                            <button onclick="toggleTranslateAll()" id="translate-all-btn" class="text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition flex items-center gap-1">🇻🇳 Dịch</button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4 text-slate-700 text-base leading-[1.9]">
+                        <div class="voice-control-box">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">🎙️ Giọng đọc & Tốc độ</h4>
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate-dashboard" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display-dashboard" class="text-xs font-bold text-blue-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select-dashboard" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                        <div id="essay-preview"></div>
+                        <div id="essay-translation" class="hidden bg-slate-50/80 p-4 rounded-2xl border border-slate-200 text-slate-600 text-sm leading-[1.8]"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-blue-100 shadow-soft">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📊 Tiến độ học tập</h3>
+                        <div class="mt-4 space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Từ vựng đã học</span><span id="vocab-progress-text">0/97</span></div>
+                                <div class="progress-bar"><div id="vocab-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Bài tập hoàn thành</span><span id="exercise-progress-text">0/100</span></div>
+                                <div class="progress-bar"><div id="exercise-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📈 Thống kê chi tiết</h4>
+                            <div class="stat-detail grid grid-cols-2 gap-1 text-sm">
+                                <span class="text-slate-500">Từ đã học</span>
+                                <span class="font-bold text-right text-blue-600" id="stat-learned">0</span>
+                                <span class="text-slate-500">Từ yêu thích</span>
+                                <span class="font-bold text-right text-amber-600" id="stat-favorites">0</span>
+                                <span class="text-slate-500">Điểm bài tập</span>
+                                <span class="font-bold text-right text-cyan-600" id="stat-score">0</span>
+                                <span class="text-slate-500">Thời gian học (ph)</span>
+                                <span class="font-bold text-right text-purple-600" id="stat-time">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50/60 p-5 rounded-2xl border border-blue-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">💡</span>
+                            <div>
+                                <p class="font-bold text-blue-800 text-sm">Mẹo học</p>
+                                <p class="text-xs text-blue-700/70">Bấm vào từ để tra nghĩa ngay trong bài.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== READING TAB ===== -->
+        <section id="tab-reading" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎵 Audio</span>
+                            <span id="reading-indicator" class="hidden bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span> Đang đọc
+                            </span>
+                        </div>
+                        <div id="audio-wrapper">
+                            <div id="audio-container" class="mt-3">
+                                <audio id="main-audio" controls class="w-full rounded-xl" preload="metadata">
+                                    <source src="dongthap.mp3" type="audio/mpeg" onerror="hideAudio()">
+                                    <source src="dongthap.wav" type="audio/wav" onerror="hideAudio()">
+                                    Trình duyệt không hỗ trợ audio.
+                                </audio>
+                            </div>
+                            <div class="mt-4 mb-6" id="audio-progress-wrapper">
+                                <div class="audio-progress" onclick="seekAudio(event)">
+                                    <div id="audio-progress-bar" class="audio-progress-bar"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                    <span id="audio-current">0:00</span>
+                                    <span id="audio-duration-label">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="video-container" class="rounded-2xl overflow-hidden bg-slate-900 shadow-lg relative border border-slate-200 w-full max-w-4xl mx-auto mb-8">
+                            <video id="main-video-player" class="w-full h-auto object-contain" controls preload="auto">
+                                <source src="dongthap.mp4" type="video/mp4" onerror="hideVideo()">
+                                Trình duyệt không hỗ trợ thẻ video.
+                            </video>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <button onclick="playFullText()" id="tts-play" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">▶ Đọc toàn bài</button>
+                            <button onclick="stopAllAudio()" id="tts-stop" class="hidden flex-1 bg-red-500 hover:bg-red-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">⏹ Dừng</button>
+                        </div>
+                        <div id="tts-status" class="text-xs text-amber-600 mt-2 hidden animate-pulse">● Đang đọc...</div>
+                        <div class="mt-3 pt-3 border-t border-slate-200">
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display" class="text-xs font-bold text-blue-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">📚 Từ vựng trong bài</p>
+                        <div class="vocab-cloud" id="reading-vocab-cloud"></div>
+                        <p class="text-[10px] text-slate-400 mt-2 italic">👆 Nhấp vào từ để tra nghĩa chi tiết</p>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-200 text-blue-800 text-xs flex items-start gap-3">
+                        <span class="text-xl">💡</span>
+                        <div><p class="font-bold">Mẹo:</p><p>Nghe và đọc theo để cải thiện phát âm và ghi nhớ từ vựng.</p></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <div class="bg-[#dbeafe] p-6 md:p-8 rounded-3xl border border-blue-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-blue-200/60">
+                            <div>
+                                <h2 class="text-2xl font-extrabold text-blue-900">Dong Thap Province – The Land of Rivers and Flowers</h2>
+                                <p class="text-blue-700/70 text-xs mt-1">👆 Nhấp vào từ được gạch chân để tra nghĩa</p>
+                            </div>
+                            <span class="text-4xl">🌺</span>
+                        </div>
+                        <div id="essay-container" class="space-y-6 text-slate-800 text-lg leading-[2]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VOCAB ===== -->
+        <section id="tab-vocab" class="tab-content hidden space-y-6">
+            <div class="bg-white p-5 rounded-3xl border border-blue-50 shadow-soft flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">📚 Thư viện từ vựng</h2>
+                    <p class="text-xs text-slate-400">97 từ với 3 ví dụ phong phú</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" data-filter="all" onclick="filterVocab('all')">Tất cả</button>
+                    <button class="filter-btn" data-filter="n" onclick="filterVocab('n')">Danh từ</button>
+                    <button class="filter-btn" data-filter="v" onclick="filterVocab('v')">Động từ</button>
+                    <button class="filter-btn" data-filter="adj" onclick="filterVocab('adj')">Tính từ</button>
+                    <button class="filter-btn" data-filter="adv" onclick="filterVocab('adv')">Trạng từ</button>
+                    <button class="filter-btn" data-filter="conj" onclick="filterVocab('conj')">Liên từ</button>
+                    <button class="filter-btn" data-filter="fav" onclick="filterVocab('fav')">⭐ Yêu thích</button>
+                </div>
+            </div>
+            <div class="flex gap-2 items-center flex-wrap">
+                <input type="text" id="vocab-search" placeholder="🔍 Tìm từ..." class="px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-300 focus:outline-none w-full md:w-64" />
+                <button onclick="toggleLearnedFilter()" id="learned-toggle" class="px-4 py-2.5 text-sm rounded-xl bg-slate-100 hover:bg-blue-100 border border-slate-200 transition font-medium">📌 Đã học</button>
+                <button onclick="shuffleVocab()" class="px-4 py-2.5 text-sm rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-200 transition font-medium">🎲 Xáo trộn</button>
+            </div>
+            <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+        </section>
+
+        <!-- ===== GRAMMAR ===== -->
+        <section id="tab-grammar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-blue-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">📘</span>
+                    <div><h2 class="text-2xl font-extrabold text-slate-800">Ngữ pháp trọng tâm</h2><p class="text-xs text-slate-400">10 cấu trúc xuất hiện trong bài đọc</p></div>
+                </div>
+                <div id="grammar-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- ===== PRACTICE ===== -->
+        <section id="tab-practice" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-3 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft sticky top-24">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📘 Cấu trúc ngữ pháp</h3>
+                        <div id="grammar-sidebar" class="mt-3 space-y-3 text-xs"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-9 space-y-5">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-slate-100">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-4 border-b border-slate-100 mb-5">
+                            <div><h3 class="text-xl font-extrabold text-slate-800">🎯 Bài tập đa dạng</h3><p class="text-xs text-slate-400">100 câu hỏi - 7 dạng bài</p></div>
+                            <div class="flex items-center gap-2 bg-blue-50 px-4 py-1.5 rounded-xl border border-blue-100">
+                                <span class="text-xs font-bold text-blue-700">Điểm:</span>
+                                <span id="score-badge" class="text-sm font-extrabold text-blue-600 bg-white px-3 py-0.5 rounded-lg shadow-sm">0/100</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 border-b border-slate-100 pb-3 mb-6 text-xs font-bold uppercase tracking-wider">
+                            <button onclick="switchExercise(1)" id="ex-tab-1" class="exercise-tab active px-4 py-2 rounded-xl transition">📝 Điền từ</button>
+                            <button onclick="switchExercise(2)" id="ex-tab-2" class="exercise-tab px-4 py-2 rounded-xl transition">🔘 Trắc nghiệm</button>
+                            <button onclick="switchExercise(3)" id="ex-tab-3" class="exercise-tab px-4 py-2 rounded-xl transition">🎯 Ghép nghĩa</button>
+                            <button onclick="switchExercise(4)" id="ex-tab-4" class="exercise-tab px-4 py-2 rounded-xl transition">🃏 Flashcard</button>
+                            <button onclick="switchExercise(5)" id="ex-tab-5" class="exercise-tab px-4 py-2 rounded-xl transition">⌨️ Gõ chính tả</button>
+                            <button onclick="switchExercise(6)" id="ex-tab-6" class="exercise-tab px-4 py-2 rounded-xl transition">🔄 Sắp xếp</button>
+                            <button onclick="switchExercise(7)" id="ex-tab-7" class="exercise-tab px-4 py-2 rounded-xl transition">❓ Câu hỏi</button>
+                        </div>
+
+                        <form onsubmit="event.preventDefault();" class="space-y-6">
+                            <div id="ex-1" class="exercise-section space-y-5"></div>
+                            <div id="ex-2" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-3" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-4" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-5" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-6" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-7" class="exercise-section hidden space-y-5"></div>
+
+                            <div class="pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+                                <button type="button" onclick="evaluateCurrent()" class="flex-1 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">✅ Nộp bài & kiểm tra</button>
+                                <button type="button" onclick="resetCurrent()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-2xl transition">🔄 Làm lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ANALYSIS ===== -->
+        <section id="tab-analysis" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-blue-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">🔍</span>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-800">Phân tích câu</h2>
+                        <p class="text-xs text-slate-400">Cấu trúc, từ loại và dịch nghĩa của 12 câu trong bài</p>
+                    </div>
+                </div>
+                <div id="analysis-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- ===== FOOTER ===== -->
+    <footer class="max-w-7xl mx-auto px-4 md:px-6 mt-10 pb-6">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-soft py-4 px-6 text-center">
+            <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                <span class="font-bold text-blue-600">✧</span> 
+                Bản quyền 2026 — Thiết kế bởi <span class="font-bold text-blue-600">Minh Châu Phú</span> 
+                với sự đồng hành của AI 
+                <span class="font-semibold text-slate-700">DeepSeek</span>, 
+                <span class="font-semibold text-slate-700">Gemini</span>, 
+                <span class="font-semibold text-slate-700">ChatGPT</span> 
+                và các trợ lý thông minh khác.
+                <span class="font-bold text-yellow-600">✧</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="word-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-3xl font-light transition">&times;</button>
+            <div id="modal-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Load Common.js và ghi đè dữ liệu -->
+    <script src="../common/Common.js"></script>
+    <script>
+        // ============================================================
+        // DỮ LIỆU ĐỒNG THÁP - GHI ĐÈ LÊN DỮ LIỆU GỐC (97 TỪ)
+        // ============================================================
+
+        // ---- 1. TỪ VỰNG (97 từ) ----
+        const newVocabData = [
+            { id: 1, word: "Land", type: "n.", phonetic: "/lænd/", tip: "lén", meaning: "Vùng đất", cat: "n",
+                ex1: "Dong Thap is a beautiful land.", ex1_vi: "Đồng Tháp là một vùng đất đẹp.",
+                ex2: "This land is very fertile.", ex2_vi: "Vùng đất này rất màu mỡ.",
+                ex3: "People love their homeland.", ex3_vi: "Mọi người yêu quê hương của họ." },
+            { id: 2, word: "Rivers", type: "n.", phonetic: "/ˈrɪvərz/", tip: "rí-vờ", meaning: "Sông", cat: "n",
+                ex1: "Dong Thap has many rivers.", ex1_vi: "Đồng Tháp có nhiều sông.",
+                ex2: "The rivers are peaceful.", ex2_vi: "Những con sông yên bình.",
+                ex3: "We boat on the rivers.", ex3_vi: "Chúng tôi đi thuyền trên sông." },
+            { id: 3, word: "Flowers", type: "n.", phonetic: "/ˈflaʊərz/", tip: "phlau-ờ", meaning: "Hoa", cat: "n",
+                ex1: "Dong Thap has beautiful flowers.", ex1_vi: "Đồng Tháp có nhiều hoa đẹp.",
+                ex2: "The flowers bloom in spring.", ex2_vi: "Hoa nở vào mùa xuân.",
+                ex3: "She loves colorful flowers.", ex3_vi: "Cô ấy yêu những bông hoa nhiều màu sắc." },
+            { id: 4, word: "one", type: "num.", phonetic: "/wʌn/", tip: "uân", meaning: "Một", cat: "n",
+                ex1: "Dong Thap is one of the most beautiful destinations.", ex1_vi: "Đồng Tháp là một trong những điểm đến đẹp nhất.",
+                ex2: "I have one sister.", ex2_vi: "Tôi có một chị gái.",
+                ex3: "One day, I will return.", ex3_vi: "Một ngày nào đó, tôi sẽ quay lại." },
+            { id: 5, word: "beautiful", type: "adj.", phonetic: "/ˈbjuːtɪfl/", tip: "bju-ti-phồ", meaning: "Đẹp", cat: "adj",
+                ex1: "The rivers are beautiful.", ex1_vi: "Những con sông thật đẹp.",
+                ex2: "She is beautiful.", ex2_vi: "Cô ấy đẹp.",
+                ex3: "The view is beautiful.", ex3_vi: "Khung cảnh đẹp." },
+            { id: 6, word: "destinations", type: "n.", phonetic: "/ˌdestɪˈneɪʃnz/", tip: "đét-ti-nây-sờn", meaning: "Các điểm đến", cat: "n",
+                ex1: "Vietnam has many tourist destinations.", ex1_vi: "Việt Nam có nhiều điểm du lịch.",
+                ex2: "These destinations are popular.", ex2_vi: "Những điểm đến này rất phổ biến.",
+                ex3: "We visited several destinations.", ex3_vi: "Chúng tôi đã thăm một số điểm đến." },
+            { id: 7, word: "southern", type: "adj.", phonetic: "/ˈsʌðərn/", tip: "sá-đờn", meaning: "Miền Nam", cat: "adj",
+                ex1: "Dong Thap is in southern Vietnam.", ex1_vi: "Đồng Tháp thuộc miền Nam Việt Nam.",
+                ex2: "We traveled to southern Vietnam.", ex2_vi: "Chúng tôi đã du lịch đến miền Nam Việt Nam.",
+                ex3: "Southern cities are busy.", ex3_vi: "Các thành phố miền Nam nhộn nhịp." },
+            { id: 8, word: "Vietnam", type: "n.", phonetic: "/ˌvjetˈnæm/", tip: "việt nam", meaning: "Việt Nam", cat: "n",
+                ex1: "Dong Thap is in Vietnam.", ex1_vi: "Đồng Tháp ở Việt Nam.",
+                ex2: "Vietnam is a beautiful country.", ex2_vi: "Việt Nam là một đất nước xinh đẹp.",
+                ex3: "I love Vietnam.", ex3_vi: "Tôi yêu Việt Nam." },
+            { id: 9, word: "famous", type: "adj.", phonetic: "/ˈfeɪməs/", tip: "phây-mớt", meaning: "Nổi tiếng", cat: "adj",
+                ex1: "Tram Chim National Park is famous.", ex1_vi: "Vườn quốc gia Tràm Chim nổi tiếng.",
+                ex2: "He is a famous singer.", ex2_vi: "Anh ấy là một ca sĩ nổi tiếng.",
+                ex3: "This place is famous.", ex3_vi: "Nơi này nổi tiếng." },
+            { id: 10, word: "peaceful", type: "adj.", phonetic: "/ˈpiːsfl/", tip: "pít-phồ", meaning: "Yên bình", cat: "adj",
+                ex1: "The rivers are peaceful.", ex1_vi: "Những con sông yên bình.",
+                ex2: "I love the peaceful atmosphere.", ex2_vi: "Tôi yêu bầu không khí yên bình.",
+                ex3: "The village is peaceful.", ex3_vi: "Ngôi làng yên bình." },
+            { id: 11, word: "colorful", type: "adj.", phonetic: "/ˈkʌlərfl/", tip: "có-lờ-phồ", meaning: "Nhiều màu sắc", cat: "adj",
+                ex1: "The flower gardens are colorful.", ex1_vi: "Những vườn hoa đầy màu sắc.",
+                ex2: "She wears a colorful dress.", ex2_vi: "Cô ấy mặc một chiếc váy nhiều màu.",
+                ex3: "The painting is colorful.", ex3_vi: "Bức tranh nhiều màu sắc." },
+            { id: 12, word: "flower gardens", type: "n.", phonetic: "/ˈflaʊər ˈɡɑːrdnz/", tip: "phlau-ờ ga-đần", meaning: "Vườn hoa", cat: "n",
+                ex1: "Dong Thap has many flower gardens.", ex1_vi: "Đồng Tháp có nhiều vườn hoa.",
+                ex2: "We visited the flower gardens.", ex2_vi: "Chúng tôi đã thăm những vườn hoa.",
+                ex3: "Flower gardens are beautiful.", ex3_vi: "Vườn hoa rất đẹp." },
+            { id: 13, word: "rich", type: "adj.", phonetic: "/rɪtʃ/", tip: "rích", meaning: "Phong phú", cat: "adj",
+                ex1: "Dong Thap has a rich culture.", ex1_vi: "Đồng Tháp có một nền văn hóa phong phú.",
+                ex2: "The food is rich in flavor.", ex2_vi: "Đồ ăn giàu hương vị.",
+                ex3: "She comes from a rich family.", ex3_vi: "Cô ấy xuất thân từ một gia đình giàu có." },
+            { id: 14, word: "culture", type: "n.", phonetic: "/ˈkʌltʃər/", tip: "cón-chờ", meaning: "Văn hóa", cat: "n",
+                ex1: "Dong Thap has a unique culture.", ex1_vi: "Đồng Tháp có một nền văn hóa độc đáo.",
+                ex2: "I love Vietnamese culture.", ex2_vi: "Tôi yêu văn hóa Việt Nam.",
+                ex3: "Culture shapes our identity.", ex3_vi: "Văn hóa định hình bản sắc của chúng ta." },
+            { id: 15, word: "delicious", type: "adj.", phonetic: "/dɪˈlɪʃəs/", tip: "đi-li-sờ", meaning: "Ngon", cat: "adj",
+                ex1: "The food in Dong Thap is delicious.", ex1_vi: "Đồ ăn ở Đồng Tháp rất ngon.",
+                ex2: "The cake is delicious.", ex2_vi: "Bánh rất ngon.",
+                ex3: "We had a delicious meal.", ex3_vi: "Chúng tôi đã có một bữa ăn ngon." },
+            { id: 16, word: "local food", type: "n.", phonetic: "/ˈloʊkl fuːd/", tip: "lâu-cồ phút", meaning: "Đồ ăn địa phương", cat: "n",
+                ex1: "We tried local food.", ex1_vi: "Chúng tôi đã thử đồ ăn địa phương.",
+                ex2: "Local food is delicious.", ex2_vi: "Đồ ăn địa phương rất ngon.",
+                ex3: "I love local food.", ex3_vi: "Tôi yêu đồ ăn địa phương." },
+            { id: 17, word: "Located", type: "v.", phonetic: "/loʊˈkeɪtɪd/", tip: "lâu-kây-tít", meaning: "Nằm", cat: "v",
+                ex1: "Dong Thap is located in the Mekong Delta.", ex1_vi: "Đồng Tháp nằm ở Đồng bằng sông Cửu Long.",
+                ex2: "The hotel is located by the sea.", ex2_vi: "Khách sạn nằm bên biển.",
+                ex3: "The school is located in the city center.", ex3_vi: "Trường nằm ở trung tâm thành phố." },
+            { id: 18, word: "Mekong Delta", type: "n.", phonetic: "/məˈkɒŋ ˈdeltə/", tip: "mơ-cong đen-tờ", meaning: "Đồng bằng sông Cửu Long", cat: "n",
+                ex1: "Dong Thap is in the Mekong Delta.", ex1_vi: "Đồng Tháp thuộc Đồng bằng sông Cửu Long.",
+                ex2: "The Mekong Delta is beautiful.", ex2_vi: "Đồng bằng sông Cửu Long rất đẹp.",
+                ex3: "We visited the Mekong Delta.", ex3_vi: "Chúng tôi đã thăm Đồng bằng sông Cửu Long." },
+            { id: 19, word: "perfect", type: "adj.", phonetic: "/ˈpɜːrfɪkt/", tip: "pớ-phít", meaning: "Hoàn hảo", cat: "adj",
+                ex1: "Dong Thap is a perfect place for nature lovers.", ex1_vi: "Đồng Tháp là một nơi hoàn hảo cho người yêu thiên nhiên.",
+                ex2: "The weather is perfect.", ex2_vi: "Thời tiết hoàn hảo.",
+                ex3: "She has a perfect smile.", ex3_vi: "Cô ấy có nụ cười hoàn hảo." },
+            { id: 20, word: "place", type: "n.", phonetic: "/pleɪs/", tip: "plây", meaning: "Nơi, địa điểm", cat: "n",
+                ex1: "Dong Thap is a great place to visit.", ex1_vi: "Đồng Tháp là một nơi tuyệt vời để tham quan.",
+                ex2: "This is my favorite place.", ex2_vi: "Đây là nơi yêu thích của tôi.",
+                ex3: "We need a quiet place.", ex3_vi: "Chúng tôi cần một nơi yên tĩnh." },
+            { id: 21, word: "nature lovers", type: "n.", phonetic: "/ˈneɪtʃər ˈlʌvərz/", tip: "nây-chờ láp-vờ", meaning: "Người yêu thiên nhiên", cat: "n",
+                ex1: "Dong Thap is perfect for nature lovers.", ex1_vi: "Đồng Tháp hoàn hảo cho người yêu thiên nhiên.",
+                ex2: "Nature lovers will enjoy the park.", ex2_vi: "Người yêu thiên nhiên sẽ thích công viên.",
+                ex3: "This place is for nature lovers.", ex3_vi: "Nơi này dành cho người yêu thiên nhiên." },
+            { id: 22, word: "visitors", type: "n.", phonetic: "/ˈvɪzɪtərz/", tip: "ví-zít-tờ", meaning: "Du khách", cat: "n",
+                ex1: "Visitors come to see the park.", ex1_vi: "Du khách đến thăm công viên.",
+                ex2: "The museum attracts many visitors.", ex2_vi: "Bảo tàng thu hút nhiều du khách.",
+                ex3: "Visitors enjoy the food.", ex3_vi: "Du khách thích đồ ăn." },
+            { id: 23, word: "want", type: "v.", phonetic: "/wɒnt/", tip: "uốnt", meaning: "Muốn", cat: "v",
+                ex1: "Visitors want to enjoy the beauty.", ex1_vi: "Du khách muốn thưởng thức vẻ đẹp.",
+                ex2: "I want to visit Dong Thap.", ex2_vi: "Tôi muốn thăm Đồng Tháp.",
+                ex3: "She wants to learn English.", ex3_vi: "Cô ấy muốn học tiếng Anh." },
+            { id: 24, word: "enjoy", type: "v.", phonetic: "/ɪnˈdʒɔɪ/", tip: "in-chói", meaning: "Thưởng thức", cat: "v",
+                ex1: "Visitors can enjoy the beautiful scenery.", ex1_vi: "Du khách có thể thưởng thức phong cảnh đẹp.",
+                ex2: "I enjoy reading books.", ex2_vi: "Tôi thích đọc sách.",
+                ex3: "She enjoys traveling.", ex3_vi: "Cô ấy thích du lịch." },
+            { id: 25, word: "beauty", type: "n.", phonetic: "/ˈbjuːti/", tip: "bju-ti", meaning: "Vẻ đẹp", cat: "n",
+                ex1: "The beauty of the countryside is amazing.", ex1_vi: "Vẻ đẹp của vùng quê thật tuyệt vời.",
+                ex2: "I admire the beauty of nature.", ex2_vi: "Tôi ngưỡng mộ vẻ đẹp của thiên nhiên.",
+                ex3: "Beauty is everywhere.", ex3_vi: "Vẻ đẹp ở khắp mọi nơi." },
+            { id: 26, word: "countryside", type: "n.", phonetic: "/ˈkʌntrisaɪd/", tip: "cón-tri-xai", meaning: "Vùng quê", cat: "n",
+                ex1: "Dong Thap has beautiful countryside.", ex1_vi: "Đồng Tháp có vùng quê đẹp.",
+                ex2: "We walked in the countryside.", ex2_vi: "Chúng tôi đi bộ ở vùng quê.",
+                ex3: "The countryside is peaceful.", ex3_vi: "Vùng quê yên bình." },
+            { id: 27, word: "popular", type: "adj.", phonetic: "/ˈpɒpjələr/", tip: "póp-chu-lờ", meaning: "Phổ biến", cat: "adj",
+                ex1: "Tram Chim National Park is a popular attraction.", ex1_vi: "Vườn quốc gia Tràm Chim là một điểm tham quan phổ biến.",
+                ex2: "This song is popular.", ex2_vi: "Bài hát này phổ biến.",
+                ex3: "She is a popular teacher.", ex3_vi: "Cô ấy là một giáo viên nổi tiếng." },
+            { id: 28, word: "attractions", type: "n.", phonetic: "/əˈtrækʃnz/", tip: "ờ-trác-sờn", meaning: "Điểm tham quan", cat: "n",
+                ex1: "Dong Thap has many attractions.", ex1_vi: "Đồng Tháp có nhiều điểm tham quan.",
+                ex2: "Tourists love the attractions.", ex2_vi: "Du khách yêu thích các điểm tham quan.",
+                ex3: "The attractions are interesting.", ex3_vi: "Các điểm tham quan rất thú vị." },
+            { id: 29, word: "Tram Chim National Park", type: "n.", phonetic: "/træm tʃɪm ˈnæʃnəl pɑːrk/", tip: "tràm chim ná-sờ-nồ pác", meaning: "Vườn quốc gia Tràm Chim", cat: "n",
+                ex1: "Tram Chim National Park is famous.", ex1_vi: "Vườn quốc gia Tràm Chim rất nổi tiếng.",
+                ex2: "We visited Tram Chim National Park.", ex2_vi: "Chúng tôi đã thăm vườn quốc gia Tràm Chim.",
+                ex3: "Tram Chim National Park has many birds.", ex3_vi: "Vườn quốc gia Tràm Chim có nhiều loài chim." },
+            { id: 30, word: "home", type: "n.", phonetic: "/hoʊm/", tip: "hôm", meaning: "Nhà", cat: "n",
+                ex1: "Tram Chim National Park is home to many birds.", ex1_vi: "Vườn quốc gia Tràm Chim là nhà của nhiều loài chim.",
+                ex2: "We need to build more homes.", ex2_vi: "Chúng ta cần xây thêm nhà.",
+                ex3: "Home is where the heart is.", ex3_vi: "Nhà là nơi trái tim thuộc về." },
+            { id: 31, word: "kinds", type: "n.", phonetic: "/kaɪndz/", tip: "kain", meaning: "Các loại", cat: "n",
+                ex1: "There are many kinds of birds.", ex1_vi: "Có nhiều loài chim.",
+                ex2: "We saw different kinds of plants.", ex2_vi: "Chúng tôi đã thấy các loại thực vật khác nhau.",
+                ex3: "There are many kinds of food.", ex3_vi: "Có nhiều loại đồ ăn." },
+            { id: 32, word: "birds", type: "n.", phonetic: "/bɜːrdz/", tip: "bớ", meaning: "Chim", cat: "n",
+                ex1: "The park has many birds.", ex1_vi: "Công viên có nhiều loài chim.",
+                ex2: "We watched the birds.", ex2_vi: "Chúng tôi đã xem những con chim.",
+                ex3: "Birds fly in the sky.", ex3_vi: "Chim bay trên bầu trời." },
+            { id: 33, word: "rare", type: "adj.", phonetic: "/reər/", tip: "re-ờ", meaning: "Quý hiếm", cat: "adj",
+                ex1: "Tram Chim has rare animals.", ex1_vi: "Tràm Chim có động vật quý hiếm.",
+                ex2: "This is a rare book.", ex2_vi: "Đây là một cuốn sách quý hiếm.",
+                ex3: "We saw rare birds.", ex3_vi: "Chúng tôi đã thấy những loài chim quý hiếm." },
+            { id: 34, word: "animals", type: "n.", phonetic: "/ˈænɪmlz/", tip: "á-ni-mồ", meaning: "Động vật", cat: "n",
+                ex1: "The park has many rare animals.", ex1_vi: "Công viên có nhiều động vật quý hiếm.",
+                ex2: "We saw animals in the forest.", ex2_vi: "Chúng tôi đã thấy động vật trong rừng.",
+                ex3: "Animals need protection.", ex3_vi: "Động vật cần được bảo vệ." },
+            { id: 35, word: "wetlands", type: "n.", phonetic: "/ˈwetləndz/", tip: "uét-lân", meaning: "Vùng đất ngập nước", cat: "n",
+                ex1: "The wetlands are beautiful.", ex1_vi: "Vùng đất ngập nước thật đẹp.",
+                ex2: "We visited the wetlands.", ex2_vi: "Chúng tôi đã thăm vùng đất ngập nước.",
+                ex3: "Wetlands are important for the environment.", ex3_vi: "Vùng đất ngập nước quan trọng cho môi trường." },
+            { id: 36, word: "take", type: "v.", phonetic: "/teɪk/", tip: "tây", meaning: "Đi (phương tiện)", cat: "v",
+                ex1: "Visitors can take a boat trip.", ex1_vi: "Du khách có thể đi thuyền.",
+                ex2: "We took the bus.", ex2_vi: "Chúng tôi đã đi xe buýt.",
+                ex3: "She takes the train to work.", ex3_vi: "Cô ấy đi tàu đến nơi làm việc." },
+            { id: 37, word: "boat trip", type: "n.", phonetic: "/boʊt trɪp/", tip: "bốt tríp", meaning: "Chuyến đi thuyền", cat: "n",
+                ex1: "We took a boat trip on the river.", ex1_vi: "Chúng tôi đã có một chuyến đi thuyền trên sông.",
+                ex2: "The boat trip was relaxing.", ex2_vi: "Chuyến đi thuyền thật thư giãn.",
+                ex3: "Visitors enjoy boat trips.", ex3_vi: "Du khách thích các chuyến đi thuyền." },
+            { id: 38, word: "watch", type: "v.", phonetic: "/wɒtʃ/", tip: "uốch", meaning: "Ngắm", cat: "v",
+                ex1: "Visitors can watch birds at the park.", ex1_vi: "Du khách có thể ngắm chim ở công viên.",
+                ex2: "We watched the sunset.", ex2_vi: "Chúng tôi đã xem hoàng hôn.",
+                ex3: "She watches TV every evening.", ex3_vi: "Cô ấy xem TV mỗi tối." },
+            { id: 39, word: "fresh air", type: "n.", phonetic: "/freʃ eər/", tip: "phrét e-ờ", meaning: "Không khí trong lành", cat: "n",
+                ex1: "The fresh air is good for health.", ex1_vi: "Không khí trong lành tốt cho sức khỏe.",
+                ex2: "We enjoyed the fresh air.", ex2_vi: "Chúng tôi đã tận hưởng không khí trong lành.",
+                ex3: "Fresh air helps you relax.", ex3_vi: "Không khí trong lành giúp bạn thư giãn." },
+            { id: 40, word: "Another", type: "adj.", phonetic: "/əˈnʌðər/", tip: "ờ-ná-đờ", meaning: "Khác", cat: "adj",
+                ex1: "Another famous place is Sa Dec Flower Village.", ex1_vi: "Một địa điểm nổi tiếng khác là Làng hoa Sa Đéc.",
+                ex2: "I need another cup of coffee.", ex2_vi: "Tôi cần một tách cà phê khác.",
+                ex3: "We visited another temple.", ex3_vi: "Chúng tôi đã thăm một ngôi chùa khác." },
+            { id: 41, word: "Sa Dec Flower Village", type: "n.", phonetic: "/sɑː dek ˈflaʊər ˈvɪlɪdʒ/", tip: "sa đéc phlau-ờ vi-lít", meaning: "Làng hoa Sa Đéc", cat: "n",
+                ex1: "Sa Dec Flower Village is famous.", ex1_vi: "Làng hoa Sa Đéc rất nổi tiếng.",
+                ex2: "We visited Sa Dec Flower Village.", ex2_vi: "Chúng tôi đã thăm Làng hoa Sa Đéc.",
+                ex3: "Sa Dec Flower Village has thousands of flowers.", ex3_vi: "Làng hoa Sa Đéc có hàng nghìn loài hoa." },
+            { id: 42, word: "thousands", type: "n.", phonetic: "/ˈθaʊzndz/", tip: "xâu-xần", meaning: "Hàng nghìn", cat: "n",
+                ex1: "There are thousands of flowers.", ex1_vi: "Có hàng nghìn bông hoa.",
+                ex2: "Thousands of people visit the village.", ex2_vi: "Hàng nghìn người thăm làng.",
+                ex3: "Thousands of birds fly here.", ex3_vi: "Hàng nghìn con chim bay đến đây." },
+            { id: 43, word: "bloom", type: "v.", phonetic: "/bluːm/", tip: "blum", meaning: "Nở", cat: "v",
+                ex1: "The flowers bloom in spring.", ex1_vi: "Hoa nở vào mùa xuân.",
+                ex2: "Roses bloom beautifully.", ex2_vi: "Hoa hồng nở rất đẹp.",
+                ex3: "The garden blooms all year.", ex3_vi: "Khu vườn nở hoa quanh năm." },
+            { id: 44, word: "year", type: "n.", phonetic: "/jɪər/", tip: "yi-ờ", meaning: "Năm", cat: "n",
+                ex1: "Flowers bloom throughout the year.", ex1_vi: "Hoa nở quanh năm.",
+                ex2: "We travel every year.", ex2_vi: "Chúng tôi du lịch mỗi năm.",
+                ex3: "This year is busy.", ex3_vi: "Năm nay bận rộn." },
+            { id: 45, word: "explore", type: "v.", phonetic: "/ɪkˈsplɔːr/", tip: "ích-xplo", meaning: "Khám phá", cat: "v",
+                ex1: "Visitors should explore Go Thap Historical Site.", ex1_vi: "Du khách nên khám phá Khu di tích Gò Tháp.",
+                ex2: "We explored the old town.", ex2_vi: "Chúng tôi đã khám phá phố cổ.",
+                ex3: "She loves to explore new places.", ex3_vi: "Cô ấy thích khám phá những nơi mới." },
+            { id: 46, word: "Go Thap Historical Site", type: "n.", phonetic: "/ɡoʊ θæp hɪˈstɒrɪkl saɪt/", tip: "gô tháp hít-x-tô-ri-cồ xai", meaning: "Khu di tích Gò Tháp", cat: "n",
+                ex1: "Go Thap Historical Site is important.", ex1_vi: "Khu di tích Gò Tháp rất quan trọng.",
+                ex2: "We visited Go Thap Historical Site.", ex2_vi: "Chúng tôi đã thăm Khu di tích Gò Tháp.",
+                ex3: "Go Thap Historical Site has cultural value.", ex3_vi: "Khu di tích Gò Tháp có giá trị văn hóa." },
+            { id: 47, word: "important", type: "adj.", phonetic: "/ɪmˈpɔːrtnt/", tip: "ím-pót-tần", meaning: "Quan trọng", cat: "adj",
+                ex1: "Go Thap is an important site.", ex1_vi: "Gò Tháp là một di tích quan trọng.",
+                ex2: "This is an important decision.", ex2_vi: "Đây là một quyết định quan trọng.",
+                ex3: "She has an important job.", ex3_vi: "Cô ấy có một công việc quan trọng." },
+            { id: 48, word: "cultural", type: "adj.", phonetic: "/ˈkʌltʃərəl/", tip: "cón-chờ-rồ", meaning: "Văn hóa", cat: "adj",
+                ex1: "The site has cultural value.", ex1_vi: "Di tích có giá trị văn hóa.",
+                ex2: "We visited cultural sites.", ex2_vi: "Chúng tôi đã thăm các di tích văn hóa.",
+                ex3: "Cultural events are popular.", ex3_vi: "Các sự kiện văn hóa rất phổ biến." },
+            { id: 49, word: "historical", type: "adj.", phonetic: "/hɪˈstɒrɪkl/", tip: "hít-x-tô-ri-cồ", meaning: "Lịch sử", cat: "adj",
+                ex1: "Go Thap is a historical site.", ex1_vi: "Gò Tháp là một di tích lịch sử.",
+                ex2: "This building is historical.", ex2_vi: "Tòa nhà này có lịch sử.",
+                ex3: "We visited historical places.", ex3_vi: "Chúng tôi đã thăm các địa điểm lịch sử." },
+            { id: 50, word: "destination", type: "n.", phonetic: "/ˌdestɪˈneɪʃn/", tip: "đét-ti-nây-sờn", meaning: "Điểm đến", cat: "n",
+                ex1: "Go Thap is an important destination.", ex1_vi: "Gò Tháp là một điểm đến quan trọng.",
+                ex2: "We reached our destination.", ex2_vi: "Chúng tôi đã đến điểm đến của mình.",
+                ex3: "This destination is beautiful.", ex3_vi: "Điểm đến này thật đẹp." },
+            { id: 51, word: "Vinh Trang Pagoda", type: "n.", phonetic: "/vɪn træŋ pəˈɡoʊdə/", tip: "vinh tràng pờ-gô-đờ", meaning: "Chùa Vĩnh Tràng", cat: "n",
+                ex1: "Vinh Trang Pagoda is a popular attraction.", ex1_vi: "Chùa Vĩnh Tràng là một điểm tham quan nổi tiếng.",
+                ex2: "We visited Vinh Trang Pagoda.", ex2_vi: "Chúng tôi đã thăm Chùa Vĩnh Tràng.",
+                ex3: "Vinh Trang Pagoda has beautiful architecture.", ex3_vi: "Chùa Vĩnh Tràng có kiến trúc đẹp." },
+            { id: 52, word: "built", type: "v.", phonetic: "/bɪlt/", tip: "bít", meaning: "Xây dựng", cat: "v",
+                ex1: "Vinh Trang Pagoda was built in 1849.", ex1_vi: "Chùa Vĩnh Tràng được xây dựng vào năm 1849.",
+                ex2: "They built a new school.", ex2_vi: "Họ đã xây một ngôi trường mới.",
+                ex3: "The house is built of wood.", ex3_vi: "Ngôi nhà được xây bằng gỗ." },
+            { id: 53, word: "well known", type: "adj.", phonetic: "/wel noʊn/", tip: "uên nôn", meaning: "Nổi tiếng", cat: "adj",
+                ex1: "Vinh Trang Pagoda is well known.", ex1_vi: "Chùa Vĩnh Tràng rất nổi tiếng.",
+                ex2: "She is well known for her talent.", ex2_vi: "Cô ấy nổi tiếng với tài năng.",
+                ex3: "This place is well known.", ex3_vi: "Nơi này nổi tiếng." },
+            { id: 54, word: "architecture", type: "n.", phonetic: "/ˈɑːrkɪtektʃər/", tip: "ác-ki-téc-chờ", meaning: "Kiến trúc", cat: "n",
+                ex1: "The architecture is unique.", ex1_vi: "Kiến trúc độc đáo.",
+                ex2: "We studied the architecture.", ex2_vi: "Chúng tôi đã nghiên cứu kiến trúc.",
+                ex3: "Modern architecture is impressive.", ex3_vi: "Kiến trúc hiện đại ấn tượng." },
+            { id: 55, word: "peaceful gardens", type: "n.", phonetic: "/ˈpiːsfl ˈɡɑːrdnz/", tip: "pít-phồ ga-đần", meaning: "Vườn yên bình", cat: "n",
+                ex1: "The pagoda has peaceful gardens.", ex1_vi: "Chùa có những khu vườn yên bình.",
+                ex2: "We walked in the peaceful gardens.", ex2_vi: "Chúng tôi đi bộ trong những khu vườn yên bình.",
+                ex3: "Peaceful gardens are relaxing.", ex3_vi: "Vườn yên bình thật thư giãn." },
+            { id: 56, word: "large", type: "adj.", phonetic: "/lɑːrdʒ/", tip: "lác", meaning: "Lớn", cat: "adj",
+                ex1: "There are large Buddha statues.", ex1_vi: "Có những tượng Phật lớn.",
+                ex2: "We need a large room.", ex2_vi: "Chúng tôi cần một phòng lớn.",
+                ex3: "The elephant is large.", ex3_vi: "Con voi lớn." },
+            { id: 57, word: "Buddha statues", type: "n.", phonetic: "/ˈbʊdə ˈstætʃuːz/", tip: "bút-đờ x-tát-chu", meaning: "Tượng Phật", cat: "n",
+                ex1: "There are two famous Buddha statues.", ex1_vi: "Có hai tượng Phật nổi tiếng.",
+                ex2: "We took photos of the Buddha statues.", ex2_vi: "Chúng tôi đã chụp ảnh tượng Phật.",
+                ex3: "The Buddha statues are impressive.", ex3_vi: "Những tượng Phật rất ấn tượng." },
+            { id: 58, word: "Thoi Son Islet", type: "n.", phonetic: "/tɔɪ sɒn ˈaɪlət/", tip: "thới sơn ai-lớt", meaning: "Cù lao Thới Sơn", cat: "n",
+                ex1: "Thoi Son Islet is a beautiful place.", ex1_vi: "Cù lao Thới Sơn là một nơi đẹp.",
+                ex2: "We visited Thoi Son Islet.", ex2_vi: "Chúng tôi đã thăm Cù lao Thới Sơn.",
+                ex3: "Thoi Son Islet has peaceful canals.", ex3_vi: "Cù lao Thới Sơn có kênh rạch yên bình." },
+            { id: 59, word: "ride", type: "v.", phonetic: "/raɪd/", tip: "rai", meaning: "Đi (xe/thuyền)", cat: "v",
+                ex1: "Visitors can ride small boats.", ex1_vi: "Du khách có thể đi thuyền nhỏ.",
+                ex2: "I ride my bike to work.", ex2_vi: "Tôi đạp xe đi làm.",
+                ex3: "She rides a horse.", ex3_vi: "Cô ấy cưỡi ngựa." },
+            { id: 60, word: "small boats", type: "n.", phonetic: "/smɔːl boʊts/", tip: "x-mót bốt", meaning: "Thuyền nhỏ", cat: "n",
+                ex1: "We rode small boats on the canals.", ex1_vi: "Chúng tôi đi thuyền nhỏ trên kênh rạch.",
+                ex2: "Small boats are popular.", ex2_vi: "Thuyền nhỏ rất phổ biến.",
+                ex3: "We rented small boats.", ex3_vi: "Chúng tôi đã thuê thuyền nhỏ." },
+            { id: 61, word: "peaceful canals", type: "n.", phonetic: "/ˈpiːsfl kəˈnælz/", tip: "pít-phồ cơ-nán", meaning: "Kênh rạch yên bình", cat: "n",
+                ex1: "The peaceful canals are beautiful.", ex1_vi: "Những kênh rạch yên bình thật đẹp.",
+                ex2: "We boated through the peaceful canals.", ex2_vi: "Chúng tôi đi thuyền qua những kênh rạch yên bình.",
+                ex3: "Peaceful canals are relaxing.", ex3_vi: "Kênh rạch yên bình thư giãn." },
+            { id: 62, word: "visit", type: "v.", phonetic: "/ˈvɪzɪt/", tip: "ví-zít", meaning: "Thăm", cat: "v",
+                ex1: "Visitors can visit fruit gardens.", ex1_vi: "Du khách có thể thăm vườn trái cây.",
+                ex2: "We visited the museum.", ex2_vi: "Chúng tôi đã thăm bảo tàng.",
+                ex3: "She visits her grandparents.", ex3_vi: "Cô ấy thăm ông bà của mình." },
+            { id: 63, word: "fruit gardens", type: "n.", phonetic: "/fruːt ˈɡɑːrdnz/", tip: "phru ga-đần", meaning: "Vườn trái cây", cat: "n",
+                ex1: "We visited fruit gardens.", ex1_vi: "Chúng tôi đã thăm vườn trái cây.",
+                ex2: "Fruit gardens are full of trees.", ex2_vi: "Vườn trái cây có nhiều cây.",
+                ex3: "We tasted fruit in the gardens.", ex3_vi: "Chúng tôi đã nếm trái cây trong vườn." },
+            { id: 64, word: "listen", type: "v.", phonetic: "/ˈlɪsn/", tip: "lí-sần", meaning: "Nghe", cat: "v",
+                ex1: "Visitors can listen to traditional folk music.", ex1_vi: "Du khách có thể nghe nhạc dân gian truyền thống.",
+                ex2: "I listen to music every day.", ex2_vi: "Tôi nghe nhạc mỗi ngày.",
+                ex3: "She listens to the radio.", ex3_vi: "Cô ấy nghe đài." },
+            { id: 65, word: "traditional folk music", type: "n.", phonetic: "/trəˈdɪʃənl foʊk ˈmjuːzɪk/", tip: "trờ-đi-sờ-nồ phâu mju-zíc", meaning: "Nhạc dân gian truyền thống", cat: "n",
+                ex1: "Traditional folk music is beautiful.", ex1_vi: "Nhạc dân gian truyền thống rất đẹp.",
+                ex2: "We listened to traditional folk music.", ex2_vi: "Chúng tôi đã nghe nhạc dân gian truyền thống.",
+                ex3: "Traditional folk music tells stories.", ex3_vi: "Nhạc dân gian truyền thống kể chuyện." },
+            { id: 66, word: "taste", type: "v.", phonetic: "/teɪst/", tip: "tây", meaning: "Nếm", cat: "v",
+                ex1: "Visitors can taste fresh honey tea.", ex1_vi: "Du khách có thể nếm trà mật ong tươi.",
+                ex2: "I want to taste local food.", ex2_vi: "Tôi muốn nếm đồ ăn địa phương.",
+                ex3: "She tastes the soup.", ex3_vi: "Cô ấy nếm súp." },
+            { id: 67, word: "fresh honey tea", type: "n.", phonetic: "/freʃ ˈhʌni tiː/", tip: "phrét hớ-ni ti", meaning: "Trà mật ong tươi", cat: "n",
+                ex1: "Fresh honey tea is delicious.", ex1_vi: "Trà mật ong tươi rất ngon.",
+                ex2: "We drank fresh honey tea.", ex2_vi: "Chúng tôi đã uống trà mật ong tươi.",
+                ex3: "Fresh honey tea is healthy.", ex3_vi: "Trà mật ong tươi tốt cho sức khỏe." },
+            { id: 68, word: "also", type: "adv.", phonetic: "/ˈɔːlsoʊ/", tip: "ó-sô", meaning: "Cũng", cat: "adv",
+                ex1: "Visitors can also visit Tan Thanh Beach.", ex1_vi: "Du khách cũng có thể thăm Bãi biển Tân Thành.",
+                ex2: "I also like coffee.", ex2_vi: "Tôi cũng thích cà phê.",
+                ex3: "She also plays piano.", ex3_vi: "Cô ấy cũng chơi piano." },
+            { id: 69, word: "Tan Thanh Beach", type: "n.", phonetic: "/tæn θæŋ biːtʃ/", tip: "tân thành bít", meaning: "Bãi biển Tân Thành", cat: "n",
+                ex1: "Tan Thanh Beach is a quiet place.", ex1_vi: "Bãi biển Tân Thành là một nơi yên tĩnh.",
+                ex2: "We visited Tan Thanh Beach.", ex2_vi: "Chúng tôi đã thăm Bãi biển Tân Thành.",
+                ex3: "Tan Thanh Beach has beautiful sea views.", ex3_vi: "Bãi biển Tân Thành có tầm nhìn biển đẹp." },
+            { id: 70, word: "quiet", type: "adj.", phonetic: "/ˈkwaɪət/", tip: "kuai-ớt", meaning: "Yên tĩnh", cat: "adj",
+                ex1: "Tan Thanh Beach is quiet.", ex1_vi: "Bãi biển Tân Thành yên tĩnh.",
+                ex2: "We need a quiet place.", ex2_vi: "Chúng tôi cần một nơi yên tĩnh.",
+                ex3: "The library is quiet.", ex3_vi: "Thư viện yên tĩnh." },
+            { id: 71, word: "beautiful sea views", type: "n.", phonetic: "/ˈbjuːtɪfl siː vjuːz/", tip: "bju-ti-phồ xi viu", meaning: "Tầm nhìn biển đẹp", cat: "n",
+                ex1: "The beautiful sea views are amazing.", ex1_vi: "Tầm nhìn biển đẹp thật tuyệt vời.",
+                ex2: "We enjoyed the beautiful sea views.", ex2_vi: "Chúng tôi đã tận hưởng tầm nhìn biển đẹp.",
+                ex3: "Beautiful sea views attract tourists.", ex3_vi: "Tầm nhìn biển đẹp thu hút du khách." },
+            { id: 72, word: "fresh seafood", type: "n.", phonetic: "/freʃ ˈsiːfuːd/", tip: "phrét xi-phút", meaning: "Hải sản tươi", cat: "n",
+                ex1: "We ate fresh seafood.", ex1_vi: "Chúng tôi đã ăn hải sản tươi.",
+                ex2: "Fresh seafood is delicious.", ex2_vi: "Hải sản tươi rất ngon.",
+                ex3: "We bought fresh seafood at the market.", ex3_vi: "Chúng tôi đã mua hải sản tươi ở chợ." },
+            { id: 73, word: "recent years", type: "n.", phonetic: "/ˈriːsnt jɪərz/", tip: "rí-sần yi-ờ", meaning: "Những năm gần đây", cat: "n",
+                ex1: "In recent years, Dong Thap has become more popular.", ex1_vi: "Trong những năm gần đây, Đồng Tháp đã trở nên phổ biến hơn.",
+                ex2: "Recent years have seen many changes.", ex2_vi: "Những năm gần đây đã chứng kiến nhiều thay đổi.",
+                ex3: "In recent years, tourism has grown.", ex3_vi: "Trong những năm gần đây, du lịch đã phát triển." },
+            { id: 74, word: "become", type: "v.", phonetic: "/bɪˈkʌm/", tip: "bi-câm", meaning: "Trở thành", cat: "v",
+                ex1: "Dong Thap has become a popular destination.", ex1_vi: "Đồng Tháp đã trở thành một điểm đến phổ biến.",
+                ex2: "She became a doctor.", ex2_vi: "Cô ấy đã trở thành bác sĩ.",
+                ex3: "It will become famous.", ex3_vi: "Nó sẽ trở nên nổi tiếng." },
+            { id: 75, word: "more", type: "adv.", phonetic: "/mɔːr/", tip: "mo", meaning: "Hơn", cat: "adv",
+                ex1: "Dong Thap has become more popular.", ex1_vi: "Đồng Tháp đã trở nên phổ biến hơn.",
+                ex2: "I need more time.", ex2_vi: "Tôi cần thêm thời gian.",
+                ex3: "She is more beautiful.", ex3_vi: "Cô ấy đẹp hơn." },
+            { id: 76, word: "tourist destination", type: "n.", phonetic: "/ˈtʊrɪst ˌdestɪˈneɪʃn/", tip: "tu-rít đét-ti-nây-sờn", meaning: "Điểm đến du lịch", cat: "n",
+                ex1: "Dong Thap is a popular tourist destination.", ex1_vi: "Đồng Tháp là một điểm đến du lịch phổ biến.",
+                ex2: "The tourist destination is crowded.", ex2_vi: "Điểm đến du lịch đông đúc.",
+                ex3: "We visited a famous tourist destination.", ex3_vi: "Chúng tôi đã thăm một điểm đến du lịch nổi tiếng." },
+            { id: 77, word: "province", type: "n.", phonetic: "/ˈprɒvɪns/", tip: "pró-vin", meaning: "Tỉnh", cat: "n",
+                ex1: "Dong Thap is a beautiful province.", ex1_vi: "Đồng Tháp là một tỉnh đẹp.",
+                ex2: "The province has many attractions.", ex2_vi: "Tỉnh có nhiều điểm tham quan.",
+                ex3: "We traveled to the province.", ex3_vi: "Chúng tôi đã du lịch đến tỉnh." },
+            { id: 78, word: "developed", type: "v.", phonetic: "/dɪˈveləpt/", tip: "đi-vé-lốp", meaning: "Phát triển", cat: "v",
+                ex1: "The province has developed better roads.", ex1_vi: "Tỉnh đã phát triển đường xá tốt hơn.",
+                ex2: "The city developed quickly.", ex2_vi: "Thành phố phát triển nhanh chóng.",
+                ex3: "We developed new skills.", ex3_vi: "Chúng tôi đã phát triển các kỹ năng mới." },
+            { id: 79, word: "better roads", type: "n.", phonetic: "/ˈbetər roʊdz/", tip: "bét-tờ rốt", meaning: "Đường xá tốt hơn", cat: "n",
+                ex1: "There are better roads now.", ex1_vi: "Bây giờ có đường xá tốt hơn.",
+                ex2: "Better roads make travel easier.", ex2_vi: "Đường xá tốt hơn làm cho du lịch dễ dàng hơn.",
+                ex3: "The government built better roads.", ex3_vi: "Chính phủ đã xây dựng đường xá tốt hơn." },
+            { id: 80, word: "hotels", type: "n.", phonetic: "/hoʊˈtelz/", tip: "hồ-tén", meaning: "Khách sạn", cat: "n",
+                ex1: "There are many hotels in Dong Thap.", ex1_vi: "Có nhiều khách sạn ở Đồng Tháp.",
+                ex2: "We stayed at a hotel.", ex2_vi: "Chúng tôi đã ở một khách sạn.",
+                ex3: "The hotels are comfortable.", ex3_vi: "Các khách sạn thoải mái." },
+            { id: 81, word: "tourist services", type: "n.", phonetic: "/ˈtʊrɪst ˈsɜːrvɪsɪz/", tip: "tu-rít sớ-vít", meaning: "Dịch vụ du lịch", cat: "n",
+                ex1: "Tourist services have improved.", ex1_vi: "Dịch vụ du lịch đã được cải thiện.",
+                ex2: "We used tourist services.", ex2_vi: "Chúng tôi đã sử dụng dịch vụ du lịch.",
+                ex3: "Tourist services are convenient.", ex3_vi: "Dịch vụ du lịch thuận tiện." },
+            { id: 82, word: "making", type: "v.", phonetic: "/ˈmeɪkɪŋ/", tip: "mây-king", meaning: "Làm cho", cat: "v",
+                ex1: "Better roads are making travel easier.", ex1_vi: "Đường xá tốt hơn đang làm cho du lịch dễ dàng hơn.",
+                ex2: "We are making progress.", ex2_vi: "Chúng tôi đang tiến bộ.",
+                ex3: "She is making a cake.", ex3_vi: "Cô ấy đang làm một cái bánh." },
+            { id: 83, word: "travel", type: "v.", phonetic: "/ˈtrævl/", tip: "trá-vồ", meaning: "Du lịch", cat: "v",
+                ex1: "Travel to Dong Thap is easy.", ex1_vi: "Du lịch đến Đồng Tháp rất dễ dàng.",
+                ex2: "I love to travel.", ex2_vi: "Tôi thích du lịch.",
+                ex3: "She travels every year.", ex3_vi: "Cô ấy du lịch mỗi năm." },
+            { id: 84, word: "easier", type: "adj.", phonetic: "/ˈiːziər/", tip: "í-zi-ờ", meaning: "Dễ dàng hơn", cat: "adj",
+                ex1: "Travel is easier now.", ex1_vi: "Du lịch bây giờ dễ dàng hơn.",
+                ex2: "This task is easier.", ex2_vi: "Nhiệm vụ này dễ hơn.",
+                ex3: "Life is easier with technology.", ex3_vi: "Cuộc sống dễ dàng hơn với công nghệ." },
+            { id: 85, word: "comfortable", type: "adj.", phonetic: "/ˈkʌmftəbl/", tip: "cám-phờ-tớp", meaning: "Thoải mái", cat: "adj",
+                ex1: "Travel is more comfortable now.", ex1_vi: "Du lịch bây giờ thoải mái hơn.",
+                ex2: "The room is comfortable.", ex2_vi: "Phòng thoải mái.",
+                ex3: "We need comfortable shoes.", ex3_vi: "Chúng tôi cần giày thoải mái." },
+            { id: 86, word: "specialties", type: "n.", phonetic: "/ˈspeʃəltiz/", tip: "xpe-sân-ti", meaning: "Đặc sản", cat: "n",
+                ex1: "Dong Thap is famous for its specialties.", ex1_vi: "Đồng Tháp nổi tiếng với các đặc sản.",
+                ex2: "We tried local specialties.", ex2_vi: "Chúng tôi đã thử các đặc sản địa phương.",
+                ex3: "The specialties are delicious.", ex3_vi: "Các đặc sản rất ngon." },
+            { id: 87, word: "My Tho noodle soup", type: "n.", phonetic: "/maɪ θoʊ ˈnuːdl suːp/", tip: "mây thô nú-đồ sup", meaning: "Hủ tiếu Mỹ Tho", cat: "n",
+                ex1: "My Tho noodle soup is famous.", ex1_vi: "Hủ tiếu Mỹ Tho rất nổi tiếng.",
+                ex2: "We tried My Tho noodle soup.", ex2_vi: "Chúng tôi đã thử hủ tiếu Mỹ Tho.",
+                ex3: "My Tho noodle soup is delicious.", ex3_vi: "Hủ tiếu Mỹ Tho rất ngon." },
+            { id: 88, word: "Sa Dec rice noodles", type: "n.", phonetic: "/sɑː dek raɪs ˈnuːdlz/", tip: "sa đéc rai nú-đồ", meaning: "Bún gạo Sa Đéc", cat: "n",
+                ex1: "Sa Dec rice noodles are tasty.", ex1_vi: "Bún gạo Sa Đéc rất ngon.",
+                ex2: "We ate Sa Dec rice noodles.", ex2_vi: "Chúng tôi đã ăn bún gạo Sa Đéc.",
+                ex3: "Sa Dec rice noodles are a specialty.", ex3_vi: "Bún gạo Sa Đéc là một đặc sản." },
+            { id: 89, word: "Cao Lanh mangoes", type: "n.", phonetic: "/kaʊ læn ˈmæŋɡoʊz/", tip: "cao lãnh man-gô", meaning: "Xoài Cao Lãnh", cat: "n",
+                ex1: "Cao Lanh mangoes are sweet.", ex1_vi: "Xoài Cao Lãnh rất ngọt.",
+                ex2: "We bought Cao Lanh mangoes.", ex2_vi: "Chúng tôi đã mua xoài Cao Lãnh.",
+                ex3: "Cao Lanh mangoes are famous.", ex3_vi: "Xoài Cao Lãnh nổi tiếng." },
+            { id: 90, word: "Lai Vung pink mandarins", type: "n.", phonetic: "/laɪ vʌŋ pɪŋk ˈmændərɪnz/", tip: "lai vụng pink man-đờ-rin", meaning: "Quýt hồng Lai Vung", cat: "n",
+                ex1: "Lai Vung pink mandarins are delicious.", ex1_vi: "Quýt hồng Lai Vung rất ngon.",
+                ex2: "We tried Lai Vung pink mandarins.", ex2_vi: "Chúng tôi đã thử quýt hồng Lai Vung.",
+                ex3: "Lai Vung pink mandarins are a specialty.", ex3_vi: "Quýt hồng Lai Vung là một đặc sản." },
+            { id: 91, word: "scenery", type: "n.", phonetic: "/ˈsiːnəri/", tip: "xi-nơ-ri", meaning: "Phong cảnh", cat: "n",
+                ex1: "The scenery in Dong Thap is beautiful.", ex1_vi: "Phong cảnh ở Đồng Tháp rất đẹp.",
+                ex2: "We admired the scenery.", ex2_vi: "Chúng tôi đã ngắm nhìn phong cảnh.",
+                ex3: "The scenery is breathtaking.", ex3_vi: "Phong cảnh ngoạn mục." },
+            { id: 92, word: "friendly people", type: "n.", phonetic: "/ˈfrendli ˈpiːpl/", tip: "phren-đờ-li píp-ồ", meaning: "Người dân thân thiện", cat: "n",
+                ex1: "Dong Thap has friendly people.", ex1_vi: "Đồng Tháp có người dân thân thiện.",
+                ex2: "We met friendly people.", ex2_vi: "Chúng tôi đã gặp những người thân thiện.",
+                ex3: "Friendly people make us feel welcome.", ex3_vi: "Người dân thân thiện làm chúng tôi cảm thấy được chào đón." },
+            { id: 93, word: "offers", type: "v.", phonetic: "/ˈɒfərz/", tip: "ó-phờ", meaning: "Mang lại", cat: "v",
+                ex1: "Dong Thap offers a relaxing experience.", ex1_vi: "Đồng Tháp mang lại một trải nghiệm thư giãn.",
+                ex2: "The hotel offers free breakfast.", ex2_vi: "Khách sạn cung cấp bữa sáng miễn phí.",
+                ex3: "She offers help to everyone.", ex3_vi: "Cô ấy giúp đỡ mọi người." },
+            { id: 94, word: "relaxing", type: "adj.", phonetic: "/rɪˈlæksɪŋ/", tip: "ri-lác-xing", meaning: "Thư giãn", cat: "adj",
+                ex1: "A vacation in Dong Thap is relaxing.", ex1_vi: "Một kỳ nghỉ ở Đồng Tháp thật thư giãn.",
+                ex2: "I enjoy relaxing music.", ex2_vi: "Tôi thích nhạc thư giãn.",
+                ex3: "The atmosphere is relaxing.", ex3_vi: "Bầu không khí thư giãn." },
+            { id: 95, word: "unforgettable", type: "adj.", phonetic: "/ˌʌnfərˈɡetəbl/", tip: "ân-phơ-gét-tớp", meaning: "Khó quên", cat: "adj",
+                ex1: "Dong Thap offers an unforgettable experience.", ex1_vi: "Đồng Tháp mang lại một trải nghiệm khó quên.",
+                ex2: "We had an unforgettable trip.", ex2_vi: "Chúng tôi đã có một chuyến đi khó quên.",
+                ex3: "The view is unforgettable.", ex3_vi: "Quang cảnh khó quên." },
+            { id: 96, word: "travel experience", type: "n.", phonetic: "/ˈtrævl ɪkˈspɪriəns/", tip: "trá-vồ ích-xpi-ri-ần", meaning: "Trải nghiệm du lịch", cat: "n",
+                ex1: "Dong Thap offers a wonderful travel experience.", ex1_vi: "Đồng Tháp mang lại một trải nghiệm du lịch tuyệt vời.",
+                ex2: "We shared our travel experiences.", ex2_vi: "Chúng tôi đã chia sẻ những trải nghiệm du lịch của mình.",
+                ex3: "The travel experience was memorable.", ex3_vi: "Trải nghiệm du lịch thật đáng nhớ." },
+            { id: 97, word: "everyone", type: "pron.", phonetic: "/ˈevriwʌn/", tip: "ép-ri-uân", meaning: "Mọi người", cat: "n",
+                ex1: "Dong Thap is suitable for everyone.", ex1_vi: "Đồng Tháp phù hợp với mọi người.",
+                ex2: "Everyone loves the food.", ex2_vi: "Mọi người thích đồ ăn.",
+                ex3: "Everyone is welcome here.", ex3_vi: "Mọi người được chào đón ở đây." }
+        ];
+
+        // ---- 2. READING VOCAB ORDER ----
+        const newReadingVocabOrder = [
+            "Land", "Rivers", "Flowers", "one", "beautiful", "destinations", "southern", "Vietnam", "famous", "peaceful",
+            "colorful", "flower gardens", "rich", "culture", "delicious", "local food", "Located", "Mekong Delta",
+            "perfect", "place", "nature lovers", "visitors", "want", "enjoy", "beauty", "countryside", "popular",
+            "attractions", "Tram Chim National Park", "home", "kinds", "birds", "rare", "animals", "wetlands",
+            "take", "boat trip", "watch", "fresh air", "Another", "Sa Dec Flower Village", "thousands", "bloom",
+            "year", "explore", "Go Thap Historical Site", "important", "cultural", "historical", "destination",
+            "Vinh Trang Pagoda", "built", "well known", "architecture", "peaceful gardens", "large", "Buddha statues",
+            "Thoi Son Islet", "ride", "small boats", "peaceful canals", "visit", "fruit gardens", "listen",
+            "traditional folk music", "taste", "fresh honey tea", "also", "Tan Thanh Beach", "quiet",
+            "beautiful sea views", "fresh seafood", "recent years", "become", "more", "tourist destination",
+            "province", "developed", "better roads", "hotels", "tourist services", "making", "travel", "easier",
+            "comfortable", "specialties", "My Tho noodle soup", "Sa Dec rice noodles", "Cao Lanh mangoes",
+            "Lai Vung pink mandarins", "scenery", "friendly people", "offers", "relaxing", "unforgettable",
+            "travel experience", "everyone"
+        ];
+
+        // ---- 3. ESSAY DATA ----
+        const newEssayData = [
+            {
+                text: "Dong Thap Province is one of the most beautiful destinations in southern Vietnam. It is famous for its peaceful rivers, colorful flower gardens, rich culture, and delicious local food.",
+                vi: "Tỉnh Đồng Tháp là một trong những điểm đến đẹp nhất ở miền Nam Việt Nam. Nơi đây nổi tiếng với những dòng sông yên bình, vườn hoa nhiều màu sắc, văn hóa phong phú và đồ ăn địa phương ngon."
+            },
+            {
+                text: "Located in the Mekong Delta, Dong Thap is a perfect place for nature lovers and visitors who want to enjoy the beauty of the countryside.",
+                vi: "Nằm ở Đồng bằng sông Cửu Long, Đồng Tháp là một nơi hoàn hảo cho những người yêu thiên nhiên và du khách muốn thưởng thức vẻ đẹp của vùng quê."
+            },
+            {
+                text: "One of the most popular attractions is Tram Chim National Park. It is home to many kinds of birds, rare animals, and beautiful wetlands. Visitors can take a boat trip, watch birds, and enjoy the fresh air.",
+                vi: "Một trong những điểm tham quan phổ biến nhất là Vườn quốc gia Tràm Chim. Nơi đây là nhà của nhiều loài chim, động vật quý hiếm và vùng đất ngập nước đẹp. Du khách có thể đi thuyền, ngắm chim và tận hưởng không khí trong lành."
+            },
+            {
+                text: "Another famous place is Sa Dec Flower Village, where thousands of colorful flowers bloom throughout the year.",
+                vi: "Một địa điểm nổi tiếng khác là Làng hoa Sa Đéc, nơi hàng nghìn bông hoa nhiều màu sắc nở quanh năm."
+            },
+            {
+                text: "Visitors should also explore the Go Thap Historical Site, an important cultural and historical destination. Another popular attraction is Vinh Trang Pagoda. It was built in 1849 and is well known for its beautiful architecture, peaceful gardens, and large Buddha statues.",
+                vi: "Du khách cũng nên khám phá Khu di tích Gò Tháp, một điểm đến văn hóa và lịch sử quan trọng. Một điểm tham quan phổ biến khác là Chùa Vĩnh Tràng. Nó được xây dựng vào năm 1849 và nổi tiếng với kiến trúc đẹp, vườn yên bình và tượng Phật lớn."
+            },
+            {
+                text: "Nature lovers will enjoy Thoi Son Islet, where they can ride small boats through peaceful canals, visit fruit gardens, listen to traditional folk music, and taste fresh honey tea. They can also visit Tan Thanh Beach, a quiet place with beautiful sea views and fresh seafood.",
+                vi: "Người yêu thiên nhiên sẽ thích Cù lao Thới Sơn, nơi họ có thể đi thuyền nhỏ qua những kênh rạch yên bình, thăm vườn trái cây, nghe nhạc dân gian truyền thống và nếm trà mật ong tươi. Họ cũng có thể thăm Bãi biển Tân Thành, một nơi yên tĩnh với tầm nhìn biển đẹp và hải sản tươi sống."
+            },
+            {
+                text: "In recent years, Dong Thap has become a more popular tourist destination. The province has developed better roads, hotels, and tourist services, making travel easier and more comfortable.",
+                vi: "Trong những năm gần đây, Đồng Tháp đã trở thành một điểm đến du lịch phổ biến hơn. Tỉnh đã phát triển đường xá tốt hơn, khách sạn và dịch vụ du lịch, giúp việc di chuyển dễ dàng và thoải mái hơn."
+            },
+            {
+                text: "Dong Thap is also famous for its local specialties, such as My Tho noodle soup, Sa Dec rice noodles, Cao Lanh mangoes, and Lai Vung pink mandarins.",
+                vi: "Đồng Tháp cũng nổi tiếng với các đặc sản địa phương như hủ tiếu Mỹ Tho, bún gạo Sa Đéc, xoài Cao Lãnh và quýt hồng Lai Vung."
+            },
+            {
+                text: "With its beautiful scenery, friendly people, and rich culture, Dong Thap offers a relaxing and unforgettable travel experience.",
+                vi: "Với phong cảnh đẹp, con người thân thiện và văn hóa phong phú, Đồng Tháp mang lại một trải nghiệm du lịch thư giãn và khó quên."
+            }
+        ];
+
+        // ---- 4. GRAMMAR DATA (10 cấu trúc) ----
+        const newGrammarData = [
+            {
+                title: "Present Simple (Khẳng định)",
+                formula: "S + V(s/es) + O",
+                desc: "Diễn tả sự thật hiển nhiên, thói quen.",
+                example: "Dong Thap has beautiful rivers.",
+                vi: "Đồng Tháp có những dòng sông đẹp.",
+                detail: "Thêm -s với ngôi thứ ba số ít.",
+                extra: [
+                    { en: "It offers many attractions.", vi: "Nó mang lại nhiều điểm tham quan." },
+                    { en: "Visitors enjoy the food.", vi: "Du khách thích đồ ăn." }
+                ]
+            },
+            {
+                title: "Passive Voice (Hiện tại đơn)",
+                formula: "S + am/is/are + V3/ed",
+                desc: "Câu bị động để nhấn mạnh đối tượng bị tác động.",
+                example: "Tram Chim National Park is known for its birds.",
+                vi: "Vườn quốc gia Tràm Chim được biết đến với các loài chim.",
+                detail: "Dùng 'known' là quá khứ phân từ.",
+                extra: [
+                    { en: "Sa Dec is called the flower village.", vi: "Sa Đéc được gọi là làng hoa." },
+                    { en: "Local dishes are served fresh.", vi: "Các món ăn địa phương được phục vụ tươi." }
+                ]
+            },
+            {
+                title: "Relative Clause (where)",
+                formula: "N + where + S + V",
+                desc: "Mệnh đề quan hệ chỉ nơi chốn.",
+                example: "Sa Dec Flower Village, where thousands of flowers bloom.",
+                vi: "Làng hoa Sa Đéc, nơi hàng nghìn bông hoa nở.",
+                detail: "'Where' thay thế cho 'in which'.",
+                extra: [
+                    { en: "Thoi Son Islet, where visitors can ride boats.", vi: "Cù lao Thới Sơn, nơi du khách có thể đi thuyền." },
+                    { en: "The park, where many birds live.", vi: "Công viên, nơi nhiều loài chim sinh sống." }
+                ]
+            },
+            {
+                title: "Modal Verb: should",
+                formula: "S + should + V",
+                desc: "Diễn tả lời khuyên.",
+                example: "Visitors should explore Go Thap Historical Site.",
+                vi: "Du khách nên khám phá Khu di tích Gò Tháp.",
+                detail: "'Should' không thay đổi theo ngôi.",
+                extra: [
+                    { en: "You should try local food.", vi: "Bạn nên thử đồ ăn địa phương." },
+                    { en: "We should protect nature.", vi: "Chúng ta nên bảo vệ thiên nhiên." }
+                ]
+            },
+            {
+                title: "Gerund as Object (enjoy + V-ing)",
+                formula: "enjoy + V-ing",
+                desc: "Động từ thêm -ing làm tân ngữ sau 'enjoy'.",
+                example: "Nature lovers will enjoy riding small boats.",
+                vi: "Người yêu thiên nhiên sẽ thích đi thuyền nhỏ.",
+                detail: "Sau 'enjoy' dùng V-ing.",
+                extra: [
+                    { en: "I enjoy watching birds.", vi: "Tôi thích ngắm chim." },
+                    { en: "She enjoys listening to music.", vi: "Cô ấy thích nghe nhạc." }
+                ]
+            },
+            {
+                title: "Prepositional Phrase (with + N)",
+                formula: "with + N",
+                desc: "Cụm giới từ chỉ đặc điểm.",
+                example: "with beautiful scenery and friendly people.",
+                vi: "với phong cảnh đẹp và con người thân thiện.",
+                detail: "Giới từ 'with' chỉ đặc điểm.",
+                extra: [
+                    { en: "The city with many attractions is popular.", vi: "Thành phố với nhiều điểm tham quan rất phổ biến." },
+                    { en: "We walked with our friends.", vi: "Chúng tôi đi bộ với bạn bè." }
+                ]
+            },
+            {
+                title: "Passive Voice (Quá khứ đơn)",
+                formula: "S + was/were + V3/ed",
+                desc: "Câu bị động ở quá khứ.",
+                example: "Vinh Trang Pagoda was built in 1849.",
+                vi: "Chùa Vĩnh Tràng được xây dựng vào năm 1849.",
+                detail: "Dùng 'built' là quá khứ phân từ.",
+                extra: [
+                    { en: "The road was improved.", vi: "Con đường đã được cải thiện." },
+                    { en: "The temple was built many years ago.", vi: "Ngôi chùa được xây dựng nhiều năm trước." }
+                ]
+            },
+            {
+                title: "Adjective + Noun",
+                formula: "Adj + N",
+                desc: "Tính từ đứng trước danh từ.",
+                example: "peaceful rivers, colorful flower gardens",
+                vi: "những dòng sông yên bình, vườn hoa nhiều màu sắc",
+                detail: "Tính từ bổ nghĩa cho danh từ.",
+                extra: [
+                    { en: "fresh seafood", vi: "hải sản tươi" },
+                    { en: "friendly people", vi: "người dân thân thiện" }
+                ]
+            },
+            {
+                title: "Infinitive of Purpose (to + V)",
+                formula: "to + V",
+                desc: "Động từ nguyên mẫu chỉ mục đích.",
+                example: "Visitors come to enjoy the beauty.",
+                vi: "Du khách đến để thưởng thức vẻ đẹp.",
+                detail: "Dùng 'to' + động từ để chỉ mục đích.",
+                extra: [
+                    { en: "We go to the park to watch birds.", vi: "Chúng tôi đi công viên để ngắm chim." },
+                    { en: "She studies to improve her skills.", vi: "Cô ấy học để cải thiện kỹ năng." }
+                ]
+            },
+            {
+                title: "Present Perfect (Khẳng định)",
+                formula: "S + have/has + V3/ed",
+                desc: "Diễn tả hành động đã xảy ra trong quá khứ và còn ảnh hưởng đến hiện tại.",
+                example: "Dong Thap has become a popular destination.",
+                vi: "Đồng Tháp đã trở thành một điểm đến phổ biến.",
+                detail: "Dùng 'has' với ngôi thứ ba số ít.",
+                extra: [
+                    { en: "The province has developed better roads.", vi: "Tỉnh đã phát triển đường xá tốt hơn." },
+                    { en: "We have visited many attractions.", vi: "Chúng tôi đã thăm nhiều điểm tham quan." }
+                ]
+            }
+        ];
+
+        // ---- 5. EXERCISE DATA ----
+        // ex1Data: Điền từ (15 câu)
+        const newEx1Data = [
+            { q: "Dong Thap Province is one of the most ______ destinations in southern Vietnam.", a: "beautiful" },
+            { q: "It is famous for its peaceful rivers, colorful ______, rich culture, and delicious local food.", a: "flower gardens" },
+            { q: "Dong Thap is located in the ______.", a: "Mekong Delta" },
+            { q: "______ National Park is one of the most popular attractions.", a: "Tram Chim" },
+            { q: "Tram Chim National Park is home to many kinds of birds, rare ______, and beautiful wetlands.", a: "animals" },
+            { q: "Visitors can take a ______ trip, watch birds, and enjoy the fresh air.", a: "boat" },
+            { q: "Sa Dec Flower Village has thousands of colorful ______.", a: "flowers" },
+            { q: "Visitors should explore Go Thap ______ Site.", a: "Historical" },
+            { q: "Vinh Trang Pagoda was built in ______.", a: "1849" },
+            { q: "Vinh Trang Pagoda has beautiful architecture, peaceful gardens, and large ______.", a: "Buddha statues" },
+            { q: "Nature lovers will enjoy ______ Islet.", a: "Thoi Son" },
+            { q: "Visitors can ride small boats through peaceful ______.", a: "canals" },
+            { q: "In recent years, Dong Thap has ______ more popular.", a: "become" },
+            { q: "The province has developed better roads, hotels, and tourist ______.", a: "services" },
+            { q: "Dong Thap offers a relaxing and ______ travel experience.", a: "unforgettable" }
+        ];
+
+        // ex2Data: Trắc nghiệm (15 câu)
+        const newEx2Data = [
+            { q: "Dong Thap Province is one of the most ______ destinations in southern Vietnam.", a: "beautiful", opts: ["beautiful", "boring", "quiet", "small"] },
+            { q: "It is famous for its peaceful rivers, colorful ______, rich culture, and delicious local food.", a: "flower gardens", opts: ["flower gardens", "beaches", "buildings", "streets"] },
+            { q: "Dong Thap is located in the ______.", a: "Mekong Delta", opts: ["Mekong Delta", "Red River Delta", "Central Highlands", "Northwest"] },
+            { q: "______ National Park is one of the most popular attractions.", a: "Tram Chim", opts: ["Tram Chim", "Cat Tien", "Ba Ra", "Buu Long"] },
+            { q: "Tram Chim National Park is home to many kinds of birds, rare ______, and beautiful wetlands.", a: "animals", opts: ["animals", "flowers", "rocks", "waterfalls"] },
+            { q: "Visitors can take a ______ trip, watch birds, and enjoy the fresh air.", a: "boat", opts: ["boat", "bus", "train", "plane"] },
+            { q: "Sa Dec Flower Village has thousands of colorful ______.", a: "flowers", opts: ["flowers", "trees", "buildings", "boats"] },
+            { q: "Visitors should explore Go Thap ______ Site.", a: "Historical", opts: ["Historical", "Cultural", "Natural", "Modern"] },
+            { q: "Vinh Trang Pagoda was built in ______.", a: "1849", opts: ["1849", "1945", "1954", "1975"] },
+            { q: "Vinh Trang Pagoda has beautiful architecture, peaceful gardens, and large ______.", a: "Buddha statues", opts: ["Buddha statues", "markets", "lakes", "waterfalls"] },
+            { q: "Nature lovers will enjoy ______ Islet.", a: "Thoi Son", opts: ["Thoi Son", "Tan Thanh", "Go Thap", "Sa Dec"] },
+            { q: "Visitors can ride small boats through peaceful ______.", a: "canals", opts: ["canals", "rivers", "lakes", "oceans"] },
+            { q: "In recent years, Dong Thap has ______ more popular.", a: "become", opts: ["become", "is", "was", "were"] },
+            { q: "The province has developed better roads, hotels, and tourist ______.", a: "services", opts: ["services", "food", "shops", "museums"] },
+            { q: "Dong Thap offers a relaxing and ______ travel experience.", a: "unforgettable", opts: ["unforgettable", "boring", "tiring", "expensive"] }
+        ];
+
+        // ex3Data: Ghép nghĩa (15 cặp)
+        const newEx3Data = [
+            { word: "beautiful", mean: "Đẹp" },
+            { word: "flower gardens", mean: "Vườn hoa" },
+            { word: "Mekong Delta", mean: "Đồng bằng sông Cửu Long" },
+            { word: "wetlands", mean: "Vùng đất ngập nước" },
+            { word: "boat trip", mean: "Chuyến đi thuyền" },
+            { word: "bloom", mean: "Nở" },
+            { word: "architecture", mean: "Kiến trúc" },
+            { word: "Buddha statues", mean: "Tượng Phật" },
+            { word: "canals", mean: "Kênh rạch" },
+            { word: "traditional folk music", mean: "Nhạc dân gian truyền thống" },
+            { word: "specialties", mean: "Đặc sản" },
+            { word: "scenery", mean: "Phong cảnh" },
+            { word: "comfortable", mean: "Thoải mái" },
+            { word: "unforgettable", mean: "Khó quên" },
+            { word: "services", mean: "Dịch vụ" }
+        ];
+
+        // ex5Data: Gõ chính tả (10 câu)
+        const newEx5Data = [
+            "Dong Thap is a beautiful province.",
+            "Tram Chim National Park is famous.",
+            "Visitors can take a boat trip.",
+            "Sa Dec has thousands of flowers.",
+            "Vinh Trang Pagoda is well known.",
+            "Thoi Son Islet is peaceful.",
+            "We enjoy traditional folk music.",
+            "Tan Thanh Beach has sea views.",
+            "The province has good services.",
+            "Dong Thap offers an unforgettable experience."
+        ];
+
+        // ex6Data: Sắp xếp từ (10 câu)
+        const newEx6Data = [
+            { id: 1, words: ["Dong Thap", "beautiful", "is", "province", "a"], correct: "dong thap is a beautiful province" },
+            { id: 2, words: ["Tram Chim", "park", "national", "a", "is"], correct: "tram chim is a national park" },
+            { id: 3, words: ["boat", "take", "visitors", "trip", "can", "a"], correct: "visitors can take a boat trip" },
+            { id: 4, words: ["Sa Dec", "flowers", "has", "thousands", "of"], correct: "sa dec has thousands of flowers" },
+            { id: 5, words: ["Vinh Trang", "pagoda", "famous", "is", "a"], correct: "vinh trang is a famous pagoda" },
+            { id: 6, words: ["Thoi Son", "peaceful", "islet", "a", "is"], correct: "thoi son is a peaceful islet" },
+            { id: 7, words: ["music", "traditional", "listen", "folk", "we", "to"], correct: "we listen to traditional folk music" },
+            { id: 8, words: ["Tan Thanh", "beach", "quiet", "a", "is"], correct: "tan thanh is a quiet beach" },
+            { id: 9, words: ["better", "province", "roads", "has", "developed"], correct: "the province has developed better roads" },
+            { id: 10, words: ["experience", "offers", "unforgettable", "Dong Thap", "an"], correct: "dong thap offers an unforgettable experience" }
+        ];
+
+        // ex7Data: Câu hỏi (10 câu)
+        const newEx7Data = [
+            { q: "What is Dong Thap known as?", a: "The Land of Rivers and Flowers." },
+            { q: "Where is Dong Thap located?", a: "In the Mekong Delta." },
+            { q: "What is the most popular attraction in Dong Thap?", a: "Tram Chim National Park." },
+            { q: "What can visitors do at Tram Chim National Park?", a: "Take a boat trip, watch birds, and enjoy the fresh air." },
+            { q: "What is Sa Dec famous for?", a: "Its flower village." },
+            { q: "What historical site should visitors explore?", a: "Go Thap Historical Site." },
+            { q: "What is special about Vinh Trang Pagoda?", a: "Its beautiful architecture, peaceful gardens, and large Buddha statues." },
+            { q: "What can visitors do at Thoi Son Islet?", a: "Ride small boats, visit fruit gardens, listen to folk music, and taste honey tea." },
+            { q: "What specialties should visitors try in Dong Thap?", a: "My Tho noodle soup, Sa Dec rice noodles, Cao Lanh mangoes, and Lai Vung pink mandarins." },
+            { q: "Why is Dong Thap a great travel destination?", a: "Because of its beautiful scenery, friendly people, and rich culture." }
+        ];
+
+        // ---- 6. ANALYSIS DATA (12 câu) ----
+        const newAnalysisData = [
+            {
+                sentence: "Dong Thap Province is one of the most beautiful destinations in southern Vietnam.",
+                structure: "S + be + one of + the + adj + N + in + N.",
+                translation: "Tỉnh Đồng Tháp là một trong những điểm đến đẹp nhất ở miền Nam Việt Nam.",
+                pos: "Dong Thap Province (danh từ riêng), is (động từ), one (danh từ), of (giới từ), most (trạng từ), beautiful (tính từ), destinations (danh từ), in (giới từ), southern (tính từ), Vietnam (danh từ)."
+            },
+            {
+                sentence: "It is famous for its peaceful rivers, colorful flower gardens, rich culture, and delicious local food.",
+                structure: "S + be + adj + for + N.",
+                translation: "Nơi đây nổi tiếng với những dòng sông yên bình, vườn hoa nhiều màu sắc, văn hóa phong phú và đồ ăn địa phương ngon.",
+                pos: "It (đại từ), is (động từ), famous (tính từ), for (giới từ), its (tính từ sở hữu), peaceful (tính từ), rivers (danh từ), colorful (tính từ), flower gardens (danh từ), rich (tính từ), culture (danh từ), and (liên từ), delicious (tính từ), local (tính từ), food (danh từ)."
+            },
+            {
+                sentence: "Located in the Mekong Delta, Dong Thap is a perfect place for nature lovers and visitors who want to enjoy the beauty of the countryside.",
+                structure: "V3/ed + in + N, S + be + a + adj + N + for + N + who + V.",
+                translation: "Nằm ở Đồng bằng sông Cửu Long, Đồng Tháp là một nơi hoàn hảo cho những người yêu thiên nhiên và du khách muốn thưởng thức vẻ đẹp của vùng quê.",
+                pos: "Located (quá khứ phân từ), in (giới từ), the (mạo từ), Mekong Delta (danh từ riêng), Dong Thap (danh từ riêng), is (động từ), a (mạo từ), perfect (tính từ), place (danh từ), for (giới từ), nature lovers (danh từ), and (liên từ), visitors (danh từ), who (đại từ quan hệ), want (động từ), to enjoy (nguyên mẫu), the (mạo từ), beauty (danh từ), of (giới từ), the (mạo từ), countryside (danh từ)."
+            },
+            {
+                sentence: "One of the most popular attractions is Tram Chim National Park.",
+                structure: "One of + N + be + N.",
+                translation: "Một trong những điểm tham quan phổ biến nhất là Vườn quốc gia Tràm Chim.",
+                pos: "One (danh từ), of (giới từ), most (trạng từ), popular (tính từ), attractions (danh từ), is (động từ), Tram Chim National Park (danh từ riêng)."
+            },
+            {
+                sentence: "It is home to many kinds of birds, rare animals, and beautiful wetlands.",
+                structure: "S + be + home + to + N, N, and N.",
+                translation: "Đây là nơi sinh sống của nhiều loài chim, động vật quý hiếm và vùng đất ngập nước đẹp.",
+                pos: "It (đại từ), is (động từ), home (danh từ), to (giới từ), many (tính từ), kinds (danh từ), of (giới từ), birds (danh từ), rare (tính từ), animals (danh từ), and (liên từ), beautiful (tính từ), wetlands (danh từ)."
+            },
+            {
+                sentence: "Visitors can take a boat trip, watch birds, and enjoy the fresh air.",
+                structure: "S + modal + V + O, V + O, and V + O.",
+                translation: "Du khách có thể đi thuyền, ngắm chim và tận hưởng không khí trong lành.",
+                pos: "Visitors (danh từ), can (động từ khuyết thiếu), take (động từ), a (mạo từ), boat trip (danh từ), watch (động từ), birds (danh từ), and (liên từ), enjoy (động từ), the (mạo từ), fresh air (danh từ)."
+            },
+            {
+                sentence: "Another famous place is Sa Dec Flower Village, where thousands of colorful flowers bloom throughout the year.",
+                structure: "Another + adj + N + be + N, where + S + V.",
+                translation: "Một địa điểm nổi tiếng khác là Làng hoa Sa Đéc, nơi hàng nghìn bông hoa nhiều màu sắc nở quanh năm.",
+                pos: "Another (tính từ), famous (tính từ), place (danh từ), is (động từ), Sa Dec Flower Village (danh từ riêng), where (trạng từ quan hệ), thousands (danh từ), of (giới từ), colorful (tính từ), flowers (danh từ), bloom (động từ), throughout (giới từ), the (mạo từ), year (danh từ)."
+            },
+            {
+                sentence: "Vinh Trang Pagoda was built in 1849 and is well known for its beautiful architecture, peaceful gardens, and large Buddha statues.",
+                structure: "S + was V3/ed + in + time + and + be + adj + for + N.",
+                translation: "Chùa Vĩnh Tràng được xây dựng vào năm 1849 và nổi tiếng với kiến trúc đẹp, vườn yên bình và tượng Phật lớn.",
+                pos: "Vinh Trang Pagoda (danh từ riêng), was built (động từ bị động), in (giới từ), 1849 (số), and (liên từ), is (động từ), well known (tính từ), for (giới từ), its (tính từ sở hữu), beautiful (tính từ), architecture (danh từ), peaceful (tính từ), gardens (danh từ), and (liên từ), large (tính từ), Buddha statues (danh từ)."
+            },
+            {
+                sentence: "Nature lovers will enjoy Thoi Son Islet, where they can ride small boats through peaceful canals.",
+                structure: "S + modal + V + N, where + S + modal + V + O + through + N.",
+                translation: "Người yêu thiên nhiên sẽ thích Cù lao Thới Sơn, nơi họ có thể đi thuyền nhỏ qua những kênh rạch yên bình.",
+                pos: "Nature lovers (danh từ), will (trợ động từ), enjoy (động từ), Thoi Son Islet (danh từ riêng), where (trạng từ quan hệ), they (đại từ), can (động từ khuyết thiếu), ride (động từ), small boats (danh từ), through (giới từ), peaceful (tính từ), canals (danh từ)."
+            },
+            {
+                sentence: "In recent years, Dong Thap has become a more popular tourist destination.",
+                structure: "In + N, S + has become + N.",
+                translation: "Trong những năm gần đây, Đồng Tháp đã trở thành một điểm đến du lịch phổ biến hơn.",
+                pos: "In (giới từ), recent (tính từ), years (danh từ), Dong Thap (danh từ riêng), has become (động từ), a (mạo từ), more (trạng từ), popular (tính từ), tourist destination (danh từ)."
+            },
+            {
+                sentence: "The province has developed better roads, hotels, and tourist services, making travel easier and more comfortable.",
+                structure: "S + has V3/ed + O, O, and O, making + O + adj.",
+                translation: "Tỉnh đã phát triển đường xá tốt hơn, khách sạn và dịch vụ du lịch, giúp việc di chuyển dễ dàng và thoải mái hơn.",
+                pos: "The (mạo từ), province (danh từ), has developed (động từ), better (tính từ), roads (danh từ), hotels (danh từ), and (liên từ), tourist services (danh từ), making (V-ing), travel (danh từ), easier (tính từ), and (liên từ), more (trạng từ), comfortable (tính từ)."
+            },
+            {
+                sentence: "With its beautiful scenery, friendly people, and rich culture, Dong Thap offers a relaxing and unforgettable travel experience.",
+                structure: "With + N, S + V + O + for + N.",
+                translation: "Với phong cảnh đẹp, con người thân thiện và văn hóa phong phú, Đồng Tháp mang lại một trải nghiệm du lịch thư giãn và khó quên.",
+                pos: "With (giới từ), its (tính từ sở hữu), beautiful (tính từ), scenery (danh từ), friendly (tính từ), people (danh từ), and (liên từ), rich (tính từ), culture (danh từ), Dong Thap (danh từ riêng), offers (động từ), a (mạo từ), relaxing (tính từ), and (liên từ), unforgettable (tính từ), travel experience (danh từ)."
+            }
+        ];
+
+        // ============================================================
+        // GHI ĐÈ DỮ LIỆU VÀO CÁC BIẾN TOÀN CỤC
+        // ============================================================
+        vocabData.splice(0, vocabData.length, ...newVocabData);
+        readingVocabOrder.splice(0, readingVocabOrder.length, ...newReadingVocabOrder);
+        essayData.splice(0, essayData.length, ...newEssayData);
+        grammarData.splice(0, grammarData.length, ...newGrammarData);
+        ex1Data.splice(0, ex1Data.length, ...newEx1Data);
+        ex2Data.splice(0, ex2Data.length, ...newEx2Data);
+        ex3Data.splice(0, ex3Data.length, ...newEx3Data);
+        ex5Data.splice(0, ex5Data.length, ...newEx5Data);
+        ex6Data.splice(0, ex6Data.length, ...newEx6Data);
+        ex7Data.splice(0, ex7Data.length, ...newEx7Data);
+        analysisData.splice(0, analysisData.length, ...newAnalysisData);
+
+        // Cập nhật ex4Data từ vocabData mới
+        ex4Data.splice(0, ex4Data.length, ...newVocabData.map(v => ({ word: v.word, mean: v.meaning })));
+
+        // ---- Cập nhật giao diện ----
+        renderDashboardEssay();
+        renderReading();
+        renderVocab('');
+        renderGrammar();
+        renderEx1();
+        renderEx2();
+        renderEx3();
+        renderEx4();
+        renderEx5();
+        renderEx6();
+        renderEx7();
+        renderAnalysis();
+        switchExercise(1);
+        updateProgress();
+
+        // Cập nhật số lượng từ vựng trong tiêu đề
+        document.querySelector('#tab-vocab .text-xs.text-slate-400').textContent = `${newVocabData.length} từ với 3 ví dụ phong phú`;
+        document.getElementById('vocab-progress-text').textContent = `0/${newVocabData.length}`;
+
+        console.log('✅ Đồng Tháp data loaded successfully!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee - Học Tiếng Anh Tương Tác</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../Common/Common.css" />
+</head>
+<body>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 glass border-b border-slate-200 px-4 py-3 shadow-soft">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-gradient-to-br from-amber-600 to-yellow-700 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">☕</div>
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight text-slate-800 block leading-none">Coffee</span>
+                    <span class="text-[9px] text-amber-600 font-bold tracking-widest uppercase">Interactive Learning</span>
+                </div>
+            </div>
+            <div class="flex gap-1 md:gap-3 text-sm font-medium mt-2 sm:mt-0 flex-wrap items-center">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active px-3 py-1.5 rounded-lg transition">Tổng Quan</button>
+                <button onclick="switchTab('reading')" id="btn-reading" class="nav-btn px-3 py-1.5 rounded-lg transition">Bài Đọc</button>
+                <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-btn px-3 py-1.5 rounded-lg transition">Từ Vựng</button>
+                <button onclick="switchTab('grammar')" id="btn-grammar" class="nav-btn px-3 py-1.5 rounded-lg transition">Ngữ Pháp</button>
+                <button onclick="switchTab('practice')" id="btn-practice" class="nav-btn px-3 py-1.5 rounded-lg transition">Luyện Tập</button>
+                <button onclick="switchTab('analysis')" id="btn-analysis" class="nav-btn px-3 py-1.5 rounded-lg transition">🔍 Phân tích câu</button>
+                <button onclick="toggleDarkMode()" class="dark-toggle text-xl ml-2 p-1 rounded-full hover:bg-amber-100/30 transition">🌙</button>
+                <button onclick="toggleFullscreen()" class="fullscreen-btn text-xl ml-1 p-1 rounded-full hover:bg-amber-100/30 transition" title="Toàn màn hình (F11)">⛶</button>
+                <button onclick="exportData()" class="text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl transition ml-1" title="Xuất dữ liệu">📤</button>
+                <button onclick="document.getElementById('import-input').click()" class="text-xs font-bold text-cyan-700 bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl transition ml-1" title="Nhập dữ liệu">📥</button>
+                <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)" />
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
+
+        <!-- ===== TAB TỔNG QUAN ===== -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-50 via-white to-yellow-50/70 p-6 md:p-10 border border-amber-100 shadow-soft-lg">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <span class="inline-block bg-amber-100 text-amber-700 text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">☕ Cà phê</span>
+                        <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-[1.2]">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600">Coffee</span>
+                        </h1>
+                        <p class="text-slate-600 text-base max-w-xl leading-relaxed">
+                            Khám phá thế giới cà phê – thức uống phổ biến nhất hành tinh. Học từ vựng, ngữ pháp và luyện tập qua 7 dạng bài tương tác.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="switchTab('reading')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg hover:shadow-amber-200/50 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <span>Bắt đầu đọc</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                            <button onclick="switchTab('practice')" class="bg-white hover:bg-slate-50 text-slate-700 font-semibold px-7 py-3.5 rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center gap-2">📝 Luyện tập ngay</button>
+                        </div>
+                    </div>
+                    <div class="hero-img relative h-56 md:h-72 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Coffee" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x400/fef3c7/d97706?text=Coffee'" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold text-slate-700 shadow-lg flex items-center gap-2">
+                            <span>☕</span> Cà phê của bạn
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hàng 2: Bài đọc + Tiến độ -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-soft overflow-hidden">
+                    <div class="bg-gradient-to-r from-amber-50 to-yellow-50/50 px-6 py-4 border-b border-slate-200 flex items-center justify-between flex-wrap gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📖</span>
+                            <span class="font-bold text-slate-700">Bài đọc: Coffee</span>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button id="btn-play-loop" class="btn-play-loop text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">🔁 Nghe lặp</button>
+                            <button id="btn-stop-loop" class="btn-stop-loop hidden text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">⏹ Dừng</button>
+                            <button id="btn-record-full" class="btn-record-full text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md" onclick="toggleFullRecording()">🎤 Ghi âm</button>
+                            <button onclick="toggleTranslateAll()" id="translate-all-btn" class="text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition flex items-center gap-1">🇻🇳 Dịch</button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4 text-slate-700 text-base leading-[1.9]">
+                        <div class="voice-control-box">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">🎙️ Giọng đọc & Tốc độ</h4>
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate-dashboard" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display-dashboard" class="text-xs font-bold text-amber-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select-dashboard" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                        <div id="essay-preview"></div>
+                        <div id="essay-translation" class="hidden bg-slate-50/80 p-4 rounded-2xl border border-slate-200 text-slate-600 text-sm leading-[1.8]"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-soft">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📊 Tiến độ học tập</h3>
+                        <div class="mt-4 space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Từ vựng đã học</span><span id="vocab-progress-text">0/50</span></div>
+                                <div class="progress-bar"><div id="vocab-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Bài tập hoàn thành</span><span id="exercise-progress-text">0/100</span></div>
+                                <div class="progress-bar"><div id="exercise-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📈 Thống kê chi tiết</h4>
+                            <div class="stat-detail grid grid-cols-2 gap-1 text-sm">
+                                <span class="text-slate-500">Từ đã học</span>
+                                <span class="font-bold text-right text-blue-600" id="stat-learned">0</span>
+                                <span class="text-slate-500">Từ yêu thích</span>
+                                <span class="font-bold text-right text-amber-600" id="stat-favorites">0</span>
+                                <span class="text-slate-500">Điểm bài tập</span>
+                                <span class="font-bold text-right text-cyan-600" id="stat-score">0</span>
+                                <span class="text-slate-500">Thời gian học (ph)</span>
+                                <span class="font-bold text-right text-purple-600" id="stat-time">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-amber-50 to-yellow-50/60 p-5 rounded-2xl border border-amber-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">💡</span>
+                            <div>
+                                <p class="font-bold text-amber-800 text-sm">Mẹo học</p>
+                                <p class="text-xs text-amber-700/70">Bấm vào từ để tra nghĩa ngay trong bài.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== READING TAB ===== -->
+        <section id="tab-reading" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎵 Audio</span>
+                            <span id="reading-indicator" class="hidden bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-amber-600 rounded-full"></span> Đang đọc
+                            </span>
+                        </div>
+                        <div id="audio-wrapper">
+                            <div id="audio-container" class="mt-3">
+                                <audio id="main-audio" controls class="w-full rounded-xl" preload="metadata">
+                                    <source src="coffee.mp3" type="audio/mpeg" onerror="hideAudio()">
+                                    <source src="coffee.wav" type="audio/wav" onerror="hideAudio()">
+                                    Trình duyệt không hỗ trợ audio.
+                                </audio>
+                            </div>
+                            <div class="mt-4 mb-6" id="audio-progress-wrapper">
+                                <div class="audio-progress" onclick="seekAudio(event)">
+                                    <div id="audio-progress-bar" class="audio-progress-bar"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                    <span id="audio-current">0:00</span>
+                                    <span id="audio-duration-label">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="video-container" class="rounded-2xl overflow-hidden bg-slate-900 shadow-lg relative border border-slate-200 w-full max-w-4xl mx-auto mb-8">
+                            <video id="main-video-player" class="w-full h-auto object-contain" controls preload="auto">
+                                <source src="coffee.mp4" type="video/mp4" onerror="hideVideo()">
+                                Trình duyệt không hỗ trợ thẻ video.
+                            </video>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <button onclick="playFullText()" id="tts-play" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">▶ Đọc toàn bài</button>
+                            <button onclick="stopAllAudio()" id="tts-stop" class="hidden flex-1 bg-red-500 hover:bg-red-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">⏹ Dừng</button>
+                        </div>
+                        <div id="tts-status" class="text-xs text-amber-600 mt-2 hidden animate-pulse">● Đang đọc...</div>
+                        <div class="mt-3 pt-3 border-t border-slate-200">
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display" class="text-xs font-bold text-amber-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">📚 Từ vựng trong bài</p>
+                        <div class="vocab-cloud" id="reading-vocab-cloud"></div>
+                        <p class="text-[10px] text-slate-400 mt-2 italic">👆 Nhấp vào từ để tra nghĩa chi tiết</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-amber-800 text-xs flex items-start gap-3">
+                        <span class="text-xl">💡</span>
+                        <div><p class="font-bold">Mẹo:</p><p>Nghe và đọc theo để cải thiện phát âm và ghi nhớ từ vựng.</p></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <div class="bg-[#fef3c7] p-6 md:p-8 rounded-3xl border border-amber-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-amber-200/60">
+                            <div>
+                                <h2 class="text-2xl font-extrabold text-amber-900">Coffee</h2>
+                                <p class="text-amber-700/70 text-xs mt-1">👆 Nhấp vào từ được gạch chân để tra nghĩa</p>
+                            </div>
+                            <span class="text-4xl">☕</span>
+                        </div>
+                        <div id="essay-container" class="space-y-6 text-slate-800 text-lg leading-[2]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VOCAB ===== -->
+        <section id="tab-vocab" class="tab-content hidden space-y-6">
+            <div class="bg-white p-5 rounded-3xl border border-amber-50 shadow-soft flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">📚 Thư viện từ vựng</h2>
+                    <p class="text-xs text-slate-400">50 từ với 3 ví dụ phong phú</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" data-filter="all" onclick="filterVocab('all')">Tất cả</button>
+                    <button class="filter-btn" data-filter="n" onclick="filterVocab('n')">Danh từ</button>
+                    <button class="filter-btn" data-filter="v" onclick="filterVocab('v')">Động từ</button>
+                    <button class="filter-btn" data-filter="adj" onclick="filterVocab('adj')">Tính từ</button>
+                    <button class="filter-btn" data-filter="adv" onclick="filterVocab('adv')">Trạng từ</button>
+                    <button class="filter-btn" data-filter="conj" onclick="filterVocab('conj')">Liên từ</button>
+                    <button class="filter-btn" data-filter="fav" onclick="filterVocab('fav')">⭐ Yêu thích</button>
+                </div>
+            </div>
+            <div class="flex gap-2 items-center flex-wrap">
+                <input type="text" id="vocab-search" placeholder="🔍 Tìm từ..." class="px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-300 focus:outline-none w-full md:w-64" />
+                <button onclick="toggleLearnedFilter()" id="learned-toggle" class="px-4 py-2.5 text-sm rounded-xl bg-slate-100 hover:bg-amber-100 border border-slate-200 transition font-medium">📌 Đã học</button>
+                <button onclick="shuffleVocab()" class="px-4 py-2.5 text-sm rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-200 transition font-medium">🎲 Xáo trộn</button>
+            </div>
+            <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+        </section>
+
+        <!-- ===== GRAMMAR ===== -->
+        <section id="tab-grammar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-amber-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">📘</span>
+                    <div><h2 class="text-2xl font-extrabold text-slate-800">Ngữ pháp trọng tâm</h2><p class="text-xs text-slate-400">Các cấu trúc xuất hiện trong bài đọc</p></div>
+                </div>
+                <div id="grammar-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- ===== PRACTICE ===== -->
+        <section id="tab-practice" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-3 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft sticky top-24">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📘 Cấu trúc ngữ pháp</h3>
+                        <div id="grammar-sidebar" class="mt-3 space-y-3 text-xs"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-9 space-y-5">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-slate-100">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-4 border-b border-slate-100 mb-5">
+                            <div><h3 class="text-xl font-extrabold text-slate-800">🎯 Bài tập đa dạng</h3><p class="text-xs text-slate-400">100 câu hỏi - 7 dạng bài</p></div>
+                            <div class="flex items-center gap-2 bg-amber-50 px-4 py-1.5 rounded-xl border border-amber-100">
+                                <span class="text-xs font-bold text-amber-700">Điểm:</span>
+                                <span id="score-badge" class="text-sm font-extrabold text-amber-600 bg-white px-3 py-0.5 rounded-lg shadow-sm">0/100</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 border-b border-slate-100 pb-3 mb-6 text-xs font-bold uppercase tracking-wider">
+                            <button onclick="switchExercise(1)" id="ex-tab-1" class="exercise-tab active px-4 py-2 rounded-xl transition">📝 Điền từ</button>
+                            <button onclick="switchExercise(2)" id="ex-tab-2" class="exercise-tab px-4 py-2 rounded-xl transition">🔘 Trắc nghiệm</button>
+                            <button onclick="switchExercise(3)" id="ex-tab-3" class="exercise-tab px-4 py-2 rounded-xl transition">🎯 Ghép nghĩa</button>
+                            <button onclick="switchExercise(4)" id="ex-tab-4" class="exercise-tab px-4 py-2 rounded-xl transition">🃏 Flashcard</button>
+                            <button onclick="switchExercise(5)" id="ex-tab-5" class="exercise-tab px-4 py-2 rounded-xl transition">⌨️ Gõ chính tả</button>
+                            <button onclick="switchExercise(6)" id="ex-tab-6" class="exercise-tab px-4 py-2 rounded-xl transition">🔄 Sắp xếp</button>
+                            <button onclick="switchExercise(7)" id="ex-tab-7" class="exercise-tab px-4 py-2 rounded-xl transition">❓ Câu hỏi</button>
+                        </div>
+
+                        <form onsubmit="event.preventDefault();" class="space-y-6">
+                            <div id="ex-1" class="exercise-section space-y-5"></div>
+                            <div id="ex-2" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-3" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-4" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-5" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-6" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-7" class="exercise-section hidden space-y-5"></div>
+
+                            <div class="pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+                                <button type="button" onclick="evaluateCurrent()" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">✅ Nộp bài & kiểm tra</button>
+                                <button type="button" onclick="resetCurrent()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-2xl transition">🔄 Làm lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ANALYSIS ===== -->
+        <section id="tab-analysis" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-amber-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">🔍</span>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-800">Phân tích câu</h2>
+                        <p class="text-xs text-slate-400">Cấu trúc, từ loại và dịch nghĩa của từng câu</p>
+                    </div>
+                </div>
+                <div id="analysis-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+    </main>
+<!-- ===== FOOTER ===== -->
+    <footer class="max-w-7xl mx-auto px-4 md:px-6 mt-10 pb-6">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-soft py-4 px-6 text-center">
+            <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                <span class="font-bold text-red-600">✧</span> 
+                Bản quyền 2026 — Thiết kế bởi <span class="font-bold text-red-600">Minh Châu Phú</span> 
+                với sự đồng hành của AI 
+                <span class="font-semibold text-slate-700">DeepSeek</span>, 
+                <span class="font-semibold text-slate-700">Gemini</span>, 
+                <span class="font-semibold text-slate-700">ChatGPT</span> 
+                và các trợ lý thông minh khác.
+                <span class="font-bold text-yellow-600">✧</span>
+            </p>
+        </div>
+    </footer>
+    <!-- MODAL -->
+    <div id="word-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-3xl font-light transition">&times;</button>
+            <div id="modal-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Load Common.js và ghi đè dữ liệu -->
+    <script src="../Common/Common.js"></script>
+    <script>
+        // ============================================================
+        // DỮ LIỆU COFFEE - GHI ĐÈ LÊN DỮ LIỆU GỐC
+        // ============================================================
+
+        // ---- Từ vựng (50 từ) ----
+        const newVocabData = [
+            // 1-10
+            { id: 1, word: "coffee", type: "n.", phonetic: "/ˈkɒfi/", tip: "có-phi", meaning: "Cà phê", cat: "n",
+                ex1: "Coffee is my favorite drink.", ex1_vi: "Cà phê là đồ uống yêu thích của tôi.",
+                ex2: "I need a cup of coffee.", ex2_vi: "Tôi cần một tách cà phê.",
+                ex3: "Coffee keeps me awake.", ex3_vi: "Cà phê giúp tôi tỉnh táo." },
+            { id: 2, word: "ritual", type: "n.", phonetic: "/ˈrɪtʃuəl/", tip: "rí-chu-ồ", meaning: "Nghi thức", cat: "n",
+                ex1: "Morning coffee is a daily ritual.", ex1_vi: "Cà phê buổi sáng là một nghi thức hàng ngày.",
+                ex2: "They have a ritual of drinking tea.", ex2_vi: "Họ có nghi thức uống trà.",
+                ex3: "The ritual is very important.", ex3_vi: "Nghi thức rất quan trọng." },
+            { id: 3, word: "millions", type: "n.", phonetic: "/ˈmɪljənz/", tip: "mít-lân", meaning: "Hàng triệu", cat: "n",
+                ex1: "Millions of people drink coffee.", ex1_vi: "Hàng triệu người uống cà phê.",
+                ex2: "Millions of dollars were spent.", ex2_vi: "Hàng triệu đô la đã được chi tiêu.",
+                ex3: "The company earns millions.", ex3_vi: "Công ty kiếm được hàng triệu." },
+            { id: 4, word: "people", type: "n.", phonetic: "/ˈpiːpl/", tip: "píp-ồ", meaning: "Mọi người", cat: "n",
+                ex1: "People love coffee.", ex1_vi: "Mọi người yêu thích cà phê.",
+                ex2: "Many people work in coffee shops.", ex2_vi: "Nhiều người làm việc trong quán cà phê.",
+                ex3: "People from all over the world enjoy coffee.", ex3_vi: "Mọi người từ khắp thế giới thưởng thức cà phê." },
+            { id: 5, word: "world", type: "n.", phonetic: "/wɜːrld/", tip: "uớc", meaning: "Thế giới", cat: "n",
+                ex1: "Coffee is popular around the world.", ex1_vi: "Cà phê phổ biến trên toàn thế giới.",
+                ex2: "The world needs more coffee.", ex2_vi: "Thế giới cần nhiều cà phê hơn.",
+                ex3: "Traveling the world is a dream.", ex3_vi: "Du lịch vòng quanh thế giới là một giấc mơ." },
+            { id: 6, word: "imagine", type: "v.", phonetic: "/ɪˈmædʒɪn/", tip: "i-mé-jin", meaning: "Tưởng tượng", cat: "v",
+                ex1: "Can you imagine life without coffee?", ex1_vi: "Bạn có tưởng tượng được cuộc sống không có cà phê?",
+                ex2: "Imagine a world without coffee.", ex2_vi: "Hãy tưởng tượng một thế giới không có cà phê.",
+                ex3: "I imagine it would be difficult.", ex3_vi: "Tôi tưởng tượng nó sẽ khó khăn." },
+            { id: 7, word: "lives", type: "n.", phonetic: "/laɪvz/", tip: "lai-vơ", meaning: "Cuộc sống", cat: "n",
+                ex1: "Coffee is part of many people's lives.", ex1_vi: "Cà phê là một phần trong cuộc sống của nhiều người.",
+                ex2: "Our lives are busy.", ex2_vi: "Cuộc sống của chúng ta bận rộn.",
+                ex3: "They live happy lives.", ex3_vi: "Họ sống những cuộc đời hạnh phúc." },
+            { id: 8, word: "popular", type: "adj.", phonetic: "/ˈpɒpjələ/", tip: "póp-chu-lờ", meaning: "Phổ biến", cat: "adj",
+                ex1: "Coffee is very popular.", ex1_vi: "Cà phê rất phổ biến.",
+                ex2: "This song is popular.", ex2_vi: "Bài hát này được ưa chuộng.",
+                ex3: "He is a popular teacher.", ex3_vi: "Ông ấy là một giáo viên nổi tiếng." },
+            { id: 9, word: "rewarding", type: "adj.", phonetic: "/rɪˈwɔːrdɪŋ/", tip: "ri-uó-đing", meaning: "Bổ ích, đáng giá", cat: "adj",
+                ex1: "Drinking coffee is rewarding.", ex1_vi: "Uống cà phê rất bổ ích.",
+                ex2: "Teaching is a rewarding job.", ex2_vi: "Dạy học là một công việc đáng giá.",
+                ex3: "The experience was rewarding.", ex3_vi: "Trải nghiệm đó rất bổ ích." },
+            { id: 10, word: "beverages", type: "n.", phonetic: "/ˈbevərɪdʒɪz/", tip: "bé-vờ-rít", meaning: "Đồ uống", cat: "n",
+                ex1: "Coffee is one of the most popular beverages.", ex1_vi: "Cà phê là một trong những đồ uống phổ biến nhất.",
+                ex2: "They serve cold beverages.", ex2_vi: "Họ phục vụ đồ uống lạnh.",
+                ex3: "I like hot beverages.", ex3_vi: "Tôi thích đồ uống nóng." },
+            // 11-20
+            { id: 11, word: "enjoyed", type: "v.", phonetic: "/ɪnˈdʒɔɪd/", tip: "in-chói", meaning: "Được thưởng thức", cat: "v",
+                ex1: "Coffee is enjoyed by many.", ex1_vi: "Cà phê được nhiều người thưởng thức.",
+                ex2: "We enjoyed the meal.", ex2_vi: "Chúng tôi đã thưởng thức bữa ăn.",
+                ex3: "She enjoyed the concert.", ex3_vi: "Cô ấy đã thưởng thức buổi hòa nhạc." },
+            { id: 12, word: "provides", type: "v.", phonetic: "/prəˈvaɪdz/", tip: "prờ-vai", meaning: "Cung cấp", cat: "v",
+                ex1: "Coffee provides energy.", ex1_vi: "Cà phê cung cấp năng lượng.",
+                ex2: "The school provides lunch.", ex2_vi: "Trường cung cấp bữa trưa.",
+                ex3: "This book provides information.", ex3_vi: "Cuốn sách này cung cấp thông tin." },
+            { id: 13, word: "energy", type: "n.", phonetic: "/ˈenərdʒi/", tip: "én-nơ-ghi", meaning: "Năng lượng", cat: "n",
+                ex1: "Coffee gives me energy.", ex1_vi: "Cà phê cung cấp năng lượng cho tôi.",
+                ex2: "We need more energy.", ex2_vi: "Chúng ta cần nhiều năng lượng hơn.",
+                ex3: "Solar energy is clean.", ex3_vi: "Năng lượng mặt trời sạch." },
+            { id: 14, word: "supports", type: "v.", phonetic: "/səˈpɔːrts/", tip: "sờ-pót", meaning: "Hỗ trợ", cat: "v",
+                ex1: "Coffee supports local economies.", ex1_vi: "Cà phê hỗ trợ nền kinh tế địa phương.",
+                ex2: "My family supports me.", ex2_vi: "Gia đình tôi ủng hộ tôi.",
+                ex3: "The bridge supports heavy loads.", ex3_vi: "Cây cầu chịu được tải trọng nặng." },
+            { id: 15, word: "local", type: "adj.", phonetic: "/ˈloʊkl/", tip: "lâu-cồ", meaning: "Địa phương", cat: "adj",
+                ex1: "We buy local coffee.", ex1_vi: "Chúng tôi mua cà phê địa phương.",
+                ex2: "The local market is busy.", ex2_vi: "Chợ địa phương thì đông đúc.",
+                ex3: "He is a local hero.", ex3_vi: "Anh ấy là một anh hùng địa phương." },
+            { id: 16, word: "economies", type: "n.", phonetic: "/ɪˈkɒnəmiz/", tip: "i-cón-nờ-mi", meaning: "Nền kinh tế", cat: "n",
+                ex1: "Coffee helps many economies.", ex1_vi: "Cà phê giúp ích cho nhiều nền kinh tế.",
+                ex2: "Global economies are connected.", ex2_vi: "Các nền kinh tế toàn cầu được kết nối.",
+                ex3: "Small economies face challenges.", ex3_vi: "Các nền kinh tế nhỏ đối mặt với thách thức." },
+            { id: 17, word: "cafés", type: "n.", phonetic: "/kæˈfeɪz/", tip: "ca-phây", meaning: "Quán cà phê", cat: "n",
+                ex1: "We meet at cafés.", ex1_vi: "Chúng tôi gặp nhau ở các quán cà phê.",
+                ex2: "Many cafés serve good coffee.", ex2_vi: "Nhiều quán cà phê phục vụ cà phê ngon.",
+                ex3: "Cafés are great places to relax.", ex3_vi: "Quán cà phê là nơi tuyệt vời để thư giãn." },
+            { id: 18, word: "homes", type: "n.", phonetic: "/hoʊmz/", tip: "hôm", meaning: "Nhà cửa", cat: "n",
+                ex1: "Coffee is brewed in many homes.", ex1_vi: "Cà phê được pha ở nhiều nhà.",
+                ex2: "We need to build more homes.", ex2_vi: "Chúng ta cần xây thêm nhà.",
+                ex3: "They work from homes.", ex3_vi: "Họ làm việc từ nhà." },
+            { id: 19, word: "offices", type: "n.", phonetic: "/ˈɒfɪsɪz/", tip: "ó-phít", meaning: "Văn phòng", cat: "n",
+                ex1: "Offices often have coffee machines.", ex1_vi: "Văn phòng thường có máy pha cà phê.",
+                ex2: "We work in offices.", ex2_vi: "Chúng tôi làm việc trong văn phòng.",
+                ex3: "The offices are modern.", ex3_vi: "Các văn phòng hiện đại." },
+            { id: 20, word: "restaurants", type: "n.", phonetic: "/ˈrestərɒnts/", tip: "ré-stờ-rọng", meaning: "Nhà hàng", cat: "n",
+                ex1: "Restaurants serve coffee after meals.", ex1_vi: "Nhà hàng phục vụ cà phê sau bữa ăn.",
+                ex2: "We eat at restaurants.", ex2_vi: "Chúng tôi ăn ở nhà hàng.",
+                ex3: "The restaurants are crowded.", ex3_vi: "Các nhà hàng đông đúc." },
+            // 21-30
+            { id: 21, word: "offers", type: "v.", phonetic: "/ˈɒfərz/", tip: "ó-phờ", meaning: "Mang lại, cung cấp", cat: "v",
+                ex1: "Coffee offers comfort.", ex1_vi: "Cà phê mang lại sự thoải mái.",
+                ex2: "The hotel offers free breakfast.", ex2_vi: "Khách sạn cung cấp bữa sáng miễn phí.",
+                ex3: "She offers help to everyone.", ex3_vi: "Cô ấy giúp đỡ mọi người." },
+            { id: 22, word: "comfort", type: "n.", phonetic: "/ˈkʌmfərt/", tip: "cám-phờ", meaning: "Sự thoải mái", cat: "n",
+                ex1: "I find comfort in a hot cup of coffee.", ex1_vi: "Tôi tìm thấy sự thoải mái trong một tách cà phê nóng.",
+                ex2: "They live in comfort.", ex2_vi: "Họ sống trong sự thoải mái.",
+                ex3: "Comfort is important.", ex3_vi: "Sự thoải mái rất quan trọng." },
+            { id: 23, word: "relaxation", type: "n.", phonetic: "/ˌriːlækˈseɪʃn/", tip: "ri-lắc-xây-sờn", meaning: "Sự thư giãn", cat: "n",
+                ex1: "Coffee brings relaxation.", ex1_vi: "Cà phê mang lại sự thư giãn.",
+                ex2: "Yoga is good for relaxation.", ex2_vi: "Yoga tốt cho sự thư giãn.",
+                ex3: "We need more relaxation.", ex3_vi: "Chúng ta cần thư giãn nhiều hơn." },
+            { id: 24, word: "experience", type: "n.", phonetic: "/ɪkˈspɪriəns/", tip: "ích-xpi-ri-ần", meaning: "Trải nghiệm", cat: "n",
+                ex1: "Tasting coffee is a great experience.", ex1_vi: "Nếm thử cà phê là một trải nghiệm tuyệt vời.",
+                ex2: "Traveling gives you experience.", ex2_vi: "Du lịch mang lại cho bạn kinh nghiệm.",
+                ex3: "We need experience to improve.", ex3_vi: "Chúng ta cần kinh nghiệm để cải thiện." },
+            { id: 25, word: "tasting", type: "v.", phonetic: "/ˈteɪstɪŋ/", tip: "tây-ting", meaning: "Nếm thử", cat: "v",
+                ex1: "People enjoy tasting different coffees.", ex1_vi: "Mọi người thích nếm thử các loại cà phê khác nhau.",
+                ex2: "She is tasting the soup.", ex2_vi: "Cô ấy đang nếm thử súp.",
+                ex3: "Wine tasting is popular.", ex3_vi: "Nếm rượu vang rất phổ biến." },
+            { id: 26, word: "blends", type: "n.", phonetic: "/blendz/", tip: "blén", meaning: "Sự pha trộn", cat: "n",
+                ex1: "Coffee blends have different flavors.", ex1_vi: "Các loại cà phê pha trộn có hương vị khác nhau.",
+                ex2: "We tried new blends.", ex2_vi: "Chúng tôi đã thử các loại pha trộn mới.",
+                ex3: "The blends are unique.", ex3_vi: "Các sự pha trộn rất độc đáo." },
+            { id: 27, word: "spending", type: "v.", phonetic: "/ˈspendɪŋ/", tip: "xpen-đing", meaning: "Dành thời gian", cat: "v",
+                ex1: "We enjoy spending time in cafés.", ex1_vi: "Chúng tôi thích dành thời gian ở quán cà phê.",
+                ex2: "She spends a lot of money.", ex2_vi: "Cô ấy tiêu nhiều tiền.",
+                ex3: "Spending time with family is important.", ex3_vi: "Dành thời gian cho gia đình rất quan trọng." },
+            { id: 28, word: "warmth", type: "n.", phonetic: "/wɔːrmθ/", tip: "uốc-mờ", meaning: "Sự ấm áp", cat: "n",
+                ex1: "The warmth of coffee is comforting.", ex1_vi: "Sự ấm áp của cà phê rất dễ chịu.",
+                ex2: "We feel the warmth of the sun.", ex2_vi: "Chúng tôi cảm nhận hơi ấm của mặt trời.",
+                ex3: "Warmth is needed in winter.", ex3_vi: "Sự ấm áp cần thiết vào mùa đông." },
+            { id: 29, word: "culture", type: "n.", phonetic: "/ˈkʌltʃər/", tip: "cón-chờ", meaning: "Văn hóa", cat: "n",
+                ex1: "Coffee culture is strong in many countries.", ex1_vi: "Văn hóa cà phê phát triển ở nhiều quốc gia.",
+                ex2: "We learn about different cultures.", ex2_vi: "Chúng ta học về các nền văn hóa khác nhau.",
+                ex3: "Culture shapes our identity.", ex3_vi: "Văn hóa định hình bản sắc của chúng ta." },
+            { id: 30, word: "experienced", type: "adj.", phonetic: "/ɪkˈspɪriənst/", tip: "ích-xpi-ri-ân", meaning: "Có kinh nghiệm", cat: "adj",
+                ex1: "Experienced baristas make great coffee.", ex1_vi: "Những người pha chế có kinh nghiệm làm cà phê tuyệt vời.",
+                ex2: "We need an experienced manager.", ex2_vi: "Chúng ta cần một người quản lý có kinh nghiệm.",
+                ex3: "She is experienced in teaching.", ex3_vi: "Cô ấy có kinh nghiệm trong giảng dạy." },
+            // 31-40
+            { id: 31, word: "baristas", type: "n.", phonetic: "/bəˈriːstəz/", tip: "bờ-rít-tờ", meaning: "Nhân viên pha chế", cat: "n",
+                ex1: "Baristas are skilled coffee makers.", ex1_vi: "Nhân viên pha chế là những người pha cà phê lành nghề.",
+                ex2: "The baristas at this café are friendly.", ex2_vi: "Nhân viên pha chế ở quán này thân thiện.",
+                ex3: "Many baristas compete in competitions.", ex3_vi: "Nhiều nhân viên pha chế tham gia các cuộc thi." },
+            { id: 32, word: "beginners", type: "n.", phonetic: "/bɪˈɡɪnərz/", tip: "bi-gí-nờ", meaning: "Người mới bắt đầu", cat: "n",
+                ex1: "Beginners can learn to make coffee.", ex1_vi: "Người mới bắt đầu có thể học pha cà phê.",
+                ex2: "We have courses for beginners.", ex2_vi: "Chúng tôi có các khóa học cho người mới bắt đầu.",
+                ex3: "Beginners should start with basic recipes.", ex3_vi: "Người mới bắt đầu nên bắt đầu với các công thức cơ bản." },
+            { id: 33, word: "develop", type: "v.", phonetic: "/dɪˈveləp/", tip: "đi-vé-lốp", meaning: "Phát triển", cat: "v",
+                ex1: "We can develop skills through coffee making.", ex1_vi: "Chúng ta có thể phát triển kỹ năng qua việc pha cà phê.",
+                ex2: "She wants to develop her career.", ex2_vi: "Cô ấy muốn phát triển sự nghiệp.",
+                ex3: "The city is developing fast.", ex3_vi: "Thành phố đang phát triển nhanh." },
+            { id: 34, word: "valuable", type: "adj.", phonetic: "/ˈvæljuəbl/", tip: "vén-lu-ồ", meaning: "Có giá trị", cat: "adj",
+                ex1: "Coffee skills are valuable.", ex1_vi: "Các kỹ năng về cà phê rất có giá trị.",
+                ex2: "We learned valuable lessons.", ex2_vi: "Chúng tôi đã học được những bài học quý giá.",
+                ex3: "Valuable items are kept safely.", ex3_vi: "Các vật có giá trị được giữ an toàn." },
+            { id: 35, word: "skills", type: "n.", phonetic: "/skɪlz/", tip: "xkiu", meaning: "Kỹ năng", cat: "n",
+                ex1: "Coffee making requires skills.", ex1_vi: "Pha cà phê đòi hỏi kỹ năng.",
+                ex2: "We need to improve our skills.", ex2_vi: "Chúng ta cần cải thiện kỹ năng.",
+                ex3: "Soft skills are important.", ex3_vi: "Kỹ năng mềm rất quan trọng." },
+            { id: 36, word: "industry", type: "n.", phonetic: "/ˈɪndəstri/", tip: "ín-đờ-tri", meaning: "Ngành công nghiệp", cat: "n",
+                ex1: "The coffee industry is huge.", ex1_vi: "Ngành công nghiệp cà phê rất lớn.",
+                ex2: "We work in the industry.", ex2_vi: "Chúng tôi làm việc trong ngành.",
+                ex3: "The industry creates jobs.", ex3_vi: "Ngành công nghiệp tạo ra công việc." },
+            { id: 37, word: "brings", type: "v.", phonetic: "/brɪŋz/", tip: "bri-ng", meaning: "Mang lại", cat: "v",
+                ex1: "Every cup brings new experiences.", ex1_vi: "Mỗi tách cà phê mang lại trải nghiệm mới.",
+                ex2: "The news brings joy.", ex2_vi: "Tin tức mang lại niềm vui.",
+                ex3: "Travel brings knowledge.", ex3_vi: "Du lịch mang lại kiến thức." },
+            { id: 38, word: "roasting", type: "n.", phonetic: "/ˈroʊstɪŋ/", tip: "rốt-tinh", meaning: "Quá trình rang", cat: "n",
+                ex1: "Roasting methods affect coffee flavor.", ex1_vi: "Phương pháp rang ảnh hưởng đến hương vị cà phê.",
+                ex2: "Roasting requires precision.", ex2_vi: "Rang đòi hỏi sự chính xác.",
+                ex3: "We learned about roasting.", ex3_vi: "Chúng tôi đã học về quá trình rang." },
+            { id: 39, word: "methods", type: "n.", phonetic: "/ˈmeθədz/", tip: "mé-thớt", meaning: "Phương pháp", cat: "n",
+                ex1: "There are many coffee brewing methods.", ex1_vi: "Có nhiều phương pháp pha cà phê.",
+                ex2: "We tried different methods.", ex2_vi: "Chúng tôi đã thử các phương pháp khác nhau.",
+                ex3: "Methods change over time.", ex3_vi: "Các phương pháp thay đổi theo thời gian." },
+            { id: 40, word: "bean", type: "n.", phonetic: "/biːn/", tip: "bin", meaning: "Hạt cà phê", cat: "n",
+                ex1: "Coffee beans are roasted.", ex1_vi: "Hạt cà phê được rang.",
+                ex2: "We buy fresh beans.", ex2_vi: "Chúng tôi mua hạt tươi.",
+                ex3: "Beans are the source of coffee.", ex3_vi: "Hạt cà phê là nguồn gốc của cà phê." },
+            // 41-50
+            { id: 41, word: "origins", type: "n.", phonetic: "/ˈɒrɪdʒɪnz/", tip: "ó-ri-gin", meaning: "Nguồn gốc", cat: "n",
+                ex1: "Bean origins affect taste.", ex1_vi: "Nguồn gốc hạt ảnh hưởng đến hương vị.",
+                ex2: "We explore the origins of coffee.", ex2_vi: "Chúng tôi khám phá nguồn gốc của cà phê.",
+                ex3: "Origins are important.", ex3_vi: "Nguồn gốc rất quan trọng." },
+            { id: 42, word: "constantly", type: "adv.", phonetic: "/ˈkɒnstəntli/", tip: "cón-xờ-tần-ly", meaning: "Liên tục", cat: "adv",
+                ex1: "Coffee flavors constantly change.", ex1_vi: "Hương vị cà phê liên tục thay đổi.",
+                ex2: "We constantly improve.", ex2_vi: "Chúng tôi liên tục cải thiện.",
+                ex3: "She constantly checks the coffee.", ex3_vi: "Cô ấy liên tục kiểm tra cà phê." },
+            { id: 43, word: "change", type: "v.", phonetic: "/tʃeɪndʒ/", tip: "chên", meaning: "Thay đổi", cat: "v",
+                ex1: "Methods and origins change.", ex1_vi: "Phương pháp và nguồn gốc thay đổi.",
+                ex2: "We need to change our habits.", ex2_vi: "Chúng ta cần thay đổi thói quen.",
+                ex3: "Change is necessary.", ex3_vi: "Thay đổi là cần thiết." },
+            { id: 44, word: "teaches", type: "v.", phonetic: "/ˈtiːtʃɪz/", tip: "tít-chiz", meaning: "Dạy", cat: "v",
+                ex1: "Coffee teaches patience.", ex1_vi: "Cà phê dạy sự kiên nhẫn.",
+                ex2: "She teaches English.", ex2_vi: "Cô ấy dạy tiếng Anh.",
+                ex3: "Life teaches us many things.", ex3_vi: "Cuộc sống dạy chúng ta nhiều điều." },
+            { id: 45, word: "patience", type: "n.", phonetic: "/ˈpeɪʃns/", tip: "pây-sần", meaning: "Sự kiên nhẫn", cat: "n",
+                ex1: "Making coffee requires patience.", ex1_vi: "Pha cà phê đòi hỏi sự kiên nhẫn.",
+                ex2: "We need patience to succeed.", ex2_vi: "Chúng ta cần kiên nhẫn để thành công.",
+                ex3: "Patience is a virtue.", ex3_vi: "Kiên nhẫn là một đức tính." },
+            { id: 46, word: "focus", type: "n.", phonetic: "/ˈfoʊkəs/", tip: "phâu-cần", meaning: "Sự tập trung", cat: "n",
+                ex1: "Coffee helps improve focus.", ex1_vi: "Cà phê giúp cải thiện sự tập trung.",
+                ex2: "We need focus to study.", ex2_vi: "Chúng ta cần tập trung để học.",
+                ex3: "Focus is key to success.", ex3_vi: "Tập trung là chìa khóa thành công." },
+            { id: 47, word: "appreciation", type: "n.", phonetic: "/əˌpriːʃiˈeɪʃn/", tip: "ờ-pri-si-ây-sờn", meaning: "Sự đánh giá cao", cat: "n",
+                ex1: "Coffee culture promotes appreciation.", ex1_vi: "Văn hóa cà phê thúc đẩy sự đánh giá cao.",
+                ex2: "We show appreciation for art.", ex2_vi: "Chúng tôi thể hiện sự trân trọng nghệ thuật.",
+                ex3: "Appreciation is important.", ex3_vi: "Sự đánh giá cao rất quan trọng." },
+            { id: 48, word: "sustainable", type: "adj.", phonetic: "/səˈsteɪnəbl/", tip: "sờ-tây-nớp", meaning: "Bền vững", cat: "adj",
+                ex1: "Sustainable coffee production is good.", ex1_vi: "Sản xuất cà phê bền vững là tốt.",
+                ex2: "We need sustainable solutions.", ex2_vi: "Chúng ta cần các giải pháp bền vững.",
+                ex3: "Sustainable farming protects nature.", ex3_vi: "Canh tác bền vững bảo vệ thiên nhiên." },
+            { id: 49, word: "production", type: "n.", phonetic: "/prəˈdʌkʃn/", tip: "prờ-đắc-sờn", meaning: "Sản xuất", cat: "n",
+                ex1: "Coffee production is a big industry.", ex1_vi: "Sản xuất cà phê là một ngành công nghiệp lớn.",
+                ex2: "We studied production methods.", ex2_vi: "Chúng tôi đã nghiên cứu các phương pháp sản xuất.",
+                ex3: "Production needs to be efficient.", ex3_vi: "Sản xuất cần phải hiệu quả." },
+            { id: 50, word: "protects", type: "v.", phonetic: "/prəˈtekts/", tip: "prờ-téc", meaning: "Bảo vệ", cat: "v",
+                ex1: "Sustainable production protects ecosystems.", ex1_vi: "Sản xuất bền vững bảo vệ hệ sinh thái.",
+                ex2: "We need to protect the environment.", ex2_vi: "Chúng ta cần bảo vệ môi trường.",
+                ex3: "The helmet protects the head.", ex3_vi: "Mũ bảo hiểm bảo vệ đầu." }
+        ];
+
+        // ---- Thay thế dữ liệu gốc ----
+        // vocabData
+        vocabData.splice(0, vocabData.length, ...newVocabData);
+
+        // readingVocabOrder: lấy danh sách từ theo thứ tự xuất hiện trong bài
+        const newReadingVocabOrder = [
+            "coffee", "ritual", "millions", "people", "world", "imagine", "lives", "popular", "rewarding", "beverages",
+            "enjoyed", "provides", "energy", "supports", "local", "economies", "cafés", "homes", "offices", "restaurants",
+            "offers", "comfort", "relaxation", "experience", "tasting", "blends", "spending", "warmth", "culture",
+            "experienced", "baristas", "beginners", "develop", "valuable", "skills", "industry", "brings", "roasting",
+            "methods", "bean", "origins", "constantly", "change", "teaches", "patience", "focus", "appreciation",
+            "sustainable", "production", "protects"
+        ];
+        readingVocabOrder.splice(0, readingVocabOrder.length, ...newReadingVocabOrder);
+
+        // ---- Bài đọc (essayData) ----
+        const newEssayData = [
+            {
+                text: "Have you ever stopped to think why coffee has become a daily ritual that millions of people around the world cannot imagine their lives without? Coffee is one of the most popular and rewarding beverages enjoyed around the world.",
+                vi: "Bạn đã bao giờ dừng lại để nghĩ tại sao cà phê đã trở thành một nghi thức hàng ngày mà hàng triệu người trên khắp thế giới không thể tưởng tượng cuộc sống của họ nếu thiếu nó? Cà phê là một trong những đồ uống phổ biến và bổ ích nhất được thưởng thức trên toàn thế giới."
+            },
+            {
+                text: "It provides energy for millions of people and supports many local economies. Whether in cafés, homes, offices, or restaurants, coffee offers both comfort and relaxation.",
+                vi: "Nó cung cấp năng lượng cho hàng triệu người và hỗ trợ nhiều nền kinh tế địa phương. Dù ở quán cà phê, nhà riêng, văn phòng, hay nhà hàng, cà phê đều mang lại cả sự thoải mái và thư giãn."
+            },
+            {
+                text: "People enjoy the experience of tasting different blends while spending time in the warmth of coffee culture. Both experienced baristas and beginners can develop valuable skills through this industry.",
+                vi: "Mọi người thích thú với trải nghiệm nếm thử các loại pha trộn khác nhau trong khi dành thời gian trong không khí ấm áp của văn hóa cà phê. Cả những nhân viên pha chế có kinh nghiệm và người mới bắt đầu đều có thể phát triển các kỹ năng quý giá thông qua ngành này."
+            },
+            {
+                text: "Every cup brings new experiences as roasting methods and bean origins constantly change. Coffee also teaches patience, focus, and appreciation for different cultures.",
+                vi: "Mỗi tách cà phê mang lại những trải nghiệm mới khi phương pháp rang và nguồn gốc hạt liên tục thay đổi. Cà phê cũng dạy sự kiên nhẫn, tập trung và lòng trân trọng đối với các nền văn hóa khác nhau."
+            },
+            {
+                text: "Sustainable coffee production helps protect ecosystems and ensures fair livelihoods for farmers. Millions of people continue to enjoy coffee as a daily habit, a profession, and an important source of comfort and income.",
+                vi: "Sản xuất cà phê bền vững giúp bảo vệ hệ sinh thái và đảm bảo sinh kế công bằng cho nông dân. Hàng triệu người tiếp tục thưởng thức cà phê như một thói quen hàng ngày, một nghề nghiệp và một nguồn an ủi và thu nhập quan trọng."
+            }
+        ];
+        essayData.splice(0, essayData.length, ...newEssayData);
+
+        // ---- Ngữ pháp (grammarData) ----
+        const newGrammarData = [
+            {
+                title: "Present Simple (Câu hỏi)",
+                formula: "Have/Has + S + V3/ed?",
+                desc: "Câu hỏi ở thì hiện tại hoàn thành để hỏi về kinh nghiệm.",
+                example: "Have you ever stopped to think why coffee has become a daily ritual?",
+                vi: "Bạn đã bao giờ dừng lại để nghĩ tại sao cà phê đã trở thành một nghi thức hàng ngày?",
+                detail: "Dùng 'ever' trong câu hỏi để hỏi về trải nghiệm.",
+                extra: [
+                    { en: "Have you ever tried Vietnamese coffee?", vi: "Bạn đã bao giờ thử cà phê Việt Nam chưa?" },
+                    { en: "Has she ever visited a coffee farm?", vi: "Cô ấy đã bao giờ thăm một trang trại cà phê chưa?" }
+                ]
+            },
+            {
+                title: "Passive Voice (Hiện tại đơn)",
+                formula: "S + am/is/are + V3/ed",
+                desc: "Câu bị động để nhấn mạnh đối tượng bị tác động.",
+                example: "Coffee is one of the most popular beverages enjoyed around the world.",
+                vi: "Cà phê là một trong những đồ uống phổ biến nhất được thưởng thức trên toàn thế giới.",
+                detail: "Dùng 'enjoyed' là quá khứ phân từ.",
+                extra: [
+                    { en: "Coffee is grown in many countries.", vi: "Cà phê được trồng ở nhiều quốc gia." },
+                    { en: "The beans are roasted carefully.", vi: "Hạt cà phê được rang cẩn thận." }
+                ]
+            },
+            {
+                title: "Present Simple (Khẳng định)",
+                formula: "S + V(s/es) + O",
+                desc: "Diễn tả sự thật hiển nhiên, thói quen.",
+                example: "Coffee provides energy for millions of people.",
+                vi: "Cà phê cung cấp năng lượng cho hàng triệu người.",
+                detail: "Thêm -s với ngôi thứ ba số ít.",
+                extra: [
+                    { en: "It supports many local economies.", vi: "Nó hỗ trợ nhiều nền kinh tế địa phương." },
+                    { en: "Coffee offers both comfort and relaxation.", vi: "Cà phê mang lại cả sự thoải mái và thư giãn." }
+                ]
+            },
+            {
+                title: "Gerund as Subject",
+                formula: "V-ing + V",
+                desc: "Động từ thêm -ing làm chủ ngữ.",
+                example: "Tasting different blends is an enjoyable experience.",
+                vi: "Nếm thử các loại pha trộn khác nhau là một trải nghiệm thú vị.",
+                detail: "Gerund đóng vai trò như danh từ.",
+                extra: [
+                    { en: "Spending time in cafés is relaxing.", vi: "Dành thời gian ở quán cà phê thật thư giãn." },
+                    { en: "Drinking coffee in the morning is a habit.", vi: "Uống cà phê vào buổi sáng là một thói quen." }
+                ]
+            },
+            {
+                title: "Conjunction: both...and...",
+                formula: "both + N/Adj + and + N/Adj",
+                desc: "Dùng để nối hai thành phần tương đương.",
+                example: "Both experienced baristas and beginners can develop valuable skills.",
+                vi: "Cả nhân viên pha chế có kinh nghiệm và người mới bắt đầu đều có thể phát triển kỹ năng quý giá.",
+                detail: "Nhấn mạnh cả hai đối tượng.",
+                extra: [
+                    { en: "Both coffee and tea are popular.", vi: "Cả cà phê và trà đều phổ biến." },
+                    { en: "She is both talented and hardworking.", vi: "Cô ấy vừa tài năng vừa chăm chỉ." }
+                ]
+            },
+            {
+                title: "Relative Clause (who/which/that)",
+                formula: "N + who/which/that + clause",
+                desc: "Mệnh đề quan hệ bổ sung thông tin cho danh từ.",
+                example: "Millions of people around the world cannot imagine their lives without coffee.",
+                vi: "Hàng triệu người trên khắp thế giới không thể tưởng tượng cuộc sống của họ nếu thiếu cà phê.",
+                detail: "Mệnh đề quan hệ không xác định.",
+                extra: [
+                    { en: "People who drink coffee often feel energized.", vi: "Những người uống cà phê thường cảm thấy tràn đầy năng lượng." },
+                    { en: "Cafés that serve fresh coffee are popular.", vi: "Những quán cà phê phục vụ cà phê tươi được ưa chuộng." }
+                ]
+            },
+            {
+                title: "Passive Voice with Modal Verb",
+                formula: "S + can/must + be + V3/ed",
+                desc: "Câu bị động với động từ khuyết thiếu.",
+                example: "Sustainable coffee production helps protect ecosystems.",
+                vi: "Sản xuất cà phê bền vững giúp bảo vệ hệ sinh thái.",
+                detail: "Không có modal ở đây, nhưng có thể dùng.",
+                extra: [
+                    { en: "Coffee beans can be roasted at home.", vi: "Hạt cà phê có thể được rang tại nhà." },
+                    { en: "Ecosystems must be protected.", vi: "Hệ sinh thái phải được bảo vệ." }
+                ]
+            },
+            {
+                title: "Adverb of Frequency",
+                formula: "S + adv + V",
+                desc: "Trạng từ chỉ tần suất đứng trước động từ chính.",
+                example: "Bean origins constantly change.",
+                vi: "Nguồn gốc hạt cà phê liên tục thay đổi.",
+                detail: "Constantly = luôn luôn, liên tục.",
+                extra: [
+                    { en: "We always enjoy coffee after meals.", vi: "Chúng tôi luôn thưởng thức cà phê sau bữa ăn." },
+                    { en: "She often visits coffee shops.", vi: "Cô ấy thường đến quán cà phê." }
+                ]
+            },
+            {
+                title: "Infinitives of Purpose",
+                formula: "to + V (mục đích)",
+                desc: "Động từ nguyên mẫu chỉ mục đích.",
+                example: "Coffee helps protect ecosystems.",
+                vi: "Cà phê giúp bảo vệ hệ sinh thái.",
+                detail: "Dùng 'to' + động từ để chỉ mục đích.",
+                extra: [
+                    { en: "We drink coffee to stay awake.", vi: "Chúng tôi uống cà phê để tỉnh táo." },
+                    { en: "She learns to make coffee to impress her friends.", vi: "Cô ấy học pha cà phê để gây ấn tượng với bạn bè." }
+                ]
+            },
+            {
+                title: "Noun Phrase as Subject",
+                formula: "Det + Adj + N + ...",
+                desc: "Cụm danh từ làm chủ ngữ.",
+                example: "Sustainable coffee production helps protect ecosystems.",
+                vi: "Sản xuất cà phê bền vững giúp bảo vệ hệ sinh thái.",
+                detail: "Cụm danh từ bao gồm tính từ + danh từ.",
+                extra: [
+                    { en: "Fair livelihoods for farmers are important.", vi: "Sinh kế công bằng cho nông dân rất quan trọng." },
+                    { en: "Different blends offer unique flavors.", vi: "Các loại pha trộn khác nhau mang lại hương vị độc đáo." }
+                ]
+            }
+        ];
+        grammarData.splice(0, grammarData.length, ...newGrammarData);
+
+        // ---- Bài tập ----
+        // ex1Data: Điền từ (15 câu)
+        const newEx1Data = [
+            { q: "Coffee is one of the most popular _______ enjoyed around the world.", a: "beverages" },
+            { q: "It provides _______ for millions of people.", a: "energy" },
+            { q: "Coffee supports many local _______.", a: "economies" },
+            { q: "Whether in cafés, homes, offices, or restaurants, coffee offers both comfort and _______.", a: "relaxation" },
+            { q: "People enjoy the experience of _______ different blends.", a: "tasting" },
+            { q: "Both experienced baristas and _______ can develop valuable skills.", a: "beginners" },
+            { q: "Every cup brings new experiences as roasting _______ and bean origins constantly change.", a: "methods" },
+            { q: "Coffee also teaches patience, _______, and appreciation for different cultures.", a: "focus" },
+            { q: "Sustainable coffee production helps protect _______.", a: "ecosystems" },
+            { q: "Millions of people continue to enjoy coffee as a daily _______.", a: "habit" },
+            { q: "Coffee is a source of comfort and _______.", a: "income" },
+            { q: "The _______ of coffee culture is warm and inviting.", a: "warmth" },
+            { q: "Baristas need to develop valuable _______.", a: "skills" },
+            { q: "Coffee _______ are roasted to bring out flavors.", a: "beans" },
+            { q: "Sustainable production _______ fair livelihoods for farmers.", a: "ensures" }
+        ];
+        ex1Data.splice(0, ex1Data.length, ...newEx1Data);
+
+        // ex2Data: Trắc nghiệm (15 câu)
+        const newEx2Data = [
+            { q: "Coffee is one of the most popular _______ enjoyed around the world.", a: "beverages", opts: ["beverages", "drinks", "meals", "snacks"] },
+            { q: "It provides _______ for millions of people.", a: "energy", opts: ["energy", "power", "force", "strength"] },
+            { q: "Coffee supports many local _______.", a: "economies", opts: ["economies", "markets", "businesses", "industries"] },
+            { q: "Whether in cafés, homes, offices, or restaurants, coffee offers both comfort and _______.", a: "relaxation", opts: ["relaxation", "excitement", "stress", "noise"] },
+            { q: "People enjoy the experience of _______ different blends.", a: "tasting", opts: ["tasting", "smelling", "watching", "hearing"] },
+            { q: "Both experienced baristas and _______ can develop valuable skills.", a: "beginners", opts: ["beginners", "professionals", "students", "experts"] },
+            { q: "Every cup brings new experiences as roasting _______ and bean origins constantly change.", a: "methods", opts: ["methods", "tools", "techniques", "recipes"] },
+            { q: "Coffee also teaches patience, _______, and appreciation for different cultures.", a: "focus", opts: ["focus", "relaxation", "excitement", "curiosity"] },
+            { q: "Sustainable coffee production helps protect _______.", a: "ecosystems", opts: ["ecosystems", "buildings", "vehicles", "machines"] },
+            { q: "Millions of people continue to enjoy coffee as a daily _______.", a: "habit", opts: ["habit", "routine", "custom", "tradition"] },
+            { q: "Coffee is a source of comfort and _______.", a: "income", opts: ["income", "wealth", "profit", "salary"] },
+            { q: "The _______ of coffee culture is warm and inviting.", a: "warmth", opts: ["warmth", "coldness", "dryness", "wetness"] },
+            { q: "Baristas need to develop valuable _______.", a: "skills", opts: ["skills", "habits", "hobbies", "interests"] },
+            { q: "Coffee _______ are roasted to bring out flavors.", a: "beans", opts: ["beans", "leaves", "fruits", "seeds"] },
+            { q: "Sustainable production _______ fair livelihoods for farmers.", a: "ensures", opts: ["ensures", "guarantees", "provides", "creates"] }
+        ];
+        ex2Data.splice(0, ex2Data.length, ...newEx2Data);
+
+        // ex3Data: Ghép nghĩa (15 từ)
+        const newEx3Data = [
+            { word: "coffee", mean: "Cà phê" },
+            { word: "beverages", mean: "Đồ uống" },
+            { word: "energy", mean: "Năng lượng" },
+            { word: "economies", mean: "Nền kinh tế" },
+            { word: "relaxation", mean: "Sự thư giãn" },
+            { word: "tasting", mean: "Nếm thử" },
+            { word: "beginners", mean: "Người mới bắt đầu" },
+            { word: "methods", mean: "Phương pháp" },
+            { word: "focus", mean: "Sự tập trung" },
+            { word: "ecosystems", mean: "Hệ sinh thái" },
+            { word: "habit", mean: "Thói quen" },
+            { word: "income", mean: "Thu nhập" },
+            { word: "warmth", mean: "Sự ấm áp" },
+            { word: "skills", mean: "Kỹ năng" },
+            { word: "beans", mean: "Hạt cà phê" }
+        ];
+        ex3Data.splice(0, ex3Data.length, ...newEx3Data);
+
+        // ex4Data: Flashcard (dùng vocabData, nên không cần thay đổi vì vocabData đã được thay)
+        // Tuy nhiên ex4Data được tạo từ vocabData.map, nên sau khi vocabData thay đổi, ex4Data sẽ tự động thay đổi nếu được gán lại? 
+        // Nhưng ex4Data là const array, không thể gán lại, nên cần thay đổi nội dung.
+        // Ta sẽ thay đổi ex4Data bằng cách splice và push từ vocabData.
+        ex4Data.splice(0, ex4Data.length, ...newVocabData.map(v => ({ word: v.word, mean: v.meaning })));
+
+        // ex5Data: Gõ chính tả (10 câu)
+        const newEx5Data = [
+            "Coffee is a popular beverage.",
+            "It provides energy for millions.",
+            "Coffee supports local economies.",
+            "It offers comfort and relaxation.",
+            "People enjoy tasting different blends.",
+            "Baristas develop valuable skills.",
+            "Roasting methods change constantly.",
+            "Coffee teaches patience and focus.",
+            "Sustainable production protects ecosystems.",
+            "Coffee is a daily habit and a profession."
+        ];
+        ex5Data.splice(0, ex5Data.length, ...newEx5Data);
+
+        // ex6Data: Sắp xếp từ (10 câu)
+        const newEx6Data = [
+            { id: 1, words: ["coffee", "beverage", "popular", "is", "a"], correct: "coffee is a popular beverage" },
+            { id: 2, words: ["energy", "provides", "millions", "it", "for"], correct: "it provides energy for millions" },
+            { id: 3, words: ["supports", "economies", "local", "coffee"], correct: "coffee supports local economies" },
+            { id: 4, words: ["offers", "relaxation", "it", "and", "comfort"], correct: "it offers comfort and relaxation" },
+            { id: 5, words: ["tasting", "enjoy", "people", "blends", "different"], correct: "people enjoy tasting different blends" },
+            { id: 6, words: ["baristas", "skills", "develop", "valuable"], correct: "baristas develop valuable skills" },
+            { id: 7, words: ["methods", "change", "constantly", "roasting"], correct: "roasting methods constantly change" },
+            { id: 8, words: ["patience", "teaches", "focus", "coffee", "and"], correct: "coffee teaches patience and focus" },
+            { id: 9, words: ["protects", "production", "ecosystems", "sustainable"], correct: "sustainable production protects ecosystems" },
+            { id: 10, words: ["daily", "coffee", "habit", "a", "is", "and", "profession"], correct: "coffee is a daily habit and a profession" }
+        ];
+        ex6Data.splice(0, ex6Data.length, ...newEx6Data);
+
+        // ex7Data: Câu hỏi (10 câu)
+        const newEx7Data = [
+            { q: "What is one of the most popular beverages in the world?", a: "Coffee." },
+            { q: "What does coffee provide for millions of people?", a: "Energy." },
+            { q: "What does coffee support?", a: "Local economies." },
+            { q: "Where can you enjoy coffee?", a: "In cafés, homes, offices, or restaurants." },
+            { q: "What do people enjoy tasting?", a: "Different blends." },
+            { q: "Who can develop valuable skills in the coffee industry?", a: "Both experienced baristas and beginners." },
+            { q: "What constantly changes in coffee making?", a: "Roasting methods and bean origins." },
+            { q: "What does coffee teach?", a: "Patience, focus, and appreciation for different cultures." },
+            { q: "Why is sustainable coffee production important?", a: "It helps protect ecosystems and ensures fair livelihoods for farmers." },
+            { q: "How do millions of people view coffee?", a: "As a daily habit, a profession, and a source of comfort and income." }
+        ];
+        ex7Data.splice(0, ex7Data.length, ...newEx7Data);
+
+        // ---- Phân tích câu (analysisData) ----
+        // Lấy từng câu từ essayData (đã thay đổi), tách thành các câu đơn.
+        // Tôi sẽ tạo 8 câu phân tích dựa trên đoạn văn.
+        const newAnalysisData = [
+            {
+                sentence: "Have you ever stopped to think why coffee has become a daily ritual?",
+                structure: "Câu hỏi Hiện tại hoàn thành (Have + S + V3/ed) + to V",
+                translation: "Bạn đã bao giờ dừng lại để nghĩ tại sao cà phê đã trở thành một nghi thức hàng ngày?",
+                pos: "Have (trợ động từ), you (đại từ), ever (trạng từ), stopped (động từ), to think (nguyên mẫu), why (liên từ), coffee (danh từ), has become (động từ), a (mạo từ), daily (tính từ), ritual (danh từ)."
+            },
+            {
+                sentence: "Coffee is one of the most popular and rewarding beverages enjoyed around the world.",
+                structure: "S + be + one of + the + adj + N + V3/ed (quá khứ phân từ)",
+                translation: "Cà phê là một trong những đồ uống phổ biến và bổ ích nhất được thưởng thức trên toàn thế giới.",
+                pos: "Coffee (danh từ), is (động từ), one (danh từ), of (giới từ), the (mạo từ), most (trạng từ), popular (tính từ), and (liên từ), rewarding (tính từ), beverages (danh từ), enjoyed (quá khứ phân từ), around (giới từ), the (mạo từ), world (danh từ)."
+            },
+            {
+                sentence: "It provides energy for millions of people and supports many local economies.",
+                structure: "S + V + O + for + N + and + V + O",
+                translation: "Nó cung cấp năng lượng cho hàng triệu người và hỗ trợ nhiều nền kinh tế địa phương.",
+                pos: "It (đại từ), provides (động từ), energy (danh từ), for (giới từ), millions (danh từ), of (giới từ), people (danh từ), and (liên từ), supports (động từ), many (tính từ), local (tính từ), economies (danh từ)."
+            },
+            {
+                sentence: "Whether in cafés, homes, offices, or restaurants, coffee offers both comfort and relaxation.",
+                structure: "Whether + N, N, or N + S + V + O",
+                translation: "Dù ở quán cà phê, nhà riêng, văn phòng, hay nhà hàng, cà phê đều mang lại cả sự thoải mái và thư giãn.",
+                pos: "Whether (liên từ), in (giới từ), cafés (danh từ), homes (danh từ), offices (danh từ), or (liên từ), restaurants (danh từ), coffee (danh từ), offers (động từ), both (từ hạn định), comfort (danh từ), and (liên từ), relaxation (danh từ)."
+            },
+            {
+                sentence: "People enjoy the experience of tasting different blends while spending time in the warmth of coffee culture.",
+                structure: "S + V + O + of + V-ing + while + V-ing",
+                translation: "Mọi người thích thú với trải nghiệm nếm thử các loại pha trộn khác nhau trong khi dành thời gian trong không khí ấm áp của văn hóa cà phê.",
+                pos: "People (danh từ), enjoy (động từ), the (mạo từ), experience (danh từ), of (giới từ), tasting (V-ing), different (tính từ), blends (danh từ), while (liên từ), spending (V-ing), time (danh từ), in (giới từ), the (mạo từ), warmth (danh từ), of (giới từ), coffee (danh từ), culture (danh từ)."
+            },
+            {
+                sentence: "Both experienced baristas and beginners can develop valuable skills through this industry.",
+                structure: "Both + N + and + N + modal + V + O",
+                translation: "Cả nhân viên pha chế có kinh nghiệm và người mới bắt đầu đều có thể phát triển các kỹ năng quý giá thông qua ngành này.",
+                pos: "Both (từ hạn định), experienced (tính từ), baristas (danh từ), and (liên từ), beginners (danh từ), can (động từ khuyết thiếu), develop (động từ), valuable (tính từ), skills (danh từ), through (giới từ), this (tính từ chỉ định), industry (danh từ)."
+            },
+            {
+                sentence: "Every cup brings new experiences as roasting methods and bean origins constantly change.",
+                structure: "S + V + O + as + S + V",
+                translation: "Mỗi tách cà phê mang lại những trải nghiệm mới khi phương pháp rang và nguồn gốc hạt liên tục thay đổi.",
+                pos: "Every (tính từ), cup (danh từ), brings (động từ), new (tính từ), experiences (danh từ), as (liên từ), roasting (V-ing làm adj), methods (danh từ), and (liên từ), bean (danh từ), origins (danh từ), constantly (trạng từ), change (động từ)."
+            },
+            {
+                sentence: "Sustainable coffee production helps protect ecosystems and ensures fair livelihoods for farmers.",
+                structure: "S + V + O + and + V + O",
+                translation: "Sản xuất cà phê bền vững giúp bảo vệ hệ sinh thái và đảm bảo sinh kế công bằng cho nông dân.",
+                pos: "Sustainable (tính từ), coffee (danh từ), production (danh từ), helps (động từ), protect (động từ nguyên mẫu), ecosystems (danh từ), and (liên từ), ensures (động từ), fair (tính từ), livelihoods (danh từ), for (giới từ), farmers (danh từ)."
+            }
+        ];
+        analysisData.splice(0, analysisData.length, ...newAnalysisData);
+
+        // ---- Cập nhật lại giao diện ----
+        // Gọi lại các hàm render để hiển thị dữ liệu mới
+        renderDashboardEssay();
+        renderReading();
+        renderVocab('');
+        renderGrammar();
+        renderEx1();
+        renderEx2();
+        renderEx3();
+        renderEx4();
+        renderEx5();
+        renderEx6();
+        renderEx7();
+        renderAnalysis();
+        switchExercise(1);
+        updateProgress();
+
+        // Cập nhật số lượng từ vựng trong tiêu đề
+        document.querySelector('#tab-vocab .text-xs.text-slate-400').textContent = `${newVocabData.length} từ với 3 ví dụ phong phú`;
+        document.querySelector('#tab-vocab .text-slate-400:last-child').textContent = `${newVocabData.length} từ với 3 ví dụ phong phú`;
+        // Cập nhật số lượng từ trong progress
+        document.getElementById('vocab-progress-text').textContent = `0/${newVocabData.length}`;
+
+        console.log('✅ Coffee data loaded successfully!');
+    </script>
+</body>
+</html>
