@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đà Nẵng - Học Tiếng Anh Tương Tác</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../common/Common.css" />
+</head>
+<body>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 glass border-b border-slate-200 px-4 py-3 shadow-soft">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
+            <div class="flex items-center gap-3 flex-wrap">
+                <a
+                    href="../index.html"
+                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl
+                           bg-green-50 hover:bg-green-100
+                           border border-green-200
+                           text-green-700 font-bold text-sm
+                           transition shadow-sm"
+                    title="Quay lại danh sách bài học"
+                >
+                    <span aria-hidden="true">←</span>
+                    <span class="hidden sm:inline">Danh sách bài học</span>
+                    <span class="sm:hidden">Trang chủ</span>
+                </a>
+
+                <div class="w-11 h-11 bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">🌉</div>
+
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight text-slate-800 block leading-none">Đà Nẵng</span>
+                    <span class="text-[9px] text-green-600 font-bold tracking-widest uppercase">Interactive Learning</span>
+                </div>
+            </div>
+            <div class="flex gap-1 md:gap-3 text-sm font-medium mt-2 sm:mt-0 flex-wrap items-center">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active px-3 py-1.5 rounded-lg transition">Tổng Quan</button>
+                <button onclick="switchTab('reading')" id="btn-reading" class="nav-btn px-3 py-1.5 rounded-lg transition">Bài Đọc</button>
+                <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-btn px-3 py-1.5 rounded-lg transition">Từ Vựng</button>
+                <button onclick="switchTab('grammar')" id="btn-grammar" class="nav-btn px-3 py-1.5 rounded-lg transition">Ngữ Pháp</button>
+                <button onclick="switchTab('practice')" id="btn-practice" class="nav-btn px-3 py-1.5 rounded-lg transition">Luyện Tập</button>
+                <button onclick="switchTab('analysis')" id="btn-analysis" class="nav-btn px-3 py-1.5 rounded-lg transition">🔍 Phân tích câu</button>
+                <button onclick="toggleDarkMode()" class="dark-toggle text-xl ml-2 p-1 rounded-full hover:bg-green-100/30 transition">🌙</button>
+                <button onclick="toggleFullscreen()" class="fullscreen-btn text-xl ml-1 p-1 rounded-full hover:bg-green-100/30 transition" title="Toàn màn hình (F11)">⛶</button>
+                <button onclick="exportData()" class="text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-xl transition ml-1" title="Xuất dữ liệu">📤</button>
+                <button onclick="document.getElementById('import-input').click()" class="text-xs font-bold text-cyan-700 bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl transition ml-1" title="Nhập dữ liệu">📥</button>
+                <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)" />
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
+
+        <!-- ===== TAB TỔNG QUAN ===== -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-50 via-white to-emerald-50/70 p-6 md:p-10 border border-green-100 shadow-soft-lg">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <span class="inline-block bg-green-100 text-green-700 text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">🌉 Đà Nẵng</span>
+                        <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-[1.2]">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">Da Nang – Vietnam</span>
+                        </h1>
+                        <p class="text-slate-600 text-base max-w-xl leading-relaxed">
+                            Khám phá thành phố đáng sống nhất Việt Nam – Đà Nẵng. Học từ vựng, ngữ pháp và luyện tập qua 7 dạng bài tương tác.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="switchTab('reading')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-7 py-3.5 rounded-2xl shadow-lg hover:shadow-green-200/50 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <span>Bắt đầu đọc</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                            <button onclick="switchTab('practice')" class="bg-white hover:bg-slate-50 text-slate-700 font-semibold px-7 py-3.5 rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center gap-2">📝 Luyện tập ngay</button>
+                        </div>
+                    </div>
+                    <div class="hero-img relative h-56 md:h-72 lg:h-80 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="cauvang.jpg" alt="Golden Bridge Da Nang" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x400/86efac/14532d?text=Cầu+Vàng+Đà+Nẵng'" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold text-slate-700 shadow-lg flex items-center gap-2">
+                            <span>🌉</span> Cầu Vàng – Đà Nẵng
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hàng 2: Bài đọc + Tiến độ -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-soft overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50/50 px-6 py-4 border-b border-slate-200 flex items-center justify-between flex-wrap gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📖</span>
+                            <span class="font-bold text-slate-700">Bài đọc: Da Nang – A Great Place to Visit</span>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button id="btn-play-loop" class="btn-play-loop text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">🔁 Nghe lặp</button>
+                            <button id="btn-stop-loop" class="btn-stop-loop hidden text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md">⏹ Dừng</button>
+                            <button id="btn-record-full" class="btn-record-full text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition hover:shadow-md" onclick="toggleFullRecording()">🎤 Ghi âm</button>
+                            <button onclick="toggleTranslateAll()" id="translate-all-btn" class="text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-xl border border-green-200 transition flex items-center gap-1">🇻🇳 Dịch</button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4 text-slate-700 text-base leading-[1.9]">
+                        <div class="voice-control-box">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">🎙️ Giọng đọc & Tốc độ</h4>
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate-dashboard" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display-dashboard" class="text-xs font-bold text-green-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select-dashboard" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                        <div id="essay-preview"></div>
+                        <div id="essay-translation" class="hidden bg-slate-50/80 p-4 rounded-2xl border border-slate-200 text-slate-600 text-sm leading-[1.8]"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-green-100 shadow-soft">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📊 Tiến độ học tập</h3>
+                        <div class="mt-4 space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Từ vựng đã học</span><span id="vocab-progress-text">0/66</span></div>
+                                <div class="progress-bar"><div id="vocab-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs"><span>Bài tập hoàn thành</span><span id="exercise-progress-text">0/100</span></div>
+                                <div class="progress-bar"><div id="exercise-progress-fill" class="fill" style="width:0%"></div></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📈 Thống kê chi tiết</h4>
+                            <div class="stat-detail grid grid-cols-2 gap-1 text-sm">
+                                <span class="text-slate-500">Từ đã học</span>
+                                <span class="font-bold text-right text-blue-600" id="stat-learned">0</span>
+                                <span class="text-slate-500">Từ yêu thích</span>
+                                <span class="font-bold text-right text-amber-600" id="stat-favorites">0</span>
+                                <span class="text-slate-500">Điểm bài tập</span>
+                                <span class="font-bold text-right text-cyan-600" id="stat-score">0</span>
+                                <span class="text-slate-500">Thời gian học (ph)</span>
+                                <span class="font-bold text-right text-purple-600" id="stat-time">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50/60 p-5 rounded-2xl border border-green-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">💡</span>
+                            <div>
+                                <p class="font-bold text-green-800 text-sm">Mẹo học</p>
+                                <p class="text-xs text-green-700/70">Bấm vào từ để tra nghĩa ngay trong bài.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== READING TAB ===== -->
+        <section id="tab-reading" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎵 Audio</span>
+                            <span id="reading-indicator" class="hidden bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span> Đang đọc
+                            </span>
+                        </div>
+                        <div id="audio-wrapper">
+                            <div id="audio-container" class="mt-3">
+                                <audio id="main-audio" controls class="w-full rounded-xl" preload="metadata">
+                                    <source src="danang.mp3" type="audio/mpeg" onerror="hideAudio()">
+                                    <source src="danang.wav" type="audio/wav" onerror="hideAudio()">
+                                    Trình duyệt không hỗ trợ audio.
+                                </audio>
+                            </div>
+                            <div class="mt-4 mb-6" id="audio-progress-wrapper">
+                                <div class="audio-progress" onclick="seekAudio(event)">
+                                    <div id="audio-progress-bar" class="audio-progress-bar"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                    <span id="audio-current">0:00</span>
+                                    <span id="audio-duration-label">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="video-container" class="rounded-2xl overflow-hidden bg-slate-900 shadow-lg relative border border-slate-200 w-full max-w-4xl mx-auto mb-8">
+                            <video id="main-video-player" class="w-full h-auto object-contain" controls preload="auto">
+                                <source src="danang.mp4" type="video/mp4" onerror="hideVideo()">
+                                Trình duyệt không hỗ trợ thẻ video.
+                            </video>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <button onclick="playFullText()" id="tts-play" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">▶ Đọc toàn bài</button>
+                            <button onclick="stopAllAudio()" id="tts-stop" class="hidden flex-1 bg-red-500 hover:bg-red-600 text-white font-bold text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">⏹ Dừng</button>
+                        </div>
+                        <div id="tts-status" class="text-xs text-amber-600 mt-2 hidden animate-pulse">● Đang đọc...</div>
+                        <div class="mt-3 pt-3 border-t border-slate-200">
+                            <div class="speed-control">
+                                <span class="text-xs font-medium text-slate-500">🐢</span>
+                                <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="0.85" />
+                                <span class="text-xs font-medium text-slate-500">🐇</span>
+                                <span id="rate-display" class="text-xs font-bold text-green-600 min-w-[36px]">0.85x</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2">
+                                <span class="text-xs font-medium text-slate-500">🗣️ Giọng:</span>
+                                <select id="voice-select" class="voice-select text-xs"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">📚 Từ vựng trong bài</p>
+                        <div class="vocab-cloud" id="reading-vocab-cloud"></div>
+                        <p class="text-[10px] text-slate-400 mt-2 italic">👆 Nhấp vào từ để tra nghĩa chi tiết</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-2xl border border-green-200 text-green-800 text-xs flex items-start gap-3">
+                        <span class="text-xl">💡</span>
+                        <div><p class="font-bold">Mẹo:</p><p>Nghe và đọc theo để cải thiện phát âm và ghi nhớ từ vựng.</p></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <div class="bg-[#ecfdf5] p-6 md:p-8 rounded-3xl border border-green-100 shadow-soft">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-green-200/60">
+                            <div>
+                                <h2 class="text-2xl font-extrabold text-green-900">Da Nang – A Great Place to Visit</h2>
+                                <p class="text-green-700/70 text-xs mt-1">👆 Nhấp vào từ được gạch chân để tra nghĩa</p>
+                            </div>
+                            <span class="text-4xl">🌉</span>
+                        </div>
+                        <div id="essay-container" class="space-y-6 text-slate-800 text-lg leading-[2]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VOCAB ===== -->
+        <section id="tab-vocab" class="tab-content hidden space-y-6">
+            <div class="bg-white p-5 rounded-3xl border border-green-50 shadow-soft flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">📚 Thư viện từ vựng</h2>
+                    <p class="text-xs text-slate-400">66 từ với 3 ví dụ phong phú</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" data-filter="all" onclick="filterVocab('all')">Tất cả</button>
+                    <button class="filter-btn" data-filter="n" onclick="filterVocab('n')">Danh từ</button>
+                    <button class="filter-btn" data-filter="v" onclick="filterVocab('v')">Động từ</button>
+                    <button class="filter-btn" data-filter="adj" onclick="filterVocab('adj')">Tính từ</button>
+                    <button class="filter-btn" data-filter="adv" onclick="filterVocab('adv')">Trạng từ</button>
+                    <button class="filter-btn" data-filter="conj" onclick="filterVocab('conj')">Liên từ</button>
+                    <button class="filter-btn" data-filter="fav" onclick="filterVocab('fav')">⭐ Yêu thích</button>
+                </div>
+            </div>
+            <div class="flex gap-2 items-center flex-wrap">
+                <input type="text" id="vocab-search" placeholder="🔍 Tìm từ..." class="px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-300 focus:outline-none w-full md:w-64" />
+                <button onclick="toggleLearnedFilter()" id="learned-toggle" class="px-4 py-2.5 text-sm rounded-xl bg-slate-100 hover:bg-green-100 border border-slate-200 transition font-medium">📌 Đã học</button>
+                <button onclick="shuffleVocab()" class="px-4 py-2.5 text-sm rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-200 transition font-medium">🎲 Xáo trộn</button>
+            </div>
+            <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+        </section>
+
+        <!-- ===== GRAMMAR ===== -->
+        <section id="tab-grammar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-green-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">📘</span>
+                    <div><h2 class="text-2xl font-extrabold text-slate-800">Ngữ pháp trọng tâm</h2><p class="text-xs text-slate-400">10 cấu trúc xuất hiện trong bài đọc</p></div>
+                </div>
+                <div id="grammar-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- ===== PRACTICE ===== -->
+        <section id="tab-practice" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-3 space-y-5">
+                    <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-soft sticky top-24">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">📘 Cấu trúc ngữ pháp</h3>
+                        <div id="grammar-sidebar" class="mt-3 space-y-3 text-xs"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-9 space-y-5">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-slate-100">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-4 border-b border-slate-100 mb-5">
+                            <div><h3 class="text-xl font-extrabold text-slate-800">🎯 Bài tập đa dạng</h3><p class="text-xs text-slate-400">100 câu hỏi - 7 dạng bài</p></div>
+                            <div class="flex items-center gap-2 bg-green-50 px-4 py-1.5 rounded-xl border border-green-100">
+                                <span class="text-xs font-bold text-green-700">Điểm:</span>
+                                <span id="score-badge" class="text-sm font-extrabold text-green-600 bg-white px-3 py-0.5 rounded-lg shadow-sm">0/100</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 border-b border-slate-100 pb-3 mb-6 text-xs font-bold uppercase tracking-wider">
+                            <button onclick="switchExercise(1)" id="ex-tab-1" class="exercise-tab active px-4 py-2 rounded-xl transition">📝 Điền từ</button>
+                            <button onclick="switchExercise(2)" id="ex-tab-2" class="exercise-tab px-4 py-2 rounded-xl transition">🔘 Trắc nghiệm</button>
+                            <button onclick="switchExercise(3)" id="ex-tab-3" class="exercise-tab px-4 py-2 rounded-xl transition">🎯 Ghép nghĩa</button>
+                            <button onclick="switchExercise(4)" id="ex-tab-4" class="exercise-tab px-4 py-2 rounded-xl transition">🃏 Flashcard</button>
+                            <button onclick="switchExercise(5)" id="ex-tab-5" class="exercise-tab px-4 py-2 rounded-xl transition">⌨️ Gõ chính tả</button>
+                            <button onclick="switchExercise(6)" id="ex-tab-6" class="exercise-tab px-4 py-2 rounded-xl transition">🔄 Sắp xếp</button>
+                            <button onclick="switchExercise(7)" id="ex-tab-7" class="exercise-tab px-4 py-2 rounded-xl transition">❓ Câu hỏi</button>
+                        </div>
+
+                        <form onsubmit="event.preventDefault();" class="space-y-6">
+                            <div id="ex-1" class="exercise-section space-y-5"></div>
+                            <div id="ex-2" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-3" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-4" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-5" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-6" class="exercise-section hidden space-y-5"></div>
+                            <div id="ex-7" class="exercise-section hidden space-y-5"></div>
+
+                            <div class="pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+                                <button type="button" onclick="evaluateCurrent()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">✅ Nộp bài & kiểm tra</button>
+                                <button type="button" onclick="resetCurrent()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-2xl transition">🔄 Làm lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ANALYSIS ===== -->
+        <section id="tab-analysis" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-green-50 shadow-soft">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">🔍</span>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-800">Phân tích câu</h2>
+                        <p class="text-xs text-slate-400">Cấu trúc, từ loại và dịch nghĩa của 12 câu trong bài</p>
+                    </div>
+                </div>
+                <div id="analysis-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+    </main>
+<!-- ===== FOOTER ===== -->
+    <footer class="max-w-7xl mx-auto px-4 md:px-6 mt-10 pb-6">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-soft py-4 px-6 text-center">
+            <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                <span class="font-bold text-red-600">✧</span> 
+                Bản quyền 2026 — Thiết kế bởi <span class="font-bold text-red-600">Minh Châu Phú</span> 
+                với sự đồng hành của AI 
+                <span class="font-semibold text-slate-700">DeepSeek</span>, 
+                <span class="font-semibold text-slate-700">Gemini</span>, 
+                <span class="font-semibold text-slate-700">ChatGPT</span> 
+                và các trợ lý thông minh khác.
+                <span class="font-bold text-yellow-600">✧</span>
+            </p>
+        </div>
+    </footer>
+    <!-- MODAL -->
+    <div id="word-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-3xl font-light transition">&times;</button>
+            <div id="modal-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Load Common.js và ghi đè dữ liệu -->
+    <script src="../common/Common.js"></script>
+    <script>
+        // ============================================================
+        // DỮ LIỆU ĐÀ NẴNG - GHI ĐÈ LÊN DỮ LIỆU GỐC
+        // ============================================================
+
+        // ---- 1. TỪ VỰNG (66 từ) ----
+        const newVocabData = [
+            // 1
+            { id: 1, word: "Da Nang", type: "n.", phonetic: "/dɑː næŋ/", tip: "đa năng", meaning: "Đà Nẵng", cat: "n",
+                ex1: "Da Nang is a beautiful city.", ex1_vi: "Đà Nẵng là một thành phố xinh đẹp.",
+                ex2: "I want to visit Da Nang.", ex2_vi: "Tôi muốn thăm Đà Nẵng.",
+                ex3: "Da Nang has many bridges.", ex3_vi: "Đà Nẵng có nhiều cây cầu." },
+            { id: 2, word: "Known", type: "adj.", phonetic: "/noʊn/", tip: "nôn", meaning: "Được biết đến", cat: "adj",
+                ex1: "Da Nang is known as a livable city.", ex1_vi: "Đà Nẵng được biết đến là thành phố đáng sống.",
+                ex2: "She is known for her kindness.", ex2_vi: "Cô ấy được biết đến vì lòng tốt.",
+                ex3: "This place is known worldwide.", ex3_vi: "Nơi này được biết đến trên toàn thế giới." },
+            { id: 3, word: "livable", type: "adj.", phonetic: "/ˈlɪvəbl/", tip: "líp-vờ-bồ", meaning: "Đáng sống", cat: "adj",
+                ex1: "Da Nang is the most livable city.", ex1_vi: "Đà Nẵng là thành phố đáng sống nhất.",
+                ex2: "We need a livable environment.", ex2_vi: "Chúng ta cần một môi trường đáng sống.",
+                ex3: "This town is very livable.", ex3_vi: "Thị trấn này rất đáng sống." },
+            { id: 4, word: "city", type: "n.", phonetic: "/ˈsɪti/", tip: "xí-ti", meaning: "Thành phố", cat: "n",
+                ex1: "Da Nang is a coastal city.", ex1_vi: "Đà Nẵng là một thành phố ven biển.",
+                ex2: "The city is crowded.", ex2_vi: "Thành phố đông đúc.",
+                ex3: "I live in a big city.", ex3_vi: "Tôi sống ở một thành phố lớn." },
+            { id: 5, word: "Vietnam", type: "n.", phonetic: "/ˌvjetˈnæm/", tip: "việt nam", meaning: "Việt Nam", cat: "n",
+                ex1: "Da Nang is in Vietnam.", ex1_vi: "Đà Nẵng ở Việt Nam.",
+                ex2: "Vietnam is a beautiful country.", ex2_vi: "Việt Nam là một đất nước xinh đẹp.",
+                ex3: "I love Vietnam.", ex3_vi: "Tôi yêu Việt Nam." },
+            { id: 6, word: "wonderful", type: "adj.", phonetic: "/ˈwʌndərfl/", tip: "uấn-đờ-phồ", meaning: "Tuyệt vời", cat: "adj",
+                ex1: "Da Nang is a wonderful place.", ex1_vi: "Đà Nẵng là một nơi tuyệt vời.",
+                ex2: "We had a wonderful time.", ex2_vi: "Chúng tôi đã có một khoảng thời gian tuyệt vời.",
+                ex3: "The view is wonderful.", ex3_vi: "Khung cảnh thật tuyệt vời." },
+            { id: 7, word: "place", type: "n.", phonetic: "/pleɪs/", tip: "plây", meaning: "Nơi, địa điểm", cat: "n",
+                ex1: "Da Nang is a great place.", ex1_vi: "Đà Nẵng là một địa điểm tuyệt vời.",
+                ex2: "This is my favorite place.", ex2_vi: "Đây là nơi yêu thích của tôi.",
+                ex3: "We need a quiet place.", ex3_vi: "Chúng tôi cần một nơi yên tĩnh." },
+            { id: 8, word: "mixes", type: "v.", phonetic: "/ˈmɪksɪz/", tip: "míc-xít", meaning: "Pha trộn, kết hợp", cat: "v",
+                ex1: "Da Nang mixes nature and modern life.", ex1_vi: "Đà Nẵng kết hợp thiên nhiên và cuộc sống hiện đại.",
+                ex2: "She mixes colors well.", ex2_vi: "Cô ấy pha trộn màu sắc tốt.",
+                ex3: "The drink mixes fruit and milk.", ex3_vi: "Đồ uống kết hợp trái cây và sữa." },
+            { id: 9, word: "beautiful", type: "adj.", phonetic: "/ˈbjuːtɪfl/", tip: "bju-ti-phồ", meaning: "Đẹp", cat: "adj",
+                ex1: "Da Nang has beautiful beaches.", ex1_vi: "Đà Nẵng có những bãi biển đẹp.",
+                ex2: "The flowers are beautiful.", ex2_vi: "Những bông hoa thật đẹp.",
+                ex3: "She is a beautiful girl.", ex3_vi: "Cô ấy là một cô gái xinh đẹp." },
+            { id: 10, word: "nature", type: "n.", phonetic: "/ˈneɪtʃər/", tip: "nây-chờ", meaning: "Thiên nhiên", cat: "n",
+                ex1: "I love the nature in Da Nang.", ex1_vi: "Tôi yêu thiên nhiên ở Đà Nẵng.",
+                ex2: "Nature is beautiful.", ex2_vi: "Thiên nhiên thật đẹp.",
+                ex3: "We should protect nature.", ex3_vi: "Chúng ta nên bảo vệ thiên nhiên." },
+            { id: 11, word: "modern", type: "adj.", phonetic: "/ˈmɒdən/", tip: "mó-đờn", meaning: "Hiện đại", cat: "adj",
+                ex1: "Da Nang is a modern city.", ex1_vi: "Đà Nẵng là một thành phố hiện đại.",
+                ex2: "We have modern technology.", ex2_vi: "Chúng tôi có công nghệ hiện đại.",
+                ex3: "The building is modern.", ex3_vi: "Tòa nhà rất hiện đại." },
+            { id: 12, word: "life", type: "n.", phonetic: "/laɪf/", tip: "lai-ph", meaning: "Cuộc sống", cat: "n",
+                ex1: "Modern life is fast.", ex1_vi: "Cuộc sống hiện đại nhanh chóng.",
+                ex2: "I enjoy city life.", ex2_vi: "Tôi thích cuộc sống thành phố.",
+                ex3: "Life is beautiful.", ex3_vi: "Cuộc sống thật đẹp." },
+            { id: 13, word: "has", type: "v.", phonetic: "/hæz/", tip: "hát", meaning: "Có (ngôi thứ ba số ít)", cat: "v",
+                ex1: "Da Nang has a long coast.", ex1_vi: "Đà Nẵng có một bờ biển dài.",
+                ex2: "She has a new car.", ex2_vi: "Cô ấy có một chiếc xe mới.",
+                ex3: "The city has many attractions.", ex3_vi: "Thành phố có nhiều điểm tham quan." },
+            { id: 14, word: "long", type: "adj.", phonetic: "/lɒŋ/", tip: "lọng", meaning: "Dài", cat: "adj",
+                ex1: "Da Nang has a long beach.", ex1_vi: "Đà Nẵng có một bãi biển dài.",
+                ex2: "She has long hair.", ex2_vi: "Cô ấy có mái tóc dài.",
+                ex3: "The road is long.", ex3_vi: "Con đường dài." },
+            { id: 15, word: "coast", type: "n.", phonetic: "/koʊst/", tip: "cốt", meaning: "Bờ biển", cat: "n",
+                ex1: "Da Nang has a beautiful coast.", ex1_vi: "Đà Nẵng có một bờ biển đẹp.",
+                ex2: "We walked along the coast.", ex2_vi: "Chúng tôi đi dọc theo bờ biển.",
+                ex3: "The coast is rocky.", ex3_vi: "Bờ biển nhiều đá." },
+            { id: 16, word: "including", type: "prep.", phonetic: "/ɪnˈkluːdɪŋ/", tip: "in-klu-đing", meaning: "Bao gồm", cat: "adv",
+                ex1: "Many beaches, including My Khe Beach.", ex1_vi: "Nhiều bãi biển, bao gồm bãi biển Mỹ Khê.",
+                ex2: "We have ten members, including me.", ex2_vi: "Chúng tôi có mười thành viên, bao gồm tôi.",
+                ex3: "I bought many things, including food.", ex3_vi: "Tôi đã mua nhiều thứ, bao gồm đồ ăn." },
+            { id: 17, word: "My Khe Beach", type: "n.", phonetic: "/maɪ keɪ biːtʃ/", tip: "mai khây bít", meaning: "Bãi biển Mỹ Khê", cat: "n",
+                ex1: "My Khe Beach is famous.", ex1_vi: "Bãi biển Mỹ Khê nổi tiếng.",
+                ex2: "I swam at My Khe Beach.", ex2_vi: "Tôi đã bơi ở bãi biển Mỹ Khê.",
+                ex3: "My Khe Beach has white sand.", ex3_vi: "Bãi biển Mỹ Khê có cát trắng." },
+            { id: 18, word: "beaches", type: "n.", phonetic: "/ˈbiːtʃɪz/", tip: "bít-chíz", meaning: "Các bãi biển", cat: "n",
+                ex1: "Da Nang has beautiful beaches.", ex1_vi: "Đà Nẵng có những bãi biển đẹp.",
+                ex2: "We visited many beaches.", ex2_vi: "Chúng tôi đã thăm nhiều bãi biển.",
+                ex3: "Beaches are crowded in summer.", ex3_vi: "Các bãi biển đông đúc vào mùa hè." },
+            { id: 19, word: "world", type: "n.", phonetic: "/wɜːrld/", tip: "uớc", meaning: "Thế giới", cat: "n",
+                ex1: "My Khe Beach is one of the best in the world.", ex1_vi: "Bãi biển Mỹ Khê là một trong những bãi biển đẹp nhất thế giới.",
+                ex2: "We live in a changing world.", ex2_vi: "Chúng ta sống trong một thế giới đang thay đổi.",
+                ex3: "He travels around the world.", ex3_vi: "Anh ấy đi du lịch khắp thế giới." },
+            { id: 20, word: "white", type: "adj.", phonetic: "/waɪt/", tip: "uai", meaning: "Trắng", cat: "adj",
+                ex1: "The sand is white.", ex1_vi: "Cát trắng.",
+                ex2: "She wears a white dress.", ex2_vi: "Cô ấy mặc váy trắng.",
+                ex3: "White snow covers the ground.", ex3_vi: "Tuyết trắng phủ kín mặt đất." },
+            { id: 21, word: "sand", type: "n.", phonetic: "/sænd/", tip: "xán", meaning: "Cát", cat: "n",
+                ex1: "The sand is soft and white.", ex1_vi: "Cát mềm và trắng.",
+                ex2: "We walked on the sand.", ex2_vi: "Chúng tôi đi bộ trên cát.",
+                ex3: "Sand covers the beach.", ex3_vi: "Cát phủ kín bãi biển." },
+            { id: 22, word: "clear", type: "adj.", phonetic: "/klɪər/", tip: "kli-ờ", meaning: "Trong, trong suốt", cat: "adj",
+                ex1: "The water is clear.", ex1_vi: "Nước trong.",
+                ex2: "She has a clear voice.", ex2_vi: "Cô ấy có giọng nói trong trẻo.",
+                ex3: "The sky is clear today.", ex3_vi: "Hôm nay trời trong xanh." },
+            { id: 23, word: "blue", type: "adj.", phonetic: "/bluː/", tip: "blu", meaning: "Xanh dương", cat: "adj",
+                ex1: "The water is blue.", ex1_vi: "Nước xanh.",
+                ex2: "He has blue eyes.", ex2_vi: "Anh ấy có mắt xanh.",
+                ex3: "The sky is blue.", ex3_vi: "Bầu trời xanh." },
+            { id: 24, word: "water", type: "n.", phonetic: "/ˈwɔːtər/", tip: "uốt-tờ", meaning: "Nước", cat: "n",
+                ex1: "The water is clear and blue.", ex1_vi: "Nước trong và xanh.",
+                ex2: "We need clean water.", ex2_vi: "Chúng ta cần nước sạch.",
+                ex3: "The water is warm.", ex3_vi: "Nước ấm." },
+            { id: 25, word: "visit", type: "v.", phonetic: "/ˈvɪzɪt/", tip: "ví-zít", meaning: "Thăm, tham quan", cat: "v",
+                ex1: "You can visit Son Tra Peninsula.", ex1_vi: "Bạn có thể thăm bán đảo Sơn Trà.",
+                ex2: "We visited the museum.", ex2_vi: "Chúng tôi đã thăm bảo tàng.",
+                ex3: "She wants to visit Da Nang.", ex3_vi: "Cô ấy muốn thăm Đà Nẵng." },
+            { id: 26, word: "green", type: "adj.", phonetic: "/ɡriːn/", tip: "gri-n", meaning: "Xanh lá", cat: "adj",
+                ex1: "Son Tra Peninsula is green.", ex1_vi: "Bán đảo Sơn Trà xanh tươi.",
+                ex2: "The forest is green.", ex2_vi: "Rừng xanh.",
+                ex3: "She wears a green shirt.", ex3_vi: "Cô ấy mặc áo xanh." },
+            { id: 27, word: "Son Tra Peninsula", type: "n.", phonetic: "/sɔːn trɑː pəˈnɪnsjələ/", tip: "son tra pê-nin-syoo-lờ", meaning: "Bán đảo Sơn Trà", cat: "n",
+                ex1: "Son Tra Peninsula is beautiful.", ex1_vi: "Bán đảo Sơn Trà rất đẹp.",
+                ex2: "We visited Son Tra Peninsula.", ex2_vi: "Chúng tôi đã thăm bán đảo Sơn Trà.",
+                ex3: "Son Tra Peninsula has many trees.", ex3_vi: "Bán đảo Sơn Trà có nhiều cây cối." },
+            { id: 28, word: "famous", type: "adj.", phonetic: "/ˈfeɪməs/", tip: "phây-mớt", meaning: "Nổi tiếng", cat: "adj",
+                ex1: "The Marble Mountains are famous.", ex1_vi: "Ngũ Hành Sơn nổi tiếng.",
+                ex2: "He is a famous singer.", ex2_vi: "Anh ấy là một ca sĩ nổi tiếng.",
+                ex3: "This place is famous for its views.", ex3_vi: "Nơi này nổi tiếng vì khung cảnh." },
+            { id: 29, word: "Marble Mountains", type: "n.", phonetic: "/ˈmɑːrbl ˈmaʊntɪnz/", tip: "ma-bồ mâu-tần", meaning: "Ngũ Hành Sơn", cat: "n",
+                ex1: "The Marble Mountains have caves.", ex1_vi: "Ngũ Hành Sơn có hang động.",
+                ex2: "We climbed the Marble Mountains.", ex2_vi: "Chúng tôi đã leo Ngũ Hành Sơn.",
+                ex3: "The Marble Mountains are beautiful.", ex3_vi: "Ngũ Hành Sơn rất đẹp." },
+            { id: 30, word: "enjoy", type: "v.", phonetic: "/ɪnˈdʒɔɪ/", tip: "in-chói", meaning: "Thưởng thức, tận hưởng", cat: "v",
+                ex1: "You will enjoy seeing the bridges.", ex1_vi: "Bạn sẽ thích thú khi nhìn thấy những cây cầu.",
+                ex2: "I enjoy listening to music.", ex2_vi: "Tôi thích nghe nhạc.",
+                ex3: "She enjoys reading books.", ex3_vi: "Cô ấy thích đọc sách." },
+            { id: 31, word: "seeing", type: "v.", phonetic: "/ˈsiːɪŋ/", tip: "xi-ing", meaning: "Nhìn thấy", cat: "v",
+                ex1: "Seeing the Golden Bridge is amazing.", ex1_vi: "Nhìn thấy Cầu Vàng thật tuyệt vời.",
+                ex2: "I like seeing new places.", ex2_vi: "Tôi thích nhìn thấy những nơi mới.",
+                ex3: "Seeing her makes me happy.", ex3_vi: "Nhìn thấy cô ấy làm tôi vui." },
+            { id: 32, word: "unique", type: "adj.", phonetic: "/juˈniːk/", tip: "yu-níc", meaning: "Độc đáo", cat: "adj",
+                ex1: "The bridges in Da Nang are unique.", ex1_vi: "Những cây cầu ở Đà Nẵng rất độc đáo.",
+                ex2: "This design is unique.", ex2_vi: "Thiết kế này rất độc đáo.",
+                ex3: "She has a unique style.", ex3_vi: "Cô ấy có phong cách độc đáo." },
+            { id: 33, word: "bridges", type: "n.", phonetic: "/ˈbrɪdʒɪz/", tip: "bri-chít", meaning: "Những cây cầu", cat: "n",
+                ex1: "Da Nang has many bridges.", ex1_vi: "Đà Nẵng có nhiều cây cầu.",
+                ex2: "We crossed the bridges.", ex2_vi: "Chúng tôi đã đi qua những cây cầu.",
+                ex3: "The bridges are beautiful at night.", ex3_vi: "Những cây cầu đẹp vào ban đêm." },
+            { id: 34, word: "Han River", type: "n.", phonetic: "/hæn ˈrɪvər/", tip: "hân ri-vờ", meaning: "Sông Hàn", cat: "n",
+                ex1: "The Han River flows through Da Nang.", ex1_vi: "Sông Hàn chảy qua Đà Nẵng.",
+                ex2: "We walked along the Han River.", ex2_vi: "Chúng tôi đi bộ dọc theo sông Hàn.",
+                ex3: "The Han River is romantic.", ex3_vi: "Sông Hàn rất lãng mạn." },
+            { id: 35, word: "example", type: "n.", phonetic: "/ɪɡˈzɑːmpl/", tip: "ig-zam-pồ", meaning: "Ví dụ", cat: "n",
+                ex1: "For example, the Dragon Bridge spits fire.", ex1_vi: "Ví dụ, Cầu Rồng phun lửa.",
+                ex2: "Give me an example.", ex2_vi: "Cho tôi một ví dụ.",
+                ex3: "This is a good example.", ex3_vi: "Đây là một ví dụ tốt." },
+            { id: 36, word: "Dragon Bridge", type: "n.", phonetic: "/ˈdræɡən brɪdʒ/", tip: "dra-gồn bri", meaning: "Cầu Rồng", cat: "n",
+                ex1: "The Dragon Bridge is famous.", ex1_vi: "Cầu Rồng nổi tiếng.",
+                ex2: "We watched the Dragon Bridge.", ex2_vi: "Chúng tôi đã xem Cầu Rồng.",
+                ex3: "The Dragon Bridge spits fire.", ex3_vi: "Cầu Rồng phun lửa." },
+            { id: 37, word: "spits", type: "v.", phonetic: "/spɪts/", tip: "x-pít", meaning: "Phun, nhổ", cat: "v",
+                ex1: "The dragon spits fire.", ex1_vi: "Con rồng phun lửa.",
+                ex2: "He spits out the seeds.", ex2_vi: "Anh ấy nhổ hạt ra.",
+                ex3: "The fountain spits water.", ex3_vi: "Đài phun nước phun nước." },
+            { id: 38, word: "fire", type: "n.", phonetic: "/faɪər/", tip: "phai-ờ", meaning: "Lửa", cat: "n",
+                ex1: "The Dragon Bridge spits fire.", ex1_vi: "Cầu Rồng phun lửa.",
+                ex2: "Fire is dangerous.", ex2_vi: "Lửa rất nguy hiểm.",
+                ex3: "We sat by the fire.", ex3_vi: "Chúng tôi ngồi bên đống lửa." },
+            { id: 39, word: "weekends", type: "n.", phonetic: "/ˌwiːkˈendz/", tip: "uích-én", meaning: "Cuối tuần", cat: "n",
+                ex1: "The Dragon Bridge spits fire on weekends.", ex1_vi: "Cầu Rồng phun lửa vào cuối tuần.",
+                ex2: "I relax on weekends.", ex2_vi: "Tôi thư giãn vào cuối tuần.",
+                ex3: "We go to the beach on weekends.", ex3_vi: "Chúng tôi đi biển vào cuối tuần." },
+            { id: 40, word: "Golden Bridge", type: "n.", phonetic: "/ˈɡoʊldən brɪdʒ/", tip: "gôn-đần bri", meaning: "Cầu Vàng", cat: "n",
+                ex1: "The Golden Bridge is in Ba Na Hills.", ex1_vi: "Cầu Vàng nằm ở Bà Nà Hills.",
+                ex2: "We took photos on the Golden Bridge.", ex2_vi: "Chúng tôi đã chụp ảnh trên Cầu Vàng.",
+                ex3: "The Golden Bridge is a popular attraction.", ex3_vi: "Cầu Vàng là một điểm thu hút nổi tiếng." },
+            { id: 41, word: "Ba Na Hills", type: "n.", phonetic: "/bɑː nɑː hɪlz/", tip: "ba na hín", meaning: "Bà Nà Hills", cat: "n",
+                ex1: "Ba Na Hills is a famous tourist destination.", ex1_vi: "Bà Nà Hills là một điểm du lịch nổi tiếng.",
+                ex2: "We took a cable car to Ba Na Hills.", ex2_vi: "Chúng tôi đi cáp treo lên Bà Nà Hills.",
+                ex3: "Ba Na Hills has beautiful views.", ex3_vi: "Bà Nà Hills có khung cảnh đẹp." },
+            { id: 42, word: "People", type: "n.", phonetic: "/ˈpiːpl/", tip: "píp-ồ", meaning: "Người dân", cat: "n",
+                ex1: "People in Da Nang are friendly.", ex1_vi: "Người dân Đà Nẵng thân thiện.",
+                ex2: "Many people visit the beach.", ex2_vi: "Nhiều người đến bãi biển.",
+                ex3: "People are kind here.", ex3_vi: "Mọi người ở đây tốt bụng." },
+            { id: 43, word: "friendly", type: "adj.", phonetic: "/ˈfrendli/", tip: "phren-đờ-li", meaning: "Thân thiện", cat: "adj",
+                ex1: "The people are friendly.", ex1_vi: "Người dân thân thiện.",
+                ex2: "She has a friendly smile.", ex2_vi: "Cô ấy có nụ cười thân thiện.",
+                ex3: "We received a friendly welcome.", ex3_vi: "Chúng tôi nhận được sự chào đón thân thiện." },
+            { id: 44, word: "welcoming", type: "adj.", phonetic: "/ˈwelkəmɪŋ/", tip: "uên-cờ-ming", meaning: "Hiếu khách", cat: "adj",
+                ex1: "The locals are welcoming.", ex1_vi: "Người dân địa phương rất hiếu khách.",
+                ex2: "We had a welcoming atmosphere.", ex2_vi: "Chúng tôi có bầu không khí hiếu khách.",
+                ex3: "The hotel staff is welcoming.", ex3_vi: "Nhân viên khách sạn rất hiếu khách." },
+            { id: 45, word: "food", type: "n.", phonetic: "/fuːd/", tip: "phút", meaning: "Đồ ăn", cat: "n",
+                ex1: "The food in Da Nang is amazing.", ex1_vi: "Đồ ăn ở Đà Nẵng rất tuyệt vời.",
+                ex2: "I love Vietnamese food.", ex2_vi: "Tôi yêu đồ ăn Việt Nam.",
+                ex3: "We need to buy food.", ex3_vi: "Chúng tôi cần mua đồ ăn." },
+            { id: 46, word: "here", type: "adv.", phonetic: "/hɪər/", tip: "hi-ờ", meaning: "Ở đây", cat: "adv",
+                ex1: "The food here is cheap.", ex1_vi: "Đồ ăn ở đây rẻ.",
+                ex2: "I live here.", ex2_vi: "Tôi sống ở đây.",
+                ex3: "Come here, please.", ex3_vi: "Đến đây, làm ơn." },
+            { id: 47, word: "amazing", type: "adj.", phonetic: "/əˈmeɪzɪŋ/", tip: "ờ-mây-zing", meaning: "Tuyệt vời, kinh ngạc", cat: "adj",
+                ex1: "The food is amazing.", ex1_vi: "Đồ ăn tuyệt vời.",
+                ex2: "We had an amazing trip.", ex2_vi: "Chúng tôi đã có một chuyến đi tuyệt vời.",
+                ex3: "The view is amazing.", ex3_vi: "Khung cảnh thật tuyệt vời." },
+            { id: 48, word: "cheap", type: "adj.", phonetic: "/tʃiːp/", tip: "chip", meaning: "Rẻ", cat: "adj",
+                ex1: "The food is cheap here.", ex1_vi: "Đồ ăn ở đây rẻ.",
+                ex2: "I bought a cheap souvenir.", ex2_vi: "Tôi đã mua một món quà lưu niệm rẻ.",
+                ex3: "This hotel is cheap.", ex3_vi: "Khách sạn này rẻ." },
+            { id: 49, word: "local", type: "adj.", phonetic: "/ˈloʊkl/", tip: "lâu-cồ", meaning: "Địa phương", cat: "adj",
+                ex1: "We tried local dishes.", ex1_vi: "Chúng tôi đã thử các món ăn địa phương.",
+                ex2: "The local market is busy.", ex2_vi: "Chợ địa phương đông đúc.",
+                ex3: "He is a local guide.", ex3_vi: "Anh ấy là một hướng dẫn viên địa phương." },
+            { id: 50, word: "dishes", type: "n.", phonetic: "/ˈdɪʃɪz/", tip: "đi-sít", meaning: "Các món ăn", cat: "n",
+                ex1: "Local dishes like Quang noodles are delicious.", ex1_vi: "Các món ăn địa phương như mì Quảng rất ngon.",
+                ex2: "I love Vietnamese dishes.", ex2_vi: "Tôi yêu các món ăn Việt Nam.",
+                ex3: "We ordered many dishes.", ex3_vi: "Chúng tôi đã gọi nhiều món ăn." },
+            { id: 51, word: "Quang noodles", type: "n.", phonetic: "/kwæŋ ˈnuːdlz/", tip: "khu-ang nú-đồ", meaning: "Mì Quảng", cat: "n",
+                ex1: "Quang noodles are a specialty of Da Nang.", ex1_vi: "Mì Quảng là một đặc sản của Đà Nẵng.",
+                ex2: "We ate Quang noodles for lunch.", ex2_vi: "Chúng tôi đã ăn mì Quảng cho bữa trưa.",
+                ex3: "Quang noodles are delicious.", ex3_vi: "Mì Quảng rất ngon." },
+            { id: 52, word: "rice paper rolls", type: "n.", phonetic: "/raɪs ˈpeɪpər roʊlz/", tip: "rai péy-pờ rôl", meaning: "Bánh tráng cuốn", cat: "n",
+                ex1: "Rice paper rolls with pork are tasty.", ex1_vi: "Bánh tráng cuốn thịt heo rất ngon.",
+                ex2: "We made rice paper rolls at home.", ex2_vi: "Chúng tôi đã làm bánh tráng cuốn tại nhà.",
+                ex3: "Rice paper rolls are fresh and healthy.", ex3_vi: "Bánh tráng cuốn tươi và tốt cho sức khỏe." },
+            { id: 53, word: "pork", type: "n.", phonetic: "/pɔːrk/", tip: "póc", meaning: "Thịt heo", cat: "n",
+                ex1: "Rice paper rolls with pork are popular.", ex1_vi: "Bánh tráng cuốn thịt heo rất phổ biến.",
+                ex2: "I don't eat pork.", ex2_vi: "Tôi không ăn thịt heo.",
+                ex3: "We grilled pork for dinner.", ex3_vi: "Chúng tôi đã nướng thịt heo cho bữa tối." },
+            { id: 54, word: "fresh", type: "adj.", phonetic: "/freʃ/", tip: "phrét", meaning: "Tươi", cat: "adj",
+                ex1: "We eat fresh seafood.", ex1_vi: "Chúng tôi ăn hải sản tươi sống.",
+                ex2: "Fresh fruit is good for health.", ex2_vi: "Trái cây tươi tốt cho sức khỏe.",
+                ex3: "The bread is fresh.", ex3_vi: "Bánh mì tươi." },
+            { id: 55, word: "seafood", type: "n.", phonetic: "/ˈsiːfuːd/", tip: "xi-phút", meaning: "Hải sản", cat: "n",
+                ex1: "Da Nang has fresh seafood.", ex1_vi: "Đà Nẵng có hải sản tươi sống.",
+                ex2: "I love seafood.", ex2_vi: "Tôi thích hải sản.",
+                ex3: "We ate seafood at the restaurant.", ex3_vi: "Chúng tôi đã ăn hải sản ở nhà hàng." },
+            { id: 56, word: "great", type: "adj.", phonetic: "/ɡreɪt/", tip: "grit", meaning: "Tuyệt vời", cat: "adj",
+                ex1: "Da Nang has great hotels.", ex1_vi: "Đà Nẵng có những khách sạn tuyệt vời.",
+                ex2: "We had a great time.", ex2_vi: "Chúng tôi đã có một khoảng thời gian tuyệt vời.",
+                ex3: "This is a great idea.", ex3_vi: "Đây là một ý tưởng tuyệt vời." },
+            { id: 57, word: "hotels", type: "n.", phonetic: "/hoʊˈtelz/", tip: "hồ-tén", meaning: "Các khách sạn", cat: "n",
+                ex1: "There are many hotels in Da Nang.", ex1_vi: "Có nhiều khách sạn ở Đà Nẵng.",
+                ex2: "We stayed at a luxury hotel.", ex2_vi: "Chúng tôi đã ở một khách sạn sang trọng.",
+                ex3: "The hotels are full.", ex3_vi: "Các khách sạn đã đầy." },
+            { id: 58, word: "easy", type: "adj.", phonetic: "/ˈiːzi/", tip: "í-zi", meaning: "Dễ dàng", cat: "adj",
+                ex1: "Transport in Da Nang is easy.", ex1_vi: "Giao thông ở Đà Nẵng rất dễ dàng.",
+                ex2: "This exercise is easy.", ex2_vi: "Bài tập này dễ.",
+                ex3: "It's easy to find the place.", ex3_vi: "Thật dễ dàng để tìm nơi đó." },
+            { id: 59, word: "transport", type: "n.", phonetic: "/ˈtrænspɔːrt/", tip: "trén-xpót", meaning: "Giao thông", cat: "n",
+                ex1: "Public transport is convenient.", ex1_vi: "Giao thông công cộng rất tiện lợi.",
+                ex2: "We use public transport.", ex2_vi: "Chúng tôi sử dụng phương tiện công cộng.",
+                ex3: "Transport is cheap here.", ex3_vi: "Giao thông ở đây rẻ." },
+            { id: 60, word: "clean", type: "adj.", phonetic: "/kliːn/", tip: "klin", meaning: "Sạch sẽ", cat: "adj",
+                ex1: "Da Nang has clean air.", ex1_vi: "Đà Nẵng có không khí sạch.",
+                ex2: "The room is clean.", ex2_vi: "Phòng sạch sẽ.",
+                ex3: "We need clean water.", ex3_vi: "Chúng ta cần nước sạch." },
+            { id: 61, word: "air", type: "n.", phonetic: "/eər/", tip: "e-ờ", meaning: "Không khí", cat: "n",
+                ex1: "The air in Da Nang is fresh.", ex1_vi: "Không khí ở Đà Nẵng trong lành.",
+                ex2: "I need fresh air.", ex2_vi: "Tôi cần không khí trong lành.",
+                ex3: "The air is clean here.", ex3_vi: "Không khí ở đây sạch." },
+            { id: 62, word: "perfect", type: "adj.", phonetic: "/ˈpɜːrfɪkt/", tip: "pớ-phít", meaning: "Hoàn hảo", cat: "adj",
+                ex1: "Da Nang is the perfect choice.", ex1_vi: "Đà Nẵng là lựa chọn hoàn hảo.",
+                ex2: "The weather is perfect.", ex2_vi: "Thời tiết hoàn hảo.",
+                ex3: "She has a perfect smile.", ex3_vi: "Cô ấy có nụ cười hoàn hảo." },
+            { id: 63, word: "choice", type: "n.", phonetic: "/tʃɔɪs/", tip: "chói", meaning: "Lựa chọn", cat: "n",
+                ex1: "Da Nang is a great choice.", ex1_vi: "Đà Nẵng là một lựa chọn tuyệt vời.",
+                ex2: "We have many choices.", ex2_vi: "Chúng tôi có nhiều lựa chọn.",
+                ex3: "That's a good choice.", ex3_vi: "Đó là một lựa chọn tốt." },
+            { id: 64, word: "fun", type: "adj.", phonetic: "/fʌn/", tip: "phân", meaning: "Vui vẻ", cat: "adj",
+                ex1: "Da Nang is a fun place.", ex1_vi: "Đà Nẵng là một nơi vui vẻ.",
+                ex2: "We had fun at the beach.", ex2_vi: "Chúng tôi đã vui vẻ ở bãi biển.",
+                ex3: "The trip was fun.", ex3_vi: "Chuyến đi rất vui." },
+            { id: 65, word: "relaxing", type: "adj.", phonetic: "/rɪˈlæksɪŋ/", tip: "ri-lác-xing", meaning: "Thư giãn", cat: "adj",
+                ex1: "A vacation in Da Nang is relaxing.", ex1_vi: "Một kỳ nghỉ ở Đà Nẵng thật thư giãn.",
+                ex2: "I enjoy relaxing music.", ex2_vi: "Tôi thích nhạc thư giãn.",
+                ex3: "The atmosphere is relaxing.", ex3_vi: "Bầu không khí thư giãn." },
+            { id: 66, word: "vacation", type: "n.", phonetic: "/veɪˈkeɪʃn/", tip: "vei-kây-sờn", meaning: "Kỳ nghỉ", cat: "n",
+                ex1: "Da Nang is perfect for a vacation.", ex1_vi: "Đà Nẵng hoàn hảo cho một kỳ nghỉ.",
+                ex2: "We plan a vacation to Da Nang.", ex2_vi: "Chúng tôi lên kế hoạch cho một kỳ nghỉ ở Đà Nẵng.",
+                ex3: "I need a vacation.", ex3_vi: "Tôi cần một kỳ nghỉ." }
+        ];
+
+        // ---- 2. READING VOCAB ORDER (theo thứ tự xuất hiện trong bài) ----
+        const newReadingVocabOrder = [
+            "Da Nang", "Known", "livable", "city", "Vietnam", "wonderful", "place", "mixes", "beautiful", "nature",
+            "modern", "life", "has", "long", "coast", "including", "My Khe Beach", "beaches", "world", "white", "sand",
+            "clear", "blue", "water", "visit", "green", "Son Tra Peninsula", "famous", "Marble Mountains", "enjoy",
+            "seeing", "unique", "bridges", "Han River", "example", "Dragon Bridge", "spits", "fire", "weekends",
+            "Golden Bridge", "Ba Na Hills", "People", "friendly", "welcoming", "food", "here", "amazing", "cheap",
+            "local", "dishes", "Quang noodles", "rice paper rolls", "pork", "fresh", "seafood", "great", "hotels",
+            "easy", "transport", "clean", "air", "perfect", "choice", "fun", "relaxing", "vacation"
+        ];
+
+        // ---- 3. ESSAY DATA (chia đoạn) ----
+        const newEssayData = [
+            {
+                text: "Da Nang – A Great Place to Visit. Known as 'the most livable city in Vietnam,' Da Nang is a wonderful place that mixes beautiful nature with modern life.",
+                vi: "Đà Nẵng – Một điểm đến tuyệt vời. Được biết đến là 'thành phố đáng sống nhất Việt Nam,' Đà Nẵng là một nơi tuyệt vời kết hợp thiên nhiên tươi đẹp với cuộc sống hiện đại."
+            },
+            {
+                text: "The city has a long and beautiful coast, including My Khe Beach – one of the most beautiful beaches in the world with white sand and clear blue water.",
+                vi: "Thành phố có một bờ biển dài và đẹp, bao gồm bãi biển Mỹ Khê – một trong những bãi biển đẹp nhất thế giới với cát trắng và nước xanh trong."
+            },
+            {
+                text: "Besides the beach, you can visit the green Son Tra Peninsula or the famous Marble (Ngu Hanh) Mountains.",
+                vi: "Bên cạnh bãi biển, bạn có thể thăm bán đảo Sơn Trà xanh tươi hoặc Ngũ Hành Sơn nổi tiếng."
+            },
+            {
+                text: "When you visit Da Nang, you will enjoy seeing its unique bridges over the Han River. For example, the Dragon Bridge spits fire and water on weekends, and the famous Golden Bridge is in Ba Na Hills.",
+                vi: "Khi bạn đến Đà Nẵng, bạn sẽ thích thú khi nhìn thấy những cây cầu độc đáo bắc qua sông Hàn. Ví dụ, Cầu Rồng phun lửa và nước vào cuối tuần, và Cầu Vàng nổi tiếng nằm ở Bà Nà Hills."
+            },
+            {
+                text: "People in Da Nang are very friendly and welcoming. The food here is also amazing and cheap, with local dishes like Quang noodles, rice paper rolls with pork, and fresh seafood.",
+                vi: "Người dân Đà Nẵng rất thân thiện và hiếu khách. Đồ ăn ở đây cũng tuyệt vời và rẻ, với các món địa phương như mì Quảng, bánh tráng cuốn thịt heo, và hải sản tươi sống."
+            },
+            {
+                text: "With great hotels, easy transport, and clean air, Da Nang is the perfect choice for a fun and relaxing vacation.",
+                vi: "Với những khách sạn tuyệt vời, giao thông dễ dàng, và không khí trong lành, Đà Nẵng là lựa chọn hoàn hảo cho một kỳ nghỉ vui vẻ và thư giãn."
+            }
+        ];
+
+        // ---- 4. GRAMMAR DATA (10 cấu trúc) ----
+        const newGrammarData = [
+            {
+                title: "Present Simple (Khẳng định)",
+                formula: "S + V(s/es) + O",
+                desc: "Diễn tả sự thật hiển nhiên, thói quen.",
+                example: "Da Nang has a long coast.",
+                vi: "Đà Nẵng có một bờ biển dài.",
+                detail: "Thêm -s với ngôi thứ ba số ít.",
+                extra: [
+                    { en: "The city offers many attractions.", vi: "Thành phố cung cấp nhiều điểm tham quan." },
+                    { en: "People enjoy the beach.", vi: "Mọi người thích bãi biển." }
+                ]
+            },
+            {
+                title: "Passive Voice (Hiện tại đơn)",
+                formula: "S + am/is/are + V3/ed",
+                desc: "Câu bị động để nhấn mạnh đối tượng bị tác động.",
+                example: "Da Nang is known as a livable city.",
+                vi: "Đà Nẵng được biết đến là thành phố đáng sống.",
+                detail: "Dùng 'known' là quá khứ phân từ.",
+                extra: [
+                    { en: "The Golden Bridge is visited by many tourists.", vi: "Cầu Vàng được nhiều du khách tham quan." },
+                    { en: "Seafood is served fresh.", vi: "Hải sản được phục vụ tươi sống." }
+                ]
+            },
+            {
+                title: "Prepositional Phrase",
+                formula: "preposition + noun",
+                desc: "Cụm giới từ chỉ vị trí, thời gian, cách thức.",
+                example: "with white sand and clear blue water.",
+                vi: "với cát trắng và nước xanh trong.",
+                detail: "Giới từ 'with' chỉ đặc điểm.",
+                extra: [
+                    { en: "The hotel is near the beach.", vi: "Khách sạn gần bãi biển." },
+                    { en: "We walked along the river.", vi: "Chúng tôi đi bộ dọc theo sông." }
+                ]
+            },
+            {
+                title: "Relative Clause (who/which/that)",
+                formula: "N + who/which/that + clause",
+                desc: "Mệnh đề quan hệ bổ sung thông tin.",
+                example: "The city has a long and beautiful coast, including My Khe Beach – one of the most beautiful beaches in the world.",
+                vi: "Thành phố có bờ biển dài và đẹp, bao gồm bãi biển Mỹ Khê – một trong những bãi biển đẹp nhất thế giới.",
+                detail: "Mệnh đề quan hệ không xác định.",
+                extra: [
+                    { en: "The Dragon Bridge, which spits fire, attracts many visitors.", vi: "Cầu Rồng, phun lửa, thu hút nhiều du khách." },
+                    { en: "Quang noodles, which are a local specialty, are delicious.", vi: "Mì Quảng, một đặc sản địa phương, rất ngon." }
+                ]
+            },
+            {
+                title: "Modal Verb: can",
+                formula: "S + can + V",
+                desc: "Diễn tả khả năng.",
+                example: "You can visit the green Son Tra Peninsula.",
+                vi: "Bạn có thể thăm bán đảo Sơn Trà xanh tươi.",
+                detail: "Can không thay đổi theo ngôi.",
+                extra: [
+                    { en: "We can enjoy the view.", vi: "Chúng tôi có thể thưởng thức khung cảnh." },
+                    { en: "I can swim in the sea.", vi: "Tôi có thể bơi ở biển." }
+                ]
+            },
+            {
+                title: "Gerund as Object",
+                formula: "enjoy + V-ing",
+                desc: "Động từ thêm -ing làm tân ngữ sau 'enjoy'.",
+                example: "You will enjoy seeing its unique bridges.",
+                vi: "Bạn sẽ thích thú khi nhìn thấy những cây cầu độc đáo.",
+                detail: "Sau 'enjoy' dùng V-ing.",
+                extra: [
+                    { en: "I enjoy eating local food.", vi: "Tôi thích ăn đồ ăn địa phương." },
+                    { en: "She enjoys swimming in the sea.", vi: "Cô ấy thích bơi ở biển." }
+                ]
+            },
+            {
+                title: "Conjunction: For example",
+                formula: "For example, S + V",
+                desc: "Dùng để đưa ra ví dụ.",
+                example: "For example, the Dragon Bridge spits fire and water on weekends.",
+                vi: "Ví dụ, Cầu Rồng phun lửa và nước vào cuối tuần.",
+                detail: "'For example' đứng đầu câu, theo sau là dấu phẩy.",
+                extra: [
+                    { en: "For example, Da Nang has many bridges.", vi: "Ví dụ, Đà Nẵng có nhiều cầu." },
+                    { en: "For example, you can try Quang noodles.", vi: "Ví dụ, bạn có thể thử mì Quảng." }
+                ]
+            },
+            {
+                title: "Adjective + Noun",
+                formula: "Adj + N",
+                desc: "Tính từ đứng trước danh từ.",
+                example: "green Son Tra Peninsula, famous Marble Mountains",
+                vi: "bán đảo Sơn Trà xanh tươi, Ngũ Hành Sơn nổi tiếng",
+                detail: "Tính từ bổ nghĩa cho danh từ.",
+                extra: [
+                    { en: "beautiful beach", vi: "bãi biển đẹp" },
+                    { en: "friendly people", vi: "người dân thân thiện" }
+                ]
+            },
+            {
+                title: "Possessive: 's",
+                formula: "N's + N",
+                desc: "Sở hữu cách.",
+                example: "Da Nang's bridges are unique.",
+                vi: "Những cây cầu của Đà Nẵng rất độc đáo.",
+                detail: "Dùng 's để chỉ sở hữu.",
+                extra: [
+                    { en: "The city's attractions are famous.", vi: "Các điểm tham quan của thành phố nổi tiếng." },
+                    { en: "The restaurant's food is delicious.", vi: "Đồ ăn của nhà hàng rất ngon." }
+                ]
+            },
+            {
+                title: "Present Simple (Phủ định)",
+                formula: "S + do/does not + V",
+                desc: "Diễn tả điều gì đó không xảy ra.",
+                example: "The food is not expensive.",
+                vi: "Đồ ăn không đắt.",
+                detail: "Dùng 'not' để phủ định.",
+                extra: [
+                    { en: "The beach is not crowded.", vi: "Bãi biển không đông đúc." },
+                    { en: "They do not like cold weather.", vi: "Họ không thích thời tiết lạnh." }
+                ]
+            }
+        ];
+
+        // ---- 5. EXERCISE DATA ----
+        // ex1Data: Điền từ (15 câu)
+        const newEx1Data = [
+            { q: "Da Nang is known as the most ______ city in Vietnam.", a: "livable" },
+            { q: "Da Nang has a long and beautiful ______.", a: "coast" },
+            { q: "My Khe Beach has white ______.", a: "sand" },
+            { q: "The water is clear and ______.", a: "blue" },
+            { q: "You can visit the green Son Tra ______.", a: "Peninsula" },
+            { q: "The Marble Mountains are ______.", a: "famous" },
+            { q: "You will enjoy ______ the unique bridges.", a: "seeing" },
+            { q: "The Dragon Bridge ______ fire on weekends.", a: "spits" },
+            { q: "The Golden Bridge is in Ba Na ______.", a: "Hills" },
+            { q: "People in Da Nang are friendly and ______.", a: "welcoming" },
+            { q: "The food here is amazing and ______.", a: "cheap" },
+            { q: "Local dishes like ______ noodles are delicious.", a: "Quang" },
+            { q: "Rice paper rolls with ______ are tasty.", a: "pork" },
+            { q: "Da Nang has clean ______.", a: "air" },
+            { q: "Da Nang is the perfect choice for a relaxing ______.", a: "vacation" }
+        ];
+
+        // ex2Data: Trắc nghiệm (15 câu)
+        const newEx2Data = [
+            { q: "Da Nang is known as the most ______ city in Vietnam.", a: "livable", opts: ["livable", "modern", "crowded", "noisy"] },
+            { q: "Da Nang has a long and beautiful ______.", a: "coast", opts: ["coast", "river", "mountain", "lake"] },
+            { q: "My Khe Beach has white ______.", a: "sand", opts: ["sand", "rocks", "trees", "grass"] },
+            { q: "The water is clear and ______.", a: "blue", opts: ["blue", "green", "yellow", "red"] },
+            { q: "You can visit the green Son Tra ______.", a: "Peninsula", opts: ["Peninsula", "Island", "Mountain", "Forest"] },
+            { q: "The Marble Mountains are ______.", a: "famous", opts: ["famous", "unknown", "small", "new"] },
+            { q: "You will enjoy ______ the unique bridges.", a: "seeing", opts: ["seeing", "hearing", "feeling", "tasting"] },
+            { q: "The Dragon Bridge ______ fire on weekends.", a: "spits", opts: ["spits", "drinks", "breathes", "swallows"] },
+            { q: "The Golden Bridge is in Ba Na ______.", a: "Hills", opts: ["Hills", "Valley", "Forest", "Lake"] },
+            { q: "People in Da Nang are friendly and ______.", a: "welcoming", opts: ["welcoming", "rude", "cold", "quiet"] },
+            { q: "The food here is amazing and ______.", a: "cheap", opts: ["cheap", "expensive", "tasty", "spicy"] },
+            { q: "Local dishes like ______ noodles are delicious.", a: "Quang", opts: ["Quang", "Hanoi", "Hue", "Saigon"] },
+            { q: "Rice paper rolls with ______ are tasty.", a: "pork", opts: ["pork", "beef", "chicken", "fish"] },
+            { q: "Da Nang has clean ______.", a: "air", opts: ["air", "water", "soil", "food"] },
+            { q: "Da Nang is the perfect choice for a relaxing ______.", a: "vacation", opts: ["vacation", "work", "study", "business"] }
+        ];
+
+        // ex3Data: Ghép nghĩa (15 cặp)
+        const newEx3Data = [
+            { word: "Da Nang", mean: "Đà Nẵng" },
+            { word: "livable", mean: "Đáng sống" },
+            { word: "coast", mean: "Bờ biển" },
+            { word: "sand", mean: "Cát" },
+            { word: "blue", mean: "Xanh dương" },
+            { word: "Peninsula", mean: "Bán đảo" },
+            { word: "famous", mean: "Nổi tiếng" },
+            { word: "seeing", mean: "Nhìn thấy" },
+            { word: "spits", mean: "Phun" },
+            { word: "welcoming", mean: "Hiếu khách" },
+            { word: "cheap", mean: "Rẻ" },
+            { word: "dishes", mean: "Món ăn" },
+            { word: "pork", mean: "Thịt heo" },
+            { word: "seafood", mean: "Hải sản" },
+            { word: "vacation", mean: "Kỳ nghỉ" }
+        ];
+
+        // ex5Data: Gõ chính tả (10 câu)
+        const newEx5Data = [
+            "Da Nang is a wonderful city.",
+            "It has a long and beautiful coast.",
+            "My Khe Beach has white sand.",
+            "The water is clear and blue.",
+            "You can visit the Marble Mountains.",
+            "The Dragon Bridge spits fire.",
+            "People in Da Nang are friendly.",
+            "The food here is amazing and cheap.",
+            "Quang noodles are delicious.",
+            "Da Nang is perfect for a vacation."
+        ];
+
+        // ex6Data: Sắp xếp từ (10 câu)
+        const newEx6Data = [
+            { id: 1, words: ["Da Nang", "city", "livable", "a", "is"], correct: "da nang is a livable city" },
+            { id: 2, words: ["coast", "beautiful", "has", "long", "Da Nang", "a"], correct: "da nang has a long beautiful coast" },
+            { id: 3, words: ["My Khe Beach", "sand", "has", "white"], correct: "my khe beach has white sand" },
+            { id: 4, words: ["water", "clear", "blue", "the", "is", "and"], correct: "the water is clear and blue" },
+            { id: 5, words: ["visit", "can", "mountains", "the", "you", "Marble"], correct: "you can visit the marble mountains" },
+            { id: 6, words: ["spits", "fire", "Dragon Bridge", "the", "on weekends"], correct: "the dragon bridge spits fire on weekends" },
+            { id: 7, words: ["friendly", "people", "Da Nang", "in", "are"], correct: "people in da nang are friendly" },
+            { id: 8, words: ["food", "amazing", "here", "is", "the"], correct: "the food here is amazing" },
+            { id: 9, words: ["Quang noodles", "delicious", "are"], correct: "quang noodles are delicious" },
+            { id: 10, words: ["vacation", "perfect", "Da Nang", "for", "is", "a"], correct: "da nang is perfect for a vacation" }
+        ];
+
+        // ex7Data: Câu hỏi (10 câu)
+        const newEx7Data = [
+            { q: "What is Da Nang known as?", a: "The most livable city in Vietnam." },
+            { q: "What does Da Nang have?", a: "A long and beautiful coast." },
+            { q: "Which beach is mentioned?", a: "My Khe Beach." },
+            { q: "What color is the water?", a: "Clear and blue." },
+            { q: "What can you visit besides the beach?", a: "Son Tra Peninsula and Marble Mountains." },
+            { q: "What does the Dragon Bridge do on weekends?", a: "It spits fire and water." },
+            { q: "Where is the Golden Bridge located?", a: "In Ba Na Hills." },
+            { q: "How are the people in Da Nang?", a: "Friendly and welcoming." },
+            { q: "Name two local dishes.", a: "Quang noodles and rice paper rolls." },
+            { q: "Why is Da Nang a perfect choice for vacation?", a: "Because of great hotels, easy transport, and clean air." }
+        ];
+
+        // ---- 6. ANALYSIS DATA (12 câu) ----
+        const newAnalysisData = [
+            {
+                sentence: "Da Nang – A Great Place to Visit.",
+                structure: "Danh từ riêng + tên gọi.",
+                translation: "Đà Nẵng – Một điểm đến tuyệt vời.",
+                pos: "Da Nang (danh từ riêng), great (tính từ), place (danh từ), to visit (nguyên mẫu)."
+            },
+            {
+                sentence: "Known as 'the most livable city in Vietnam,' Da Nang is a wonderful place that mixes beautiful nature with modern life.",
+                structure: "Quá khứ phân từ (Known as) + S + be + N + that + V + O.",
+                translation: "Được biết đến là 'thành phố đáng sống nhất Việt Nam,' Đà Nẵng là một nơi tuyệt vời kết hợp thiên nhiên tươi đẹp với cuộc sống hiện đại.",
+                pos: "Known (quá khứ phân từ), as (giới từ), most (trạng từ), livable (tính từ), city (danh từ), Vietnam (danh từ), Da Nang (danh từ), is (động từ), wonderful (tính từ), place (danh từ), that (đại từ quan hệ), mixes (động từ), beautiful (tính từ), nature (danh từ), with (giới từ), modern (tính từ), life (danh từ)."
+            },
+            {
+                sentence: "The city has a long and beautiful coast, including My Khe Beach – one of the most beautiful beaches in the world with white sand and clear blue water.",
+                structure: "S + V + O, including + N – one of + adj + N + in + N + with + N + adj + N.",
+                translation: "Thành phố có một bờ biển dài và đẹp, bao gồm bãi biển Mỹ Khê – một trong những bãi biển đẹp nhất thế giới với cát trắng và nước xanh trong.",
+                pos: "The (mạo từ), city (danh từ), has (động từ), long (tính từ), and (liên từ), beautiful (tính từ), coast (danh từ), including (giới từ), My Khe Beach (danh từ riêng), one (danh từ), of (giới từ), most (trạng từ), beautiful (tính từ), beaches (danh từ), in (giới từ), the (mạo từ), world (danh từ), with (giới từ), white (tính từ), sand (danh từ), and (liên từ), clear (tính từ), blue (tính từ), water (danh từ)."
+            },
+            {
+                sentence: "Besides the beach, you can visit the green Son Tra Peninsula or the famous Marble Mountains.",
+                structure: "Besides + N, S + modal + V + O.",
+                translation: "Bên cạnh bãi biển, bạn có thể thăm bán đảo Sơn Trà xanh tươi hoặc Ngũ Hành Sơn nổi tiếng.",
+                pos: "Besides (giới từ), the (mạo từ), beach (danh từ), you (đại từ), can (động từ khuyết thiếu), visit (động từ), the (mạo từ), green (tính từ), Son Tra Peninsula (danh từ riêng), or (liên từ), the (mạo từ), famous (tính từ), Marble Mountains (danh từ riêng)."
+            },
+            {
+                sentence: "When you visit Da Nang, you will enjoy seeing its unique bridges over the Han River.",
+                structure: "When + S + V, S + will + V + V-ing + O.",
+                translation: "Khi bạn đến Đà Nẵng, bạn sẽ thích thú khi nhìn thấy những cây cầu độc đáo bắc qua sông Hàn.",
+                pos: "When (liên từ), you (đại từ), visit (động từ), Da Nang (danh từ), you (đại từ), will (trợ động từ), enjoy (động từ), seeing (V-ing), its (tính từ sở hữu), unique (tính từ), bridges (danh từ), over (giới từ), the (mạo từ), Han River (danh từ riêng)."
+            },
+            {
+                sentence: "For example, the Dragon Bridge spits fire and water on weekends, and the famous Golden Bridge is in Ba Na Hills.",
+                structure: "For example, S + V + O, and S + V + O.",
+                translation: "Ví dụ, Cầu Rồng phun lửa và nước vào cuối tuần, và Cầu Vàng nổi tiếng nằm ở Bà Nà Hills.",
+                pos: "For example (cụm từ), the (mạo từ), Dragon Bridge (danh từ riêng), spits (động từ), fire (danh từ), and (liên từ), water (danh từ), on (giới từ), weekends (danh từ), and (liên từ), the (mạo từ), famous (tính từ), Golden Bridge (danh từ riêng), is (động từ), in (giới từ), Ba Na Hills (danh từ riêng)."
+            },
+            {
+                sentence: "People in Da Nang are very friendly and welcoming.",
+                structure: "S + be + adv + adj + and + adj.",
+                translation: "Người dân Đà Nẵng rất thân thiện và hiếu khách.",
+                pos: "People (danh từ), in (giới từ), Da Nang (danh từ riêng), are (động từ), very (trạng từ), friendly (tính từ), and (liên từ), welcoming (tính từ)."
+            },
+            {
+                sentence: "The food here is also amazing and cheap, with local dishes like Quang noodles, rice paper rolls with pork, and fresh seafood.",
+                structure: "S + be + adv + adj + and + adj, with + N + like + N, N, and N.",
+                translation: "Đồ ăn ở đây cũng tuyệt vời và rẻ, với các món địa phương như mì Quảng, bánh tráng cuốn thịt heo, và hải sản tươi sống.",
+                pos: "The (mạo từ), food (danh từ), here (trạng từ), is (động từ), also (trạng từ), amazing (tính từ), and (liên từ), cheap (tính từ), with (giới từ), local (tính từ), dishes (danh từ), like (giới từ), Quang noodles (danh từ riêng), rice paper rolls (danh từ), with (giới từ), pork (danh từ), and (liên từ), fresh (tính từ), seafood (danh từ)."
+            },
+            {
+                sentence: "With great hotels, easy transport, and clean air, Da Nang is the perfect choice for a fun and relaxing vacation.",
+                structure: "With + N, N, and N, S + be + the + adj + N + for + a + adj + N.",
+                translation: "Với những khách sạn tuyệt vời, giao thông dễ dàng, và không khí trong lành, Đà Nẵng là lựa chọn hoàn hảo cho một kỳ nghỉ vui vẻ và thư giãn.",
+                pos: "With (giới từ), great (tính từ), hotels (danh từ), easy (tính từ), transport (danh từ), and (liên từ), clean (tính từ), air (danh từ), Da Nang (danh từ riêng), is (động từ), the (mạo từ), perfect (tính từ), choice (danh từ), for (giới từ), a (mạo từ), fun (tính từ), and (liên từ), relaxing (tính từ), vacation (danh từ)."
+            },
+            {
+                sentence: "Da Nang is a wonderful place that mixes beautiful nature with modern life.",
+                structure: "S + be + a + adj + N + that + V + O + with + O.",
+                translation: "Đà Nẵng là một nơi tuyệt vời kết hợp thiên nhiên tươi đẹp với cuộc sống hiện đại.",
+                pos: "Da Nang (danh từ riêng), is (động từ), a (mạo từ), wonderful (tính từ), place (danh từ), that (đại từ quan hệ), mixes (động từ), beautiful (tính từ), nature (danh từ), with (giới từ), modern (tính từ), life (danh từ)."
+            },
+            {
+                sentence: "The Dragon Bridge spits fire and water on weekends.",
+                structure: "S + V + O + and + O + prepositional phrase.",
+                translation: "Cầu Rồng phun lửa và nước vào cuối tuần.",
+                pos: "The (mạo từ), Dragon Bridge (danh từ riêng), spits (động từ), fire (danh từ), and (liên từ), water (danh từ), on (giới từ), weekends (danh từ)."
+            },
+            {
+                sentence: "You can visit the green Son Tra Peninsula or the famous Marble Mountains.",
+                structure: "S + modal + V + O + or + O.",
+                translation: "Bạn có thể thăm bán đảo Sơn Trà xanh tươi hoặc Ngũ Hành Sơn nổi tiếng.",
+                pos: "You (đại từ), can (động từ khuyết thiếu), visit (động từ), the (mạo từ), green (tính từ), Son Tra Peninsula (danh từ riêng), or (liên từ), the (mạo từ), famous (tính từ), Marble Mountains (danh từ riêng)."
+            }
+        ];
+
+        // ============================================================
+        // GHI ĐÈ DỮ LIỆU VÀO CÁC BIẾN TOÀN CỤC
+        // ============================================================
+        vocabData.splice(0, vocabData.length, ...newVocabData);
+        readingVocabOrder.splice(0, readingVocabOrder.length, ...newReadingVocabOrder);
+        essayData.splice(0, essayData.length, ...newEssayData);
+        grammarData.splice(0, grammarData.length, ...newGrammarData);
+        ex1Data.splice(0, ex1Data.length, ...newEx1Data);
+        ex2Data.splice(0, ex2Data.length, ...newEx2Data);
+        ex3Data.splice(0, ex3Data.length, ...newEx3Data);
+        // ex4Data được tạo từ vocabData, nên ta sẽ cập nhật sau khi vocabData đã thay đổi
+        ex5Data.splice(0, ex5Data.length, ...newEx5Data);
+        ex6Data.splice(0, ex6Data.length, ...newEx6Data);
+        ex7Data.splice(0, ex7Data.length, ...newEx7Data);
+        analysisData.splice(0, analysisData.length, ...newAnalysisData);
+
+        // Cập nhật ex4Data từ vocabData mới
+        ex4Data.splice(0, ex4Data.length, ...newVocabData.map(v => ({ word: v.word, mean: v.meaning })));
+
+        // ---- Cập nhật giao diện ----
+        renderDashboardEssay();
+        renderReading();
+        renderVocab('');
+        renderGrammar();
+        renderEx1();
+        renderEx2();
+        renderEx3();
+        renderEx4();
+        renderEx5();
+        renderEx6();
+        renderEx7();
+        renderAnalysis();
+        switchExercise(1);
+        updateProgress();
+
+        // Cập nhật số lượng từ vựng trong tiêu đề
+        document.querySelector('#tab-vocab .text-xs.text-slate-400').textContent = `${newVocabData.length} từ với 3 ví dụ phong phú`;
+        document.getElementById('vocab-progress-text').textContent = `0/${newVocabData.length}`;
+
+        console.log('✅ Đà Nẵng data loaded successfully!');
+    </script>
+</body>
+</html>
