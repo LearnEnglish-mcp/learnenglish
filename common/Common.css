@@ -176,3 +176,142 @@ body.dark footer .text-slate-600 {
 body.dark footer .text-slate-700 {
     color: #e2e8f0 !important;
 }
+
+/* =========================================================
+   NÚT QUAY LẠI DANH SÁCH BÀI HỌC
+   Được Common.js tự động tạo cho tất cả trang bài học.
+   ========================================================= */
+.mcp-back-to-index {
+    position: fixed;
+    top: 84px;
+    left: 16px;
+    z-index: 140;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #a7e2cb;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #047857;
+    text-decoration: none;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 10px 28px rgba(15, 118, 90, 0.16);
+    backdrop-filter: blur(10px);
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.mcp-back-to-index:hover {
+    transform: translateY(-2px);
+    background: #ecfdf5;
+    box-shadow: 0 14px 32px rgba(15, 118, 90, 0.22);
+}
+
+.mcp-back-to-index:focus-visible {
+    outline: 3px solid rgba(16, 185, 129, 0.35);
+    outline-offset: 3px;
+}
+
+.mcp-back-to-index .mcp-back-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+body.dark .mcp-back-to-index {
+    border-color: #2f8068;
+    background: rgba(15, 23, 42, 0.94);
+    color: #6ee7b7;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+}
+
+body.dark .mcp-back-to-index:hover {
+    background: #173c32;
+}
+
+@media (max-width: 900px) {
+    .mcp-back-to-index {
+        top: auto;
+        right: 14px;
+        bottom: 16px;
+        left: auto;
+        padding: 11px 14px;
+    }
+}
+
+@media (max-width: 520px) {
+    .mcp-back-to-index {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .mcp-back-to-index .mcp-back-text {
+        display: none;
+    }
+
+    .mcp-back-to-index .mcp-back-icon {
+        font-size: 22px;
+    }
+}
+
+
+/* =========================================================
+   NÚT TRANG CHỦ TRÊN THANH MENU
+   Common.js tự động chèn trước mục "Tổng Quan".
+   ========================================================= */
+.mcp-home-menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border-radius: 9px;
+    color: #334155;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.mcp-home-menu:hover {
+    color: #047857;
+    background: #ecfdf5;
+}
+
+.mcp-home-menu:focus-visible {
+    outline: 3px solid rgba(16, 185, 129, 0.28);
+    outline-offset: 2px;
+}
+
+.mcp-home-menu .mcp-home-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+body.dark .mcp-home-menu {
+    color: #e2e8f0;
+}
+
+body.dark .mcp-home-menu:hover {
+    color: #6ee7b7;
+    background: #173c32;
+}
+
+@media (max-width: 700px) {
+    .mcp-home-menu {
+        padding: 6px 8px;
+    }
+
+    .mcp-home-menu .mcp-home-text {
+        display: none;
+    }
+}

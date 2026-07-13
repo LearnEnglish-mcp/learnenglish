@@ -2374,3 +2374,120 @@ window.hideVideo = function() {
     if (container) container.style.display = 'none';
     console.log('❌ Không tìm thấy brain.mp4');
 };
+
+// =========================================================
+// NÚT QUAY LẠI DANH SÁCH BÀI HỌC
+// Tự động được thêm vào mọi trang đang sử dụng Common.js.
+// Không cần sửa từng file HTML.
+// =========================================================
+(function addBackToLessonIndexButton() {
+    "use strict";
+
+    function isIndexPage() {
+        const fileName = decodeURIComponent(
+            window.location.pathname.split("/").pop() || ""
+        ).toLowerCase();
+
+        return (
+            fileName === "" ||
+            fileName === "index.html" ||
+            fileName === "index.htm"
+        );
+    }
+
+    function getIndexUrl() {
+        /*
+         * Các trang bài học hiện nằm trong thư mục con:
+         * 03hochiminh/, 04danang/, 05tayninh/...
+         * Vì vậy ../index.html sẽ quay về đúng trang danh sách.
+         */
+        return "../index.html";
+    }
+
+    function createBackButton() {
+        if (isIndexPage()) {
+            return;
+        }
+
+        if (document.querySelector(".mcp-back-to-index")) {
+            return;
+        }
+
+        const link = document.createElement("a");
+
+        link.className = "mcp-back-to-index";
+        link.href = getIndexUrl();
+        link.setAttribute(
+            "aria-label",
+            "Quay lại danh sách bài học"
+        );
+        link.title = "Quay lại danh sách bài học";
+
+        link.innerHTML = `
+            <span class="mcp-back-icon" aria-hidden="true">←</span>
+            <span class="mcp-back-text">Danh sách bài học</span>
+        `;
+
+        document.body.appendChild(link);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            createBackButton,
+            { once: true }
+        );
+    } else {
+        createBackButton();
+    }
+})();
+
+
+// =========================================================
+// NÚT TRANG CHỦ TRÊN THANH MENU
+// Tự động chèn trước mục "Tổng Quan" trên mọi trang bài học.
+// Không cần sửa từng file HTML.
+// =========================================================
+(function addHomeMenuItem() {
+    "use strict";
+
+    function createHomeMenuItem() {
+        if (document.querySelector(".mcp-home-menu")) {
+            return;
+        }
+
+        const dashboardButton =
+            document.getElementById("btn-dashboard");
+
+        if (!dashboardButton || !dashboardButton.parentElement) {
+            return;
+        }
+
+        const homeLink = document.createElement("a");
+
+        homeLink.className = "mcp-home-menu";
+        homeLink.href = "../index.html";
+        homeLink.title = "Về trang chủ";
+        homeLink.setAttribute("aria-label", "Về trang chủ");
+
+        homeLink.innerHTML = `
+            <span class="mcp-home-icon" aria-hidden="true">🏠</span>
+            <span class="mcp-home-text">Trang chủ</span>
+        `;
+
+        dashboardButton.parentElement.insertBefore(
+            homeLink,
+            dashboardButton
+        );
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            createHomeMenuItem,
+            { once: true }
+        );
+    } else {
+        createHomeMenuItem();
+    }
+})();
