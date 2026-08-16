@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị bài học - MCP Siblings</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <script>
+        (function () {
+            const authenticated =
+                sessionStorage.getItem("mcpAdminAuthenticated") === "1";
+
+            const expiresAt = Number(
+                sessionStorage.getItem("mcpAdminExpiresAt")
+            );
+
+            if (!authenticated || !expiresAt || Date.now() >= expiresAt) {
+                sessionStorage.removeItem("mcpAdminAuthenticated");
+                sessionStorage.removeItem("mcpAdminExpiresAt");
+                location.replace("admin-login.html");
+            }
+        })();
+    </script>
+
+
+    <style>
+        :root {
+            --green: #079a76;
+            --green-dark: #05785d;
+            --green-light: #eafaf4;
+            --border: #d7e9e2;
+            --text: #172036;
+            --muted: #68748a;
+            --background: #f4fcf9;
+            --danger: #d83a4a;
+            --orange: #d97706;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        button, input, textarea, select { font: inherit; }
+
+        .header {
+            padding: 15px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 16px rgba(31, 83, 67, 0.06);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .brand img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            border-radius: 13px;
+        }
+
+        .brand h1 { margin: 0; font-size: 24px; }
+        .brand p {
+            margin: 4px 0 0;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            padding: 11px 16px;
+            border-radius: 11px;
+            color: #fff;
+            background: var(--green);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .back-link:hover { background: var(--green-dark); }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logout-button {
+            padding: 11px 16px;
+            border: 0;
+            border-radius: 11px;
+            cursor: pointer;
+            color: #fff;
+            background: var(--danger);
+            font-weight: 750;
+        }
+
+        .logout-button:hover {
+            filter: brightness(0.92);
+        }
+
+        .page {
+            width: min(1350px, calc(100% - 30px));
+            margin: 28px auto 60px;
+        }
+
+        .intro {
+            margin-bottom: 24px;
+            padding: 22px;
+            border: 1px solid #f0dfac;
+            border-radius: 16px;
+            background: #fffaf0;
+        }
+
+        .intro h2 { margin: 0 0 8px; color: #805d00; }
+        .intro p { margin: 5px 0; color: #706346; line-height: 1.55; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 430px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 7px 22px rgba(31, 83, 67, 0.06);
+        }
+
+        .panel h2 {
+            margin: 0 0 20px;
+            color: var(--green-dark);
+            font-size: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        .field.full { grid-column: 1 / -1; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 700;
+            color: #344057;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #ccdbe0;
+            border-radius: 10px;
+            outline: none;
+            color: var(--text);
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(7, 154, 118, 0.10);
+        }
+
+        .help {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .path-preview {
+            padding: 13px;
+            border: 1px dashed #a9d4c5;
+            border-radius: 11px;
+            background: #f3fcf8;
+            color: #355d50;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .button-row {
+            margin-top: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 11px;
+        }
+
+        .btn {
+            padding: 11px 16px;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .btn-primary { color: #fff; background: var(--green); }
+        .btn-primary:hover { background: var(--green-dark); }
+
+        .btn-secondary {
+            color: var(--green-dark);
+            background: var(--green-light);
+            border: 1px solid #bfe6d8;
+        }
+
+        .btn-warning { color: #fff; background: var(--orange); }
+        .btn-danger { color: #fff; background: var(--danger); }
+
+        .status {
+            display: none;
+            margin-top: 16px;
+            padding: 13px 15px;
+            border-radius: 11px;
+            line-height: 1.5;
+        }
+
+        .status.success {
+            display: block;
+            color: #075a43;
+            border: 1px solid #a9dfcc;
+            background: #e9faf4;
+        }
+
+        .status.error {
+            display: block;
+            color: #922b39;
+            border: 1px solid #efb2ba;
+            background: #fff0f2;
+        }
+
+        .preview-card {
+            overflow: hidden;
+            border: 1px solid #d8e7e1;
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .preview-image {
+            position: relative;
+            height: 210px;
+            overflow: hidden;
+            background: #e2f1eb;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 7px 11px;
+            border-radius: 9px;
+            color: #fff;
+            background: var(--green);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .preview-body { padding: 18px; }
+        .preview-category {
+            margin: 0 0 8px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .preview-body h3 { margin: 0 0 10px; font-size: 21px; }
+        .preview-body p { color: var(--muted); line-height: 1.5; }
+
+        .lesson-list-panel { margin-top: 24px; }
+
+        .lesson-list-header {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lesson-list-header h2 { margin: 0; }
+
+        .lesson-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lesson-table th,
+        .lesson-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e7efec;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .lesson-table th {
+            color: #526074;
+            background: #f7fbf9;
+            font-size: 13px;
+        }
+
+        .lesson-table td { font-size: 14px; }
+
+        .table-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .small-btn {
+            padding: 7px 10px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .small-edit { background: var(--orange); }
+        .small-delete { background: var(--danger); }
+
+        .save-box {
+            margin-top: 24px;
+            padding: 20px;
+            border: 1px solid #bfe6d8;
+            border-radius: 16px;
+            background: #eefbf6;
+        }
+
+        .save-box h3 { margin: 0 0 8px; color: var(--green-dark); }
+        .save-box p { margin: 6px 0; color: #456559; line-height: 1.5; }
+
+        @media (max-width: 980px) {
+            .layout { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 680px) {
+            .header {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 13px 16px;
+            }
+
+            .form-grid { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+
+            .lesson-table,
+            .lesson-table thead,
+            .lesson-table tbody,
+            .lesson-table tr,
+            .lesson-table th,
+            .lesson-table td {
+                display: block;
+            }
+
+            .lesson-table thead { display: none; }
+
+            .lesson-table tr {
+                margin-bottom: 13px;
+                padding: 12px;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+            }
+
+            .lesson-table td {
+                padding: 6px 0;
+                border: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <a class="brand" href="index.html">
+        <img src="common/LogoMCP.png" alt="Logo MCP Siblings">
+        <div>
+            <h1>Nhập bài học mới</h1>
+            <p>MCP Siblings</p>
+        </div>
+    </a>
+
+    <div class="header-actions">
+        <a class="back-link" href="index.html">← Về trang Index</a>
+        <button class="logout-button" id="logoutButton" type="button">
+            Đăng xuất
+        </button>
+    </div>
+</header>
+
+<main class="page">
+    <section class="intro">
+        <h2>Trang quản lý danh sách bài học</h2>
+        <p>
+            Trang này giúp bạn nhập thông tin bài học, chỉnh sửa danh sách và tạo lại file
+            <strong>lessons.js</strong>.
+        </p>
+        <p>
+            Trước khi nhập, bạn vẫn cần tự tạo thư mục bài học rồi chép bộ 7 file bài học và hình ảnh
+            vào đúng thư mục. Trang quản trị sẽ tự tạo đường dẫn HTML và Vocabulary trong lessons.js.
+        </p>
+    </section>
+
+    <div class="layout">
+        <section class="panel">
+            <h2 id="formTitle">➕ Thêm bài học</h2>
+
+            <form id="lessonForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="lessonId">Số bài</label>
+                        <input id="lessonId" type="number" min="1" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonLevel">Trình độ</label>
+                        <input id="lessonLevel" type="text" value="A1 - B1" required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="lessonTitle">Tên bài học</label>
+                        <input id="lessonTitle" type="text" placeholder="Ví dụ: Can Tho City" required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="lessonDescription">Mô tả ngắn</label>
+                        <textarea id="lessonDescription" placeholder="Giới thiệu ngắn về bài học..." required></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonCategory">Nhóm bài học</label>
+                        <select id="lessonCategory" required>
+                            <option value="hoc-tap">1. Học tập</option>
+                            <option value="du-lich" selected>2. Du lịch</option>
+                            <option value="cuoc-song">3. Cuộc sống</option>
+                            <option value="suc-khoe">4. Sức khỏe</option>
+                            <option value="giai-tri">5. Giải trí</option>
+                            <option value="cong-viec">6. Công việc</option>
+                            <option value="cong-nghe">7. Công nghệ</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonDuration">Thời lượng</label>
+                        <input id="lessonDuration" type="text" value="12 phút" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonFolder">Tên thư mục bài học</label>
+                        <input id="lessonFolder" type="text" placeholder="Ví dụ: 01traffic" required>
+                        <div class="help">Không nhập “goc/” ở phía trước.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonCode">Mã bài học</label>
+                        <input id="lessonCode" type="text" placeholder="Ví dụ: traffic01" required>
+                        <div class="help">Dùng đúng MÃ_BÀI của bộ 7 file. Vocabulary sẽ tự tạo: MÃ_BÀI_Vocabulary.js</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonImageName">Tên file hình</label>
+                        <input id="lessonImageName" type="text" placeholder="Ví dụ: cantho.jpg" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="lessonHtmlName">Tên file HTML</label>
+                        <input id="lessonHtmlName" type="text" placeholder="Ví dụ: traffic01.html" required>
+                    </div>
+
+                    <div class="field full">
+                        <label>Đường dẫn sẽ được tạo</label>
+                        <div class="path-preview" id="pathPreview">
+                            Hình: —<br>
+                            HTML: —<br>
+                            Vocabulary: —
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" type="submit" id="submitButton">
+                        Thêm vào danh sách
+                    </button>
+
+                    <button class="btn btn-secondary" type="button" id="resetButton">
+                        Làm mới biểu mẫu
+                    </button>
+                </div>
+            </form>
+
+            <div class="status" id="statusBox"></div>
+        </section>
+
+        <aside class="panel">
+            <h2>👁️ Xem trước thẻ bài học</h2>
+
+            <div class="preview-card">
+                <div class="preview-image">
+                    <img id="previewImage" src="" alt="Xem trước hình bài học">
+                    <span class="preview-number" id="previewId">Bài —</span>
+                </div>
+
+                <div class="preview-body">
+                    <p class="preview-category" id="previewCategory">Du lịch</p>
+                    <h3 id="previewTitle">Tên bài học</h3>
+                    <p id="previewDescription">Mô tả bài học sẽ xuất hiện tại đây.</p>
+                    <p>
+                        <strong id="previewLevel">A1 - B1</strong>
+                        · <span id="previewDuration">12 phút</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="save-box">
+                <h3>💾 Sau khi nhập xong</h3>
+                <p>
+                    Bấm <strong>Lưu trực tiếp lessons.js</strong> nếu trình duyệt hỗ trợ.
+                    Chọn file <strong>goc/lessons.js</strong> và đồng ý thay thế.
+                </p>
+                <p>
+                    Hoặc bấm <strong>Tải lessons.js</strong>, sau đó chép file tải về vào thư mục
+                    <strong>goc</strong> để thay file cũ.
+                </p>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" type="button" id="saveFileButton">
+                        Lưu trực tiếp lessons.js
+                    </button>
+
+                    <button class="btn btn-warning" type="button" id="downloadButton">
+                        Tải lessons.js
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <section class="panel lesson-list-panel">
+        <div class="lesson-list-header">
+            <h2>📚 Danh sách hiện tại</h2>
+            <strong id="totalLessons">0 bài</strong>
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table class="lesson-table">
+                <thead>
+                    <tr>
+                        <th>Bài</th>
+                        <th>Tên bài học</th>
+                        <th>Nhóm</th>
+                        <th>Đường dẫn HTML</th>
+                        <th>Vocabulary</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="lessonTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="lessons.js"></script>
+<script>
+    "use strict";
+
+    const categoryMap = {
+        "hoc-tap": "Học tập",
+        "du-lich": "Du lịch",
+        "cuoc-song": "Cuộc sống",
+        "suc-khoe": "Sức khỏe",
+        "giai-tri": "Giải trí",
+        "cong-viec": "Công việc",
+        "cong-nghe": "Công nghệ"
+    };
+
+    let lessonList = Array.isArray(window.LESSONS)
+        ? JSON.parse(JSON.stringify(window.LESSONS))
+        : [];
+
+    let editingIndex = -1;
+
+    const form = document.getElementById("lessonForm");
+    const lessonId = document.getElementById("lessonId");
+    const lessonTitle = document.getElementById("lessonTitle");
+    const lessonDescription = document.getElementById("lessonDescription");
+    const lessonCategory = document.getElementById("lessonCategory");
+    const lessonLevel = document.getElementById("lessonLevel");
+    const lessonDuration = document.getElementById("lessonDuration");
+    const lessonFolder = document.getElementById("lessonFolder");
+    const lessonCode = document.getElementById("lessonCode");
+    const lessonImageName = document.getElementById("lessonImageName");
+    const lessonHtmlName = document.getElementById("lessonHtmlName");
+
+    const pathPreview = document.getElementById("pathPreview");
+    const statusBox = document.getElementById("statusBox");
+    const submitButton = document.getElementById("submitButton");
+    const formTitle = document.getElementById("formTitle");
+
+    function nextLessonId() {
+        if (lessonList.length === 0) {
+            return 1;
+        }
+
+        return Math.max(...lessonList.map((item) => Number(item.id) || 0)) + 1;
+    }
+
+    function cleanPathPart(value) {
+        return String(value || "")
+            .trim()
+            .replaceAll("\\", "/")
+            .replace(/^\/+|\/+$/g, "");
+    }
+
+    function currentImagePath() {
+        const folder = cleanPathPart(lessonFolder.value);
+        const fileName = cleanPathPart(lessonImageName.value);
+
+        return folder && fileName ? `${folder}/${fileName}` : "";
+    }
+
+    function currentHtmlPath() {
+        const folder = cleanPathPart(lessonFolder.value);
+        const fileName = cleanPathPart(lessonHtmlName.value);
+
+        return folder && fileName ? `${folder}/${fileName}` : "";
+    }
+
+    function cleanLessonCode(value) {
+        return String(value || "")
+            .trim()
+            .replace(/\.html?$/i, "")
+            .replace(/_Vocabulary\.js$/i, "")
+            .replace(/[^A-Za-z0-9_-]/g, "");
+    }
+
+    function currentVocabularyPath() {
+        const folder = cleanPathPart(lessonFolder.value);
+        const code = cleanLessonCode(lessonCode.value);
+
+        return folder && code ? `${folder}/${code}_Vocabulary.js` : "";
+    }
+
+    function showStatus(message, type) {
+        statusBox.className = `status ${type}`;
+        statusBox.textContent = message;
+    }
+
+    function clearStatus() {
+        statusBox.className = "status";
+        statusBox.textContent = "";
+    }
+
+    function updatePreview() {
+        const imagePath = currentImagePath();
+        const htmlPath = currentHtmlPath();
+        const vocabularyPath = currentVocabularyPath();
+        const categoryName =
+            categoryMap[lessonCategory.value] || "Chưa chọn";
+
+        pathPreview.innerHTML =
+            `Hình: ${imagePath || "—"}<br>` +
+            `HTML: ${htmlPath || "—"}<br>` +
+            `Vocabulary: ${vocabularyPath || "—"}`;
+
+        document.getElementById("previewId").textContent =
+            `Bài ${lessonId.value || "—"}`;
+
+        document.getElementById("previewCategory").textContent =
+            categoryName;
+
+        document.getElementById("previewTitle").textContent =
+            lessonTitle.value.trim() || "Tên bài học";
+
+        document.getElementById("previewDescription").textContent =
+            lessonDescription.value.trim() ||
+            "Mô tả bài học sẽ xuất hiện tại đây.";
+
+        document.getElementById("previewLevel").textContent =
+            lessonLevel.value.trim() || "—";
+
+        document.getElementById("previewDuration").textContent =
+            lessonDuration.value.trim() || "—";
+
+        const previewImage = document.getElementById("previewImage");
+
+        if (imagePath) {
+            previewImage.src = imagePath;
+        } else {
+            previewImage.removeAttribute("src");
+        }
+
+        previewImage.onerror = () => {
+            previewImage.removeAttribute("src");
+            previewImage.alt =
+                "Chưa tìm thấy hình. Hãy kiểm tra đường dẫn sau khi tạo thư mục.";
+        };
+    }
+
+    function resetForm() {
+        editingIndex = -1;
+        form.reset();
+
+        lessonId.value = nextLessonId();
+        lessonLevel.value = "A1 - B1";
+        lessonDuration.value = "12 phút";
+        lessonCategory.value = "du-lich";
+
+        submitButton.textContent = "Thêm vào danh sách";
+        formTitle.textContent = "➕ Thêm bài học";
+
+        clearStatus();
+        updatePreview();
+    }
+
+    function createLessonFromForm() {
+        const folder = cleanPathPart(lessonFolder.value);
+        const code = cleanLessonCode(lessonCode.value);
+        const imageName = cleanPathPart(lessonImageName.value);
+        const htmlName = cleanPathPart(lessonHtmlName.value);
+
+        return {
+            id: Number(lessonId.value),
+            title: lessonTitle.value.trim(),
+            description: lessonDescription.value.trim(),
+            category: lessonCategory.value,
+            categoryName: categoryMap[lessonCategory.value],
+            level: lessonLevel.value.trim(),
+            duration: lessonDuration.value.trim(),
+            folder,
+            code,
+            image: `${folder}/${imageName}`,
+            url: `${folder}/${htmlName}`,
+            vocabulary: `${folder}/${code}_Vocabulary.js`
+        };
+    }
+
+    function validateLesson(lesson) {
+        if (!Number.isInteger(lesson.id) || lesson.id < 1) {
+            return "Số bài phải là số nguyên lớn hơn 0.";
+        }
+
+        if (!lesson.title || !lesson.description) {
+            return "Bạn cần nhập tên bài học và mô tả.";
+        }
+
+        if (!lesson.folder) {
+            return "Bạn cần nhập tên thư mục bài học.";
+        }
+
+        if (!lesson.code) {
+            return "Bạn cần nhập Mã bài học.";
+        }
+
+        if (!/^[A-Za-z0-9_-]+$/.test(lesson.code)) {
+            return "Mã bài học chỉ được dùng chữ, số, dấu gạch dưới hoặc gạch ngang.";
+        }
+
+        if (!lesson.image || lesson.image.endsWith("/")) {
+            return "Đường dẫn hình chưa đầy đủ.";
+        }
+
+        if (!lesson.url || lesson.url.endsWith("/")) {
+            return "Đường dẫn HTML chưa đầy đủ.";
+        }
+
+        if (!lesson.vocabulary || lesson.vocabulary.endsWith("/_Vocabulary.js")) {
+            return "Đường dẫn Vocabulary chưa đầy đủ.";
+        }
+
+        const duplicateId = lessonList.some((item, index) =>
+            index !== editingIndex &&
+            Number(item.id) === lesson.id
+        );
+
+        if (duplicateId) {
+            return `Bài số ${lesson.id} đã tồn tại.`;
+        }
+
+        const duplicateUrl = lessonList.some((item, index) =>
+            index !== editingIndex &&
+            String(item.url).toLowerCase() === lesson.url.toLowerCase()
+        );
+
+        if (duplicateUrl) {
+            return "Đường dẫn HTML này đã có trong danh sách.";
+        }
+
+        const duplicateVocabulary = lessonList.some((item, index) =>
+            index !== editingIndex &&
+            String(item.vocabulary || "").toLowerCase() ===
+                lesson.vocabulary.toLowerCase()
+        );
+
+        if (duplicateVocabulary) {
+            return "Đường dẫn Vocabulary này đã có trong danh sách.";
+        }
+
+        return "";
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function renderLessonTable() {
+        lessonList.sort((a, b) => Number(a.id) - Number(b.id));
+
+        const tableBody = document.getElementById("lessonTableBody");
+        tableBody.innerHTML = "";
+
+        lessonList.forEach((lesson, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td><strong>${escapeHtml(lesson.id)}</strong></td>
+                <td>${escapeHtml(lesson.title)}</td>
+                <td>${escapeHtml(lesson.categoryName)}</td>
+                <td><code>${escapeHtml(lesson.url)}</code></td>
+                <td><code>${escapeHtml(lesson.vocabulary || "—")}</code></td>
+                <td>
+                    <div class="table-actions">
+                        <button
+                            class="small-btn small-edit"
+                            type="button"
+                            data-action="edit"
+                            data-index="${index}"
+                        >
+                            Sửa
+                        </button>
+
+                        <button
+                            class="small-btn small-delete"
+                            type="button"
+                            data-action="delete"
+                            data-index="${index}"
+                        >
+                            Xóa
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        document.getElementById("totalLessons").textContent =
+            `${lessonList.length} bài`;
+    }
+
+    function editLesson(index) {
+        const lesson = lessonList[index];
+
+        if (!lesson) {
+            return;
+        }
+
+        editingIndex = index;
+
+        const imageParts = String(lesson.image || "").split("/");
+        const urlParts = String(lesson.url || "").split("/");
+        const vocabularyParts = String(lesson.vocabulary || "").split("/");
+
+        lessonId.value = lesson.id;
+        lessonTitle.value = lesson.title;
+        lessonDescription.value = lesson.description;
+        lessonCategory.value = lesson.category;
+        lessonLevel.value = lesson.level;
+        lessonDuration.value = lesson.duration;
+
+        lessonFolder.value =
+            lesson.folder ||
+            (imageParts.length > 1
+                ? imageParts.slice(0, -1).join("/")
+                : urlParts.slice(0, -1).join("/"));
+
+        const htmlFile = urlParts.at(-1) || "";
+        const vocabularyFile = vocabularyParts.at(-1) || "";
+
+        lessonCode.value =
+            lesson.code ||
+            cleanLessonCode(vocabularyFile) ||
+            cleanLessonCode(htmlFile);
+
+        lessonImageName.value = imageParts.at(-1) || "";
+        lessonHtmlName.value = htmlFile;
+
+        submitButton.textContent = "Cập nhật bài học";
+        formTitle.textContent = "✏️ Chỉnh sửa bài học";
+
+        clearStatus();
+        updatePreview();
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteLesson(index) {
+        const lesson = lessonList[index];
+
+        if (!lesson) {
+            return;
+        }
+
+        const accepted = confirm(
+            `Bạn có chắc muốn xóa bài ${lesson.id}: ${lesson.title} khỏi danh sách không?`
+        );
+
+        if (!accepted) {
+            return;
+        }
+
+        lessonList.splice(index, 1);
+        resetForm();
+        renderLessonTable();
+
+        showStatus(
+            "Đã xóa khỏi danh sách. Hãy lưu lại file lessons.js để áp dụng.",
+            "success"
+        );
+    }
+
+    function buildLessonsFile() {
+        return (
+            "window.LESSONS = " +
+            JSON.stringify(lessonList, null, 4) +
+            ";\n"
+        );
+    }
+
+    async function saveDirectly() {
+        const content = buildLessonsFile();
+
+        if (!("showSaveFilePicker" in window)) {
+            showStatus(
+                "Trình duyệt này không hỗ trợ lưu trực tiếp. Hãy dùng nút “Tải lessons.js”.",
+                "error"
+            );
+            return;
+        }
+
+        try {
+            const fileHandle = await window.showSaveFilePicker({
+                suggestedName: "lessons.js",
+                types: [
+                    {
+                        description: "JavaScript file",
+                        accept: {
+                            "text/javascript": [".js"]
+                        }
+                    }
+                ]
+            });
+
+            const writable = await fileHandle.createWritable();
+            await writable.write(content);
+            await writable.close();
+
+            showStatus(
+                "Đã lưu lessons.js. Quay về trang Index và nhấn Ctrl + F5 để xem bài mới.",
+                "success"
+            );
+        } catch (error) {
+            if (error && error.name === "AbortError") {
+                return;
+            }
+
+            showStatus(
+                "Không thể lưu trực tiếp. Hãy dùng nút “Tải lessons.js”.",
+                "error"
+            );
+        }
+    }
+
+    function downloadLessonsFile() {
+        const content = buildLessonsFile();
+        const blob = new Blob([content], {
+            type: "text/javascript;charset=utf-8"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+
+        anchor.href = url;
+        anchor.download = "lessons.js";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+
+        URL.revokeObjectURL(url);
+
+        showStatus(
+            "Đã tải lessons.js. Hãy chép file này vào thư mục goc và thay thế file cũ.",
+            "success"
+        );
+    }
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const lesson = createLessonFromForm();
+        const validationError = validateLesson(lesson);
+
+        if (validationError) {
+            showStatus(validationError, "error");
+            return;
+        }
+
+        if (editingIndex >= 0) {
+            lessonList[editingIndex] = lesson;
+
+            showStatus(
+                "Đã cập nhật trong danh sách. Bây giờ hãy lưu lại lessons.js.",
+                "success"
+            );
+        } else {
+            lessonList.push(lesson);
+
+            showStatus(
+                "Đã thêm bài mới vào danh sách. Bây giờ hãy lưu lại lessons.js.",
+                "success"
+            );
+        }
+
+        renderLessonTable();
+        resetForm();
+    });
+
+    document.getElementById("resetButton").addEventListener(
+        "click",
+        resetForm
+    );
+
+    document.getElementById("downloadButton").addEventListener(
+        "click",
+        downloadLessonsFile
+    );
+
+    document.getElementById("saveFileButton").addEventListener(
+        "click",
+        saveDirectly
+    );
+
+    document.getElementById("lessonTableBody").addEventListener(
+        "click",
+        (event) => {
+            const button = event.target.closest("button[data-action]");
+
+            if (!button) {
+                return;
+            }
+
+            const index = Number(button.dataset.index);
+
+            if (button.dataset.action === "edit") {
+                editLesson(index);
+            }
+
+            if (button.dataset.action === "delete") {
+                deleteLesson(index);
+            }
+        }
+    );
+
+    [
+        lessonId,
+        lessonTitle,
+        lessonDescription,
+        lessonCategory,
+        lessonLevel,
+        lessonDuration,
+        lessonFolder,
+        lessonCode,
+        lessonImageName,
+        lessonHtmlName
+    ].forEach((element) => {
+        element.addEventListener("input", updatePreview);
+        element.addEventListener("change", updatePreview);
+    });
+
+    lessonHtmlName.addEventListener("input", () => {
+        if (!lessonCode.value.trim()) {
+            lessonCode.value = cleanLessonCode(lessonHtmlName.value);
+            updatePreview();
+        }
+    });
+
+    renderLessonTable();
+    resetForm();
+
+    const logoutButton = document.getElementById("logoutButton");
+
+    function logoutAdmin() {
+        sessionStorage.removeItem("mcpAdminAuthenticated");
+        sessionStorage.removeItem("mcpAdminExpiresAt");
+        location.replace("admin-login.html");
+    }
+
+    logoutButton.addEventListener("click", logoutAdmin);
+
+    setInterval(() => {
+        const expiresAt = Number(
+            sessionStorage.getItem("mcpAdminExpiresAt")
+        );
+
+        if (!expiresAt || Date.now() >= expiresAt) {
+            logoutAdmin();
+        }
+    }, 30000);
+
+</script>
+
+</body>
+</html>

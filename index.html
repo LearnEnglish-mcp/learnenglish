@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Siblings - Danh sách bài học</title>
+
+    <style>
+        :root {
+            --green: #079a76;
+            --green-dark: #05785d;
+            --green-light: #eafaf4;
+            --border: #d7e9e2;
+            --text: #172036;
+            --muted: #68748a;
+            --background: #f4fcf9;
+            --white: #ffffff;
+            --shadow: 0 12px 30px rgba(31, 83, 67, 0.10);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        button, input, select { font: inherit; }
+
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            min-height: 88px;
+            padding: 14px 28px;
+            display: grid;
+            grid-template-columns: 310px minmax(320px, 650px) 1fr;
+            align-items: center;
+            gap: 28px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 16px rgba(31, 83, 67, 0.06);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .brand img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .brand h1 { margin: 0; font-size: 25px; line-height: 1.1; }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+        }
+
+        .search-box {
+            height: 52px;
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #cbd9e0;
+            border-radius: 13px;
+            background: #fff;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(7, 154, 118, 0.12);
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 0;
+            padding: 0 18px;
+            border: 0;
+            outline: 0;
+            color: var(--text);
+            background: transparent;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            width: 64px;
+            border: 0;
+            cursor: pointer;
+            color: #fff;
+            background: var(--green);
+            font-size: 21px;
+        }
+
+        .search-box button:hover { background: var(--green-dark); }
+
+        .top-nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .top-nav a {
+            color: #3a465b;
+            text-decoration: none;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+
+        .top-nav a:hover { color: var(--green); }
+
+        .page {
+            width: min(1540px, calc(100% - 36px));
+            margin: 26px auto 60px;
+            display: grid;
+            grid-template-columns: 285px minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        .sidebar {
+            align-self: start;
+            position: sticky;
+            top: 114px;
+            padding: 22px 18px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 6px 20px rgba(31, 83, 67, 0.05);
+        }
+
+        .sidebar h2 {
+            margin: 4px 8px 20px;
+            color: var(--green-dark);
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .category-button {
+            width: 100%;
+            min-height: 60px;
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border: 1px solid #dce9e4;
+            border-radius: 13px;
+            cursor: pointer;
+            color: #344057;
+            background: #fff;
+            text-align: left;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .category-button:hover {
+            transform: translateX(4px);
+            border-color: var(--green);
+            background: #f2fcf8;
+        }
+
+        .category-button.active {
+            color: var(--green-dark);
+            border-color: var(--green);
+            background: var(--green-light);
+            box-shadow: 0 5px 14px rgba(7, 154, 118, 0.10);
+        }
+
+        .category-count {
+            min-width: 34px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            color: #fff;
+            background: var(--green);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .sidebar-note {
+            margin-top: 22px;
+            padding: 16px;
+            border: 1px solid #f0dfac;
+            border-radius: 14px;
+            background: #fffaf0;
+        }
+
+        .sidebar-note strong {
+            display: block;
+            margin-bottom: 7px;
+            color: #8b6400;
+        }
+
+        .sidebar-note p {
+            margin: 0;
+            color: #76684a;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .content {
+            min-width: 0;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+        }
+
+        .content-header {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .content-header h2 {
+            margin: 0 0 7px;
+            color: var(--green-dark);
+            font-size: 30px;
+        }
+
+        .content-header p { margin: 0; color: var(--muted); }
+
+        .sort-box {
+            padding: 12px 14px;
+            border: 1px solid #d3dfe3;
+            border-radius: 11px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+        }
+
+        .lesson-grid {
+            width: 100%;
+            min-width: 0;
+            display: grid;
+            grid-template-columns:
+                repeat(var(--lesson-columns, 4), minmax(0, 1fr));
+            gap: clamp(12px, 1.3vw, 22px);
+        }
+
+        .lesson-card {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid #d8e7e1;
+            border-radius: 17px;
+            background: #fff;
+            box-shadow: 0 5px 16px rgba(31, 83, 67, 0.07);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+        }
+
+        .lesson-image {
+            position: relative;
+            height: 190px;
+            overflow: hidden;
+            background: #ddecdf;
+        }
+
+        .lesson-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .lesson-card:hover .lesson-image img { transform: scale(1.05); }
+
+        .lesson-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 7px 11px;
+            border-radius: 9px;
+            color: #fff;
+            background: var(--green);
+            font-size: 13px;
+            font-weight: 800;
+        }
+.lesson-body { padding: 18px; }
+
+        .lesson-category {
+            margin: 0 0 8px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .lesson-body h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            line-height: 1.3;
+        }
+
+        .lesson-description {
+            min-height: 65px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .lesson-meta {
+            margin-top: 16px;
+            padding-top: 14px;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            border-top: 1px solid #ecf1ef;
+            color: #68748a;
+            font-size: 13px;
+        }
+
+        .lesson-level { color: var(--green); font-weight: 800; }
+
+        .lesson-link {
+            margin-top: 16px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            color: #fff;
+            background: var(--green);
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .lesson-link:hover { background: var(--green-dark); }
+
+        .lesson-grid[data-columns="5"] .lesson-image {
+            height: 165px;
+        }
+
+        .lesson-grid[data-columns="6"] .lesson-image {
+            height: 145px;
+        }
+
+        .lesson-grid[data-columns="5"] .lesson-body,
+        .lesson-grid[data-columns="6"] .lesson-body {
+            padding: 14px;
+        }
+
+        .lesson-grid[data-columns="5"] .lesson-body h3 {
+            font-size: 18px;
+        }
+
+        .lesson-grid[data-columns="6"] .lesson-body h3 {
+            font-size: 16px;
+        }
+
+        .lesson-grid[data-columns="5"] .lesson-description,
+        .lesson-grid[data-columns="6"] .lesson-description {
+            min-height: 0;
+            font-size: 14px;
+        }
+
+        .lesson-grid[data-columns="5"] .lesson-number,
+        .lesson-grid[data-columns="6"] .lesson-number {
+            top: 10px;
+            left: 10px;
+            padding: 6px 9px;
+            font-size: 12px;
+        }
+
+        .lesson-grid[data-columns="5"] .lesson-link,
+        .lesson-grid[data-columns="6"] .lesson-link {
+            padding: 10px 11px;
+            font-size: 14px;
+        }
+
+        .empty-message {
+            display: none;
+            padding: 70px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty-message .icon { font-size: 45px; }
+        .empty-message h3 { margin: 12px 0 7px; color: #263248; }
+
+
+        .content-tools {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .tool-label {
+            color: #526074;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .layout-select {
+            padding: 12px 14px;
+            border: 1px solid #d3dfe3;
+            border-radius: 11px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+        }
+
+        .category-manage-note {
+            margin: -3px 8px 16px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .category-button .category-order {
+            min-width: 22px;
+            color: var(--green-dark);
+            font-weight: 800;
+        }
+
+        .category-button .category-name {
+            flex: 1;
+        }
+footer {
+            padding: 28px;
+            border-top: 1px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 1280px) {.top-header { grid-template-columns: 280px 1fr; }
+            .top-nav { display: none; }
+        }
+
+        @media (max-width: 980px) {
+            .page { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lesson-grid[data-columns="5"] .lesson-image,
+            .lesson-grid[data-columns="6"] .lesson-image {
+                height: 190px;
+            }
+
+            .lesson-grid[data-columns="5"] .lesson-body h3,
+            .lesson-grid[data-columns="6"] .lesson-body h3 {
+                font-size: 20px;
+            }
+
+            .lesson-grid[data-columns="5"] .lesson-description,
+            .lesson-grid[data-columns="6"] .lesson-description {
+                font-size: inherit;
+            }
+
+            .category-button {
+                display: inline-flex;
+                width: calc(50% - 8px);
+                margin-right: 4px;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .top-header {
+                position: static;
+                padding: 13px 16px;
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .brand img { width: 52px; height: 52px; }
+            .page { width: calc(100% - 22px); margin-top: 14px; }
+            .content { padding: 16px; }
+            .content-header { flex-direction: column; }
+            .lesson-grid { grid-template-columns: 1fr; }
+            .lesson-grid[data-columns="5"] .lesson-image,
+            .lesson-grid[data-columns="6"] .lesson-image,
+            .lesson-image {
+                height: 220px;
+            }
+
+            .lesson-grid[data-columns="5"] .lesson-body h3,
+            .lesson-grid[data-columns="6"] .lesson-body h3 {
+                font-size: 20px;
+            }
+
+            .category-button { width: 100%; margin-right: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="top-header">
+    <a class="brand" href="index.html">
+        <img src="chung/LogoMCP.png" alt="Logo MCP Siblings">
+        <div>
+            <h1>MCP Siblings</h1>
+            <p>Interactive English Learning</p>
+        </div>
+    </a>
+
+    <div class="search-box">
+        <input id="searchInput" type="search" placeholder="Tìm kiếm tên bài học..." autocomplete="off">
+        <button id="searchButton" type="button" aria-label="Tìm kiếm bài học" title="Tìm kiếm">🔍</button>
+    </div>
+
+    <nav class="top-nav">
+        <a href="index.html">🏠 Trang chủ</a>
+    </nav>
+</header>
+
+<main class="page">
+    <aside class="sidebar">
+        <h2>Danh mục bài học</h2>
+
+        <p class="category-manage-note">
+            Danh mục được tạo tự động từ dữ liệu trong
+            <strong>lessons.js</strong>. Khi thêm hoặc sửa nhóm bài học,
+            danh sách bên dưới sẽ tự cập nhật.
+        </p>
+
+        <div id="categoryList"></div>
+
+        <div class="sidebar-note">
+            <strong>💡 Hướng dẫn</strong>
+            <p>Chọn nhóm bài học, nhập tên bài vào ô tìm kiếm, sau đó bấm “Bắt đầu học”.</p>
+        </div>
+    </aside>
+
+    <section class="content" id="lessonArea">
+        <div class="content-header">
+            <div>
+                <p class="eyebrow">DANH SÁCH BÀI HỌC</p>
+                <h2 id="categoryTitle">Tất cả bài học</h2>
+                <p id="resultText">Đang tải bài học...</p>
+            </div>
+
+            <div class="content-tools">
+                <label class="tool-label" for="columnSelect">
+                    Số bài mỗi hàng:
+                </label>
+
+                <select id="columnSelect" class="layout-select">
+                    <option value="2">2 bài</option>
+                    <option value="3">3 bài</option>
+                    <option value="4" selected>4 bài</option>
+                    <option value="5">5 bài</option>
+                    <option value="6">6 bài</option>
+                </select>
+
+                <select id="sortSelect" class="sort-box">
+                    <option value="default">Sắp xếp mặc định</option>
+                    <option value="az">Tên từ A đến Z</option>
+                    <option value="za">Tên từ Z đến A</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="lesson-grid" id="lessonGrid"></div>
+
+        <div class="empty-message" id="emptyMessage">
+            <div class="icon">🔍</div>
+            <h3>Không tìm thấy bài học</h3>
+            <p>Hãy thử nhập từ khóa khác hoặc chọn danh mục khác.</p>
+        </div>
+    </section>
+</main>
+
+<footer>© 2026 MCP Siblings – Interactive English Learning</footer>
+
+<script src="lessons.js"></script>
+<script>
+    "use strict";
+
+    const lessons = Array.isArray(window.LESSONS) ? [...window.LESSONS] : [];
+
+    const categoryIconMap = {
+        "hoc-tap": "🎓",
+        "du-lich": "🧳",
+        "cuoc-song": "👨‍👩‍👧",
+        "suc-khoe": "❤️",
+        "giai-tri": "🎵",
+        "cong-viec": "💼",
+        "cong-nghe": "💻"
+    };
+
+    const preferredCategoryOrder = [
+        "hoc-tap",
+        "du-lich",
+        "cuoc-song",
+        "suc-khoe",
+        "giai-tri",
+        "cong-viec",
+        "cong-nghe"
+    ];
+
+    let categoryNames = {
+        all: "Tất cả bài học"
+    };
+
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+    const sortSelect = document.getElementById("sortSelect");
+    const lessonGrid = document.getElementById("lessonGrid");
+    const resultText = document.getElementById("resultText");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const categoryTitle = document.getElementById("categoryTitle");
+    const categoryList = document.getElementById("categoryList");
+    const columnSelect = document.getElementById("columnSelect");
+
+    let selectedCategory = "all";
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    function normalizeCategoryName(lesson) {
+        return String(
+            lesson.categoryName ||
+            lesson.category ||
+            "Khác"
+        ).trim();
+    }
+
+    function getCategories() {
+        const map = new Map();
+
+        lessons.forEach((lesson) => {
+            const key = String(lesson.category || "khac").trim();
+            const name = normalizeCategoryName(lesson);
+
+            if (!map.has(key)) {
+                map.set(key, {
+                    key,
+                    name,
+                    count: 0
+                });
+            }
+
+            map.get(key).count += 1;
+        });
+
+        return Array.from(map.values()).sort((a, b) => {
+            const aIndex = preferredCategoryOrder.indexOf(a.key);
+            const bIndex = preferredCategoryOrder.indexOf(b.key);
+
+            if (aIndex !== -1 && bIndex !== -1) {
+                return aIndex - bIndex;
+            }
+
+            if (aIndex !== -1) return -1;
+            if (bIndex !== -1) return 1;
+
+            return a.name.localeCompare(b.name, "vi");
+        });
+    }
+
+    function renderCategories() {
+        const categories = getCategories();
+        categoryList.innerHTML = "";
+
+        categoryNames = {
+            all: "Tất cả bài học"
+        };
+
+        const allButton = document.createElement("button");
+        allButton.className =
+            "category-button" +
+            (selectedCategory === "all" ? " active" : "");
+        allButton.dataset.category = "all";
+        allButton.innerHTML = `
+            <span class="category-order">📚</span>
+            <span class="category-name">Tất cả bài học</span>
+            <span class="category-count">${lessons.length}</span>
+        `;
+        categoryList.appendChild(allButton);
+
+        categories.forEach((category, index) => {
+            categoryNames[category.key] =
+                `${index + 1}. ${category.name}`;
+
+            const button = document.createElement("button");
+            button.className =
+                "category-button" +
+                (selectedCategory === category.key ? " active" : "");
+            button.dataset.category = category.key;
+
+            const icon =
+                categoryIconMap[category.key] || "📁";
+
+            button.innerHTML = `
+                <span class="category-order">${icon}</span>
+                <span class="category-name">
+                    ${index + 1}. ${escapeHtml(category.name)}
+                </span>
+                <span class="category-count">
+                    ${category.count}
+                </span>
+            `;
+
+            categoryList.appendChild(button);
+        });
+    }
+
+    function setLessonColumns(value) {
+        const columns = Math.max(2, Math.min(6, Number(value) || 4));
+
+        document.documentElement.style.setProperty(
+            "--lesson-columns",
+            String(columns)
+        );
+
+        lessonGrid.dataset.columns = String(columns);
+        columnSelect.value = String(columns);
+        localStorage.setItem(
+            "mcpLessonColumns",
+            String(columns)
+        );
+    }
+
+    function createLessonCard(lesson) {
+        const article = document.createElement("article");
+        article.className = "lesson-card";
+
+        article.innerHTML = `
+            <div class="lesson-image">
+                <img src="${escapeHtml(lesson.image)}" alt="${escapeHtml(lesson.title)}">
+                <span class="lesson-number">Bài ${escapeHtml(lesson.id)}</span>
+            </div>
+
+            <div class="lesson-body">
+                <p class="lesson-category">${escapeHtml(lesson.categoryName)}</p>
+                <h3>${escapeHtml(lesson.title)}</h3>
+                <p class="lesson-description">${escapeHtml(lesson.description)}</p>
+
+                <div class="lesson-meta">
+                    <span class="lesson-level">
+                        ${escapeHtml(lesson.level)}
+                    </span>
+                </div>
+
+                <a class="lesson-link" href="${escapeHtml(lesson.url)}">Bắt đầu học →</a>
+            </div>
+        `;
+
+        return article;
+    }
+
+    function getFilteredLessons() {
+        const keyword = searchInput.value.trim().toLocaleLowerCase("vi");
+
+        const filtered = lessons.filter((lesson) => {
+            const matchesCategory =
+                selectedCategory === "all" ||
+                lesson.category === selectedCategory;
+
+            const searchText = [
+                lesson.title,
+                lesson.description,
+                lesson.categoryName
+            ].join(" ").toLocaleLowerCase("vi");
+
+            const matchesKeyword =
+                keyword === "" ||
+                searchText.includes(keyword);
+
+            return matchesCategory && matchesKeyword;
+        });
+
+        if (sortSelect.value === "az") {
+            filtered.sort((a, b) => a.title.localeCompare(b.title, "vi"));
+        }
+
+        if (sortSelect.value === "za") {
+            filtered.sort((a, b) => b.title.localeCompare(a.title, "vi"));
+        }
+
+        return filtered;
+    }
+
+    function displayLessons() {
+        const filteredLessons = getFilteredLessons();
+        lessonGrid.innerHTML = "";
+
+        categoryTitle.textContent =
+            categoryNames[selectedCategory] || "Danh sách bài học";
+
+        resultText.textContent =
+            `Hiển thị ${filteredLessons.length} trong tổng số ${lessons.length} bài học`;
+
+        if (filteredLessons.length === 0) {
+            lessonGrid.style.display = "none";
+            emptyMessage.style.display = "block";
+            return;
+        }
+
+        lessonGrid.style.display = "grid";
+        emptyMessage.style.display = "none";
+
+        filteredLessons.forEach((lesson) => {
+            lessonGrid.appendChild(createLessonCard(lesson));
+        });
+    }
+
+
+
+    categoryList.addEventListener("click", (event) => {
+        const button =
+            event.target.closest(".category-button");
+
+        if (!button) {
+            return;
+        }
+
+        selectedCategory =
+            button.dataset.category || "all";
+
+        renderCategories();
+        displayLessons();
+    });
+
+    searchInput.addEventListener("input", displayLessons);
+    searchButton.addEventListener("click", displayLessons);
+    sortSelect.addEventListener("change", displayLessons);
+
+    columnSelect.addEventListener("change", () => {
+        setLessonColumns(columnSelect.value);
+    });
+
+    searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            displayLessons();
+        }
+    });
+
+    const savedColumns =
+        localStorage.getItem("mcpLessonColumns") || "4";
+
+    setLessonColumns(savedColumns);
+    renderCategories();
+    displayLessons();
+</script>
+
+</body>
+</html>
