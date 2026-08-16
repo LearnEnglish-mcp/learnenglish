@@ -35,10 +35,10 @@ window.LESSONS = [
         "categoryName": "Công việc",
         "level": "A1 - B1",
         "duration": "12 phút",
-        "folder": "02 office",
+        "folder": "02office",
         "code": "office01",
-        "image": "02 office/office.jpg",
-        "url": "02 office/office01.html",
-        "vocabulary": "02 office/office01_Vocabulary.js"
+        "image": "02office/office.jpg",
+        "url": "02office/office01.html",
+        "vocabulary": "02office/office01_Vocabulary.js"
     }
 ];
