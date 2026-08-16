@@ -1,0 +1,14 @@
+const newEssayData = [
+  {
+    "text": "Chapter 4. The Wardrobe\nA wardrobe is a large piece of furniture used for storing clothes. It usually has doors, shelves, drawers, and a space for hanging shirts, dresses, or jackets.\n\nA wardrobe helps keep the bedroom organized. Clothes can be arranged by type, color, or season. Shoes, bags, and other personal items may also be stored inside.\n\nThe wardrobe should be cleaned and organized regularly. A tidy wardrobe makes it easier to find clothes and keeps the bedroom neat.",
+    "vi": "Chương 4. Tủ quần áo\nTủ quần áo là một món đồ nội thất lớn dùng để cất quần áo. Tủ thường có cửa, kệ, ngăn kéo và một khoảng để treo áo sơ mi, váy hoặc áo khoác.\n\nTủ quần áo giúp phòng ngủ ngăn nắp. Quần áo có thể được sắp xếp theo loại, màu sắc hoặc mùa. Giày, túi và các đồ dùng cá nhân khác cũng có thể được cất bên trong.\n\nTủ quần áo nên được làm sạch và sắp xếp thường xuyên. Một chiếc tủ gọn gàng giúp dễ tìm quần áo hơn và giữ phòng ngủ ngăn nắp."
+  },
+  {
+    "text": "Chapter 5. The Bedside Table\nA bedside table is a small table placed next to the bed. It often has one or more drawers for storing small personal items.\n\nPeople usually put a lamp, an alarm clock, a book, a phone, or a glass of water on the bedside table. These items are easy to reach during the night.\n\nThe table should not hold too many things. Keeping it clean and simple helps the bedroom look peaceful, tidy, and comfortable.",
+    "vi": "Chương 5. Bàn đầu giường\nBàn đầu giường là một chiếc bàn nhỏ đặt cạnh giường. Bàn thường có một hoặc nhiều ngăn kéo để cất những đồ dùng cá nhân nhỏ.\n\nMọi người thường đặt đèn, đồng hồ báo thức, sách, điện thoại hoặc một ly nước trên bàn đầu giường. Những đồ này dễ lấy vào ban đêm.\n\nBàn không nên để quá nhiều đồ. Giữ bàn sạch sẽ và đơn giản giúp phòng ngủ trông yên bình, gọn gàng và thoải mái."
+  },
+  {
+    "text": "Chapter 6. The Lamp\nA bedroom lamp provides light for reading, relaxing, or moving around at night. It is often placed on a bedside table, desk, or wall.\n\nMany bedroom lamps give soft and warm light. This kind of light creates a calm atmosphere and helps the eyes feel comfortable before bedtime.\n\nThe lamp should be placed in a safe position. It should also be turned off when it is not needed to save electricity and reduce the risk of accidents.",
+    "vi": "Chương 6. Đèn phòng ngủ\nĐèn phòng ngủ cung cấp ánh sáng để đọc sách, thư giãn hoặc di chuyển vào ban đêm. Đèn thường được đặt trên bàn đầu giường, bàn làm việc hoặc tường.\n\nNhiều đèn phòng ngủ cho ánh sáng dịu và ấm. Loại ánh sáng này tạo bầu không khí yên tĩnh và giúp mắt cảm thấy dễ chịu trước giờ đi ngủ.\n\nĐèn nên được đặt ở vị trí an toàn. Đèn cũng nên được tắt khi không cần dùng để tiết kiệm điện và giảm nguy cơ tai nạn."
+  }
+];
