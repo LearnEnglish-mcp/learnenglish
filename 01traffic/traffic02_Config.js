@@ -9,7 +9,7 @@ window.LESSON_CONFIG = {
     backupName: "traffic02",
     audioFile: "traffic02.mp3",
     videoFile: "traffic02.mp4",
-    imageFile: "trafic.jpg"
+    imageFile: "traffic.jpg"
 };
 
 const lessonId = "traffic02";
