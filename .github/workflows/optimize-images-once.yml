@@ -22,9 +22,9 @@ jobs:
       - name: Install image optimizers
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y jpegoptim optipng gifsicle webp imagemagick
+          sudo apt-get install -y optipng gifsicle webp imagemagick
 
-      - name: Compress images except logoMCB
+      - name: Compress images except protected logos
         shell: bash
         run: |
           set -uo pipefail
@@ -40,7 +40,8 @@ jobs:
             base="$(basename "$f")"
             low="${base,,}"
 
-            if [[ "$low" == logomcb* ]]; then
+            # Protect both spellings seen/referenced in this repository/conversation.
+            if [[ "$low" == logomcb* || "$low" == logomcp* ]]; then
               skipped_logo=$((skipped_logo + 1))
               continue
             fi
@@ -54,7 +55,13 @@ jobs:
 
             case "$ext" in
               jpg|jpeg)
-                jpegoptim --max=85 --all-progressive --quiet "$f" >/dev/null 2>&1 || ok=0
+                tmp="$(mktemp --suffix=.jpg)"
+                if convert "$f" -auto-orient -strip -interlace Plane -sampling-factor 4:2:0 -quality 85 "$tmp" >/dev/null 2>&1; then
+                  cp -p "$tmp" "$f"
+                else
+                  ok=0
+                fi
+                rm -f "$tmp"
                 ;;
               png)
                 optipng -o5 -quiet "$f" >/dev/null 2>&1 || ok=0
@@ -69,7 +76,6 @@ jobs:
                 rm -f "$tmp"
                 ;;
               webp)
-                # Preserve animated WebP files exactly; re-encoding them as static would lose frames.
                 if webpmux -info "$f" 2>/dev/null | grep -qi 'animation'; then
                   ok=0
                 else
@@ -84,7 +90,7 @@ jobs:
                 ;;
               tif|tiff)
                 tmp="$(mktemp --suffix=.tiff)"
-                if convert "$f" -compress Zip "$tmp" >/dev/null 2>&1; then
+                if convert "$f" -strip -compress Zip "$tmp" >/dev/null 2>&1; then
                   cp -p "$tmp" "$f"
                 else
                   ok=0
@@ -102,7 +108,7 @@ jobs:
                 ;;
               avif)
                 tmp="$(mktemp --suffix=.avif)"
-                if convert "$f" -quality 82 "$tmp" >/dev/null 2>&1; then
+                if convert "$f" -strip -quality 82 "$tmp" >/dev/null 2>&1; then
                   cp -p "$tmp" "$f"
                 else
                   ok=0
@@ -151,7 +157,7 @@ jobs:
           {
             echo '### Image optimization result'
             echo "- Images compressed: $changed"
-            echo "- logoMCB images skipped: $skipped_logo"
+            echo "- Protected logo images skipped: $skipped_logo"
             echo "- Images already optimal/not smaller: $kept"
             echo "- Unsupported/unsafe-to-reencode images kept: $failed"
             echo "- Before: $before_total bytes"
@@ -165,6 +171,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- '*.jpg' '*.jpeg' '*.png' '*.gif' '*.webp' '*.tif' '*.tiff' '*.bmp' '*.avif' ':!**/logoMCB*' ':!**/logomcb*'
-          git commit -m "Optimize images except logoMCB (${saved} bytes saved, ${pct}%)"
+          git add -u -- .
+          git commit -m "Optimize images except protected logos (${saved} bytes saved, ${pct}%)"
           git push origin HEAD:main
