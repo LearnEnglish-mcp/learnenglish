@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="MCP Siblings - Learn English Everyday">
-<title>MCP Siblings - Danh sách bài học</title>
+<title>MCP Siblings - Danh sách bài học (Responsive)</title>
 <style>
 :root {
     --green: #079a76;
@@ -42,8 +42,8 @@ img { display: block; max-width: 100%; }
     z-index: 100;
     height: 88px;
     display: grid;
-    grid-template-columns: 315px minmax(300px, 520px) 1fr;
-    gap: 34px;
+    grid-template-columns: minmax(270px, 315px) minmax(280px, 430px) minmax(390px, 1fr);
+    gap: 24px;
     align-items: center;
     padding: 0 40px;
     background: rgba(255,255,255,.97);
@@ -122,8 +122,9 @@ img { display: block; max-width: 100%; }
 .header-nav {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 30px;
+    justify-content: flex-start;
+    gap: 24px;
+    min-width: 0;
 }
 .nav-link {
     display: inline-flex;
@@ -762,11 +763,112 @@ body.dark .footer-social a:hover {
     }
 }
 
+/* ===== RESPONSIVE HARDENING ===== */
+body { overflow-x: hidden; }
+.search { width: 100%; max-width: 430px; justify-self: center; }
+@media (max-width: 1260px) {
+    .search { max-width: none; }
+}
+@media (max-width: 980px) {
+    .search { grid-column: 1 / -1; width: 100%; }
+}
+@media (max-width: 680px) {
+    .search { grid-column: auto; width: 100%; }
+}
+.header, .header-nav, .layout, .sidebar, .main, .site-about, .site-footer { min-width: 0; }
+@media (max-width: 1260px) {
+    .header {
+        height: auto;
+        min-height: 88px;
+        grid-template-columns: 280px minmax(0,1fr);
+        gap: 14px 20px;
+        padding: 12px 20px;
+    }
+    .header-nav {
+        display: flex;
+        grid-column: 1 / -1;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        padding-top: 2px;
+    }
+    .header-nav .nav-link { padding: 6px 4px; }
+}
+@media (max-width: 980px) {
+    .header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px 20px 14px;
+    }
+    .search { width: 100%; }
+    .header-nav {
+        grid-column: auto;
+        width: 100%;
+        justify-content: center;
+    }
+}
+@media (max-width: 680px) {
+    .header {
+        position: static;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px 12px 12px;
+    }
+    .brand { height: 54px; }
+    .brand-logo { width: 48px; height: 48px; flex-basis: 48px; }
+    .brand-name { font-size: 20px; }
+    .brand-tagline { font-size: 8px; letter-spacing: .10em; }
+    .search { height: 48px; padding-inline: 13px; }
+    .search-icon { margin-right: 8px; font-size: 21px; }
+    .search input { font-size: 15px; }
+    .header-nav { gap: 6px 10px; justify-content: space-evenly; }
+    .header-nav .nav-link { gap: 6px; padding: 5px 2px; font-size: 14px; }
+    .header-nav .nav-icon { width: 28px; height: 28px; border-radius: 6px; font-size: 14px; }
+    .header-divider { height: 28px; }
+    .icon-button { width: 36px; height: 36px; font-size: 22px; }
+    .category-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); overflow: visible; padding: 0 8px 8px; gap: 7px; }
+    .category-btn { min-width: 0; min-height: 56px; grid-template-columns: 28px minmax(0,1fr) auto; gap: 5px; padding: 7px 8px; }
+    .category-btn.active { margin: 0; }
+    .category-symbol { width: 28px; height: 28px; font-size: 18px; }
+    .category-name { font-size: 13px; }
+    .category-count { min-width: 26px; padding: 4px 5px; font-size: 11px; }
+    .main { padding: 20px 14px 28px; }
+    .main-head { gap: 14px; margin-bottom: 18px; }
+    .title-line { width: 100%; gap: 10px; flex-wrap: wrap; }
+    .main h1 { font-size: 21px; }
+    .sort-wrap { width: 100%; gap: 8px; }
+    .sort-wrap select { flex: 1; min-width: 0; height: 42px; }
+    .lesson-grid { gap: 16px; }
+    .lesson-image { height: min(62vw, 255px); }
+    .lesson-body { padding: 13px 15px 16px; }
+    .lesson-title { font-size: 18px; }
+    .pagination { width: 100%; max-width: 100%; gap: 6px; flex-wrap: nowrap; overflow: visible; }
+    .page-btn { min-width: 40px; height: 40px; border-radius: 8px; }
+    .page-btn:first-child, .page-btn:last-child { min-width: 40px; margin: 0; border-radius: 8px; }
+    .site-about-title { font-size: 19px; }
+}
+@media (max-width: 400px) {
+    .header-nav { gap: 4px 6px; justify-content: center; flex-wrap: wrap; }
+    .header-nav .nav-link { gap: 4px; padding: 4px 2px; font-size: 12px; }
+    .header-nav .nav-icon { width: 26px; height: 26px; font-size: 13px; }
+    .header-divider { height: 26px; }
+    .icon-button { width: 32px; height: 32px; font-size: 20px; }
+    .pagination { gap: 4px; }
+    .page-btn { min-width: 36px; height: 36px; font-size: 13px; }
+    .page-btn:first-child, .page-btn:last-child { min-width: 36px; }
+    .category-name { font-size: 12px; }
+    .brand-name { font-size: 18px; }
+    .main h1 { font-size: 19px; }
+}
+@media (max-width: 360px) {
+    .category-list { grid-template-columns: 1fr; }
+    .category-btn { grid-template-columns: 28px minmax(0,1fr) auto; }
+}
 </style>
 </head>
 <body>
 <header class="header">
-    <a class="brand" href="index.html" aria-label="MCP Siblings">
+    <a class="brand" href="index-new.html" aria-label="MCP Siblings">
         <img class="brand-logo" src="chung/LogoMCP.png" alt="MCP Siblings">
         <span class="brand-copy">
             <strong class="brand-name">MCP Siblings</strong>
@@ -1119,17 +1221,29 @@ function renderPagination(totalItems) {
         return;
     }
 
+    const isMobile = window.innerWidth <= 680;
+    let pages;
+    if (!isMobile || totalPages <= 5) {
+        pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+    } else if (currentPage <= 2) {
+        pages = [1, 2, 3];
+    } else if (currentPage >= totalPages - 1) {
+        pages = [totalPages - 2, totalPages - 1, totalPages];
+    } else {
+        pages = [currentPage - 1, currentPage, currentPage + 1];
+    }
+
     let html = `
         <button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""} aria-label="Trang trước">‹</button>
     `;
 
-    for (let page = 1; page <= totalPages; page++) {
+    pages.forEach(page => {
         html += `
             <button class="page-btn ${page === currentPage ? "active" : ""}" data-page="${page}" aria-label="Trang ${page}">
                 ${page}
             </button>
         `;
-    }
+    });
 
     html += `
         <button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""} aria-label="Trang sau">›</button>
