@@ -1,7 +1,7 @@
 window.LESSONS = [
   {
     "id": 1,
-    "title": "CITY TRAFFIC 01",
+    "title": "City Traffic, Public Transportation",
     "description": "Learn about busy city traffic, public transportation, and important rules that help everyone travel safely.\nTìm hiểu về giao thông thành phố đông đúc, phương tiện công cộng và những quy tắc quan trọng giúp mọi người đi lại an toàn.",
     "category": "cuoc-song",
     "categoryName": "Cuộc sống",
@@ -15,7 +15,7 @@ window.LESSONS = [
   },
   {
     "id": 2,
-    "title": "CITY TRAFFIC 02",
+    "title": "Rush Hour, Safe Crossing",
     "description": "Learn how to travel safely during rush hour, cross roads carefully, and ride a bicycle responsibly in the city.\nTìm hiểu cách đi lại an toàn trong giờ cao điểm, băng qua đường cẩn thận và đi xe đạp có trách nhiệm trong thành phố.",
     "category": "cuoc-song",
     "categoryName": "Cuộc sống",
