@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#00c853">
+  <title>Thư viện Video học tiếng Anh (Responsive)</title><script>if(localStorage.getItem("videoDarkMode")==="1")document.documentElement.classList.add("dark")</script><link rel="stylesheet" href="video.css?v=20260823-responsive-new"><link rel="stylesheet" href="player-controls.css?v=20260815-15-new"><link rel="stylesheet" href="youtube-layout.css?v=20260815-14-new"><link rel="stylesheet" href="layout-fixes.css?v=20260815-10-new"><link rel="stylesheet" href="theme-controls.css?v=20260815-8-new"><link rel="stylesheet" href="footer-brand.css?v=20260815-9-new">
+<style>
+    /* Responsive overrides riêng cho video-new.html */
+    .topbar{min-width:0;flex-wrap:wrap;gap:10px 16px}
+    .brand{min-width:0}
+    .main-menu{min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-left:0}
+    .header-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+    @media(max-width:900px){
+      .topbar{padding:10px 16px}
+      .main-menu{order:3;width:100%;justify-content:center;gap:8px}
+      .header-actions{margin-left:auto}
+      .page{width:min(100% - 28px,1200px)}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .title-row{gap:12px}
+    }
+    @media(max-width:560px){
+      .topbar{padding:9px 12px;gap:8px 10px}
+      .main-menu{gap:4px}
+      .nav-link{gap:4px;padding:5px 4px;font-size:14px}
+      .nav-icon{width:28px;height:28px;font-size:14px}
+      .header-actions{width:100%;justify-content:center}
+      .page{width:calc(100% - 20px);margin-top:12px}
+      .player-info{padding:16px}
+      .player-info h2{font-size:21px}
+      .browser{padding-inline:11px}
+      .tabs-row{gap:5px}
+      .tabs{gap:16px;overflow-x:auto}
+      .tab{font-size:14px;padding:16px 0 13px}
+      .icon-button{margin-left:auto;flex:0 0 40px}
+      .list-head{gap:10px}
+      .sort-label{font-size:13px}
+      .grid{grid-template-columns:1fr;gap:20px 12px}
+      .card.short .thumb{width:62%}
+      footer{margin-inline:10px;font-size:12px}
+    }
+  </style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="video-new.html" title="Làm mới trang"><span class="brand-mark"><img src="../chung/LogoMCP.png" alt="MCP Siblings"></span><span>VIDEO TỰ HỌC</span></a><nav class="main-menu" aria-label="Menu chính"><a class="nav-link" href="../index-new.html"><span class="nav-icon home">🏠</span><span>Trang chủ</span></a><a class="nav-link" href="../nguphap/nguphap-new.html"><span class="nav-icon blue">▣</span><span>Ngữ pháp</span></a><a class="nav-link" href="../tuvung/tuvunghoc-new.html"><span class="nav-icon green">▦</span><span>Từ vựng</span></a></nav><div class="header-actions"><button id="nightMode" class="header-icon" type="button" aria-label="Bật chế độ ban đêm" title="Chế độ ban đêm">🌙</button><button id="pageFullscreen" class="header-icon" type="button" aria-label="Toàn màn hình trang" title="Toàn màn hình">⛶</button></div></header>
+<main class="page">
+  <section class="player-card">
+    <div class="player-box"><iframe id="player" src="" title="Trình phát video YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div id="placeholder" class="placeholder"><div class="playbig">▶</div><h1>Chọn một video để bắt đầu</h1><p>Bấm vào bất kỳ clip nào trong thư viện bên dưới.</p></div></div>
+    <div class="speed-control" aria-label="Điều chỉnh tốc độ phát"><span>◷ Tốc độ học</span><div class="speed-options"><button type="button" data-speed="0.5">0.5×</button><button type="button" data-speed="0.75">0.75×</button><button class="active" type="button" data-speed="1">1×</button><button type="button" data-speed="1.25">1.25×</button><button type="button" data-speed="1.5">1.5×</button><button type="button" data-speed="2">2×</button></div><div class="speed-slider"><output id="speedValue" for="speedRange">1,00×</output><div><button id="speedDown" type="button" aria-label="Giảm tốc độ 0,05">−</button><input id="speedRange" type="range" min="0.25" max="2" step="0.05" value="1" aria-label="Tốc độ từ 0,25 đến 2,0; mỗi mức 0,05"><button id="speedUp" type="button" aria-label="Tăng tốc độ 0,05">＋</button></div></div></div>
+    <div class="player-info"><div class="title-row"><div><span class="eyebrow">Đang xem</span><h2 id="currentTitle">Chưa chọn video</h2><p><span id="currentChannel">Video tự học</span><span id="currentViews" class="view-count"></span></p></div><a id="youtubeBtn" class="youtube-btn disabled" href="#" target="_blank" rel="noopener">Mở trên YouTube ↗</a></div><div id="currentMeta" class="meta"></div><div class="description-box"><div id="currentDescription" class="description collapsed">Video sẽ được phát trực tiếp từ YouTube ngay trên trang web này.</div><button id="descriptionToggle" class="description-toggle" type="button" hidden>Mở rộng</button></div></div>
+  </section>
+
+  <aside class="related-panel" aria-label="Các clip cùng danh sách phát"><div class="related-head"><div><span class="eyebrow">Cùng danh sách phát</span><h2 id="relatedCategory">Các clip liên quan</h2></div><span id="relatedCount">0 clip</span></div><div id="relatedList" class="related-list"></div></aside>
+
+  <section class="browser">
+    <div class="tabs-row">
+      <div class="tabs" role="tablist" aria-label="Loại nội dung"><button class="tab active" data-tab="video" role="tab" aria-selected="true">Video</button><button class="tab" data-tab="short" role="tab" aria-selected="false">Shorts</button><button class="tab" data-tab="playlist" role="tab" aria-selected="false">Danh sách phát</button></div>
+      <button id="searchToggle" class="icon-button" type="button" aria-label="Tìm kiếm" aria-expanded="false">⌕</button>
+    </div>
+    <div id="searchPanel" class="search-panel" hidden><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Tìm tên video, chủ đề, kênh..."><button id="clearBtn" type="button" aria-label="Xóa tìm kiếm">×</button></div></div>
+    <div class="list-head"><span id="resultCount">0 video</span><label class="sort-label"><span class="sort-icon">☷</span><span>Sắp xếp theo</span><select id="sortFilter" aria-label="Sắp xếp theo"><option value="default">Mặc định</option><option value="az">Tên A → Z</option><option value="za">Tên Z → A</option></select></label></div>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden><h3>Chưa có nội dung</h3><p>Không tìm thấy nội dung phù hợp trong mục này.</p><button id="resetBtn" type="button">Hiển thị tất cả</button></div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p class="footer-copy">✧ Bản quyền 2026 — Thiết kế bởi <strong>MCP Siblings</strong> với sự đồng hành của AI DeepSeek, Gemini, ChatGPT và các trợ lý thông minh khác. ✦</p>
+  <div class="footer-signature"><span>Design by</span><img src="../chung/LogoMCP.png" alt="Logo MCP Siblings"></div>
+</footer>
+<script src="video-data.js?v=20260815-6-new"></script><script src="video.js?v=20260815-15-new"></script>
+</body></html>
