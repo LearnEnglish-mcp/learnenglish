@@ -69,9 +69,13 @@
     .header-actions{gap:2px}
     .header-actions .header-icon{width:28px;min-width:28px;height:31px;font-size:13px}
   }
+  @media(max-width:767px){
+    .player-box.short-player:fullscreen,.player-box.short-player:-webkit-full-screen{width:100vw!important;height:100vh!important;max-height:none;aspect-ratio:auto;border-radius:0;background:#000}
+    .player-box.short-player:fullscreen iframe,.player-box.short-player:-webkit-full-screen iframe{width:100%;height:100%;object-fit:contain}
+  }
   </style>
 </head>
-<body>
+<body data-auto-portrait-fullscreen="true">
 <header class="topbar"><a class="brand" href="video.html" title="Làm mới trang"><span class="brand-mark"><img src="../chung/LogoMCP.png" alt="MCP Siblings"></span><span>VIDEO TỰ HỌC</span></a><nav class="main-menu" aria-label="Menu chính"><a class="nav-link" href="../index.html"><span class="nav-icon home">🏠</span><span>Trang chủ</span></a><a class="nav-link" href="../nguphap/nguphapNew.html"><span class="nav-icon blue">▣</span><span>Ngữ pháp</span></a><a class="nav-link" href="../tuvung/tuvunghoc.html"><span class="nav-icon green">▦</span><span>Từ vựng</span></a></nav><div class="header-actions"><button id="nightMode" class="header-icon" type="button" aria-label="Bật chế độ ban đêm" title="Chế độ ban đêm">🌙</button><button id="pageFullscreen" class="header-icon" type="button" aria-label="Toàn màn hình trang" title="Toàn màn hình">⛶</button></div></header>
 <main class="page">
   <section class="player-card">
