@@ -2,7 +2,74 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#00c853">
-  <title>Thư viện Video học tiếng Anh</title><script>if(localStorage.getItem("videoDarkMode")==="1")document.documentElement.classList.add("dark")</script><link rel="stylesheet" href="video.css?v=20260823-3"><link rel="stylesheet" href="player-controls.css?v=20260815-15"><link rel="stylesheet" href="youtube-layout.css?v=20260815-14"><link rel="stylesheet" href="layout-fixes.css?v=20260815-10"><link rel="stylesheet" href="theme-controls.css?v=20260815-8"><link rel="stylesheet" href="footer-brand.css?v=20260815-9">
+  <title>Thư viện Video học tiếng Anh (Responsive)</title><script>if(localStorage.getItem("videoDarkMode")==="1")document.documentElement.classList.add("dark")</script><link rel="stylesheet" href="video.css?v=20260823-responsive-new"><link rel="stylesheet" href="player-controls.css?v=20260815-15-new"><link rel="stylesheet" href="youtube-layout.css?v=20260815-14-new"><link rel="stylesheet" href="layout-fixes.css?v=20260815-10-new"><link rel="stylesheet" href="theme-controls.css?v=20260815-8-new"><link rel="stylesheet" href="footer-brand.css?v=20260815-9-new">
+<style>
+    /* Responsive overrides riêng cho video.html */
+    .topbar{min-width:0;flex-wrap:wrap;gap:10px 16px}
+    .brand{min-width:0}
+    .main-menu{min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-left:0}
+    .header-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+    @media(max-width:900px){
+      .topbar{padding:10px 16px}
+      .main-menu{order:3;width:100%;justify-content:center;gap:8px}
+      .header-actions{margin-left:auto}
+      .page{width:min(100% - 28px,1200px)}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .title-row{gap:12px}
+    }
+    @media(max-width:560px){
+      .topbar{padding:9px 12px;gap:8px 10px}
+      .main-menu{gap:4px}
+      .nav-link{gap:4px;padding:5px 4px;font-size:14px}
+      .nav-icon{width:28px;height:28px;font-size:14px}
+      .header-actions{width:100%;justify-content:center}
+      .page{width:calc(100% - 20px);margin-top:12px}
+      .player-info{padding:16px}
+      .player-info h2{font-size:21px}
+      .browser{padding-inline:11px}
+      .tabs-row{gap:5px}
+      .tabs{gap:16px;overflow-x:auto}
+      .tab{font-size:14px;padding:16px 0 13px}
+      .icon-button{margin-left:auto;flex:0 0 40px}
+      .list-head{gap:10px}
+      .sort-label{font-size:13px}
+      .grid{grid-template-columns:1fr;gap:20px 12px}
+      .card.short .thumb{width:62%}
+      footer{margin-inline:10px;font-size:12px}
+    }
+  
+/* One-line navigation menu */
+.main-menu{flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+.main-menu::-webkit-scrollbar{display:none}
+.main-menu .nav-link{flex:0 0 auto}
+.header-actions{flex:0 0 auto;flex-wrap:nowrap;white-space:nowrap}
+.header-actions .header-icon{flex:0 0 auto}
+@media(max-width:900px){.main-menu{width:auto;overflow-x:visible;gap:6px}.header-actions{width:auto;margin-left:auto}}
+@media(max-width:560px){.main-menu{width:100%;justify-content:center;gap:3px}.nav-link{gap:4px;padding:5px 4px;font-size:12px}.nav-icon{width:26px;height:26px;font-size:13px}.header-actions{width:auto;margin-left:auto;gap:4px}.header-actions .header-icon{width:34px;height:34px;font-size:20px}}
+@media(max-width:360px){.main-menu{justify-content:flex-start;overflow-x:auto;gap:2px}.nav-link{padding:4px 3px;font-size:11px}.header-actions .header-icon{width:31px;height:31px;font-size:18px}}
+  /* Final mobile header fix: one single row */
+  @media(max-width:560px){
+    .topbar{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;padding:8px 10px;min-height:60px;overflow-x:auto;scrollbar-width:none}
+    .topbar::-webkit-scrollbar{display:none}
+    .brand{flex:0 0 42px!important;width:42px;height:42px;gap:0}
+    .brand span:last-child{display:none}
+    .brand-mark{width:42px;height:42px}
+    .main-menu{order:0;flex:0 0 auto;width:auto!important;margin-left:0;gap:2px;flex-wrap:nowrap;overflow:visible}
+    .nav-link{flex:0 0 auto;gap:3px;padding:4px 3px;font-size:11px}
+    .nav-link span:last-child{display:none}
+    .nav-icon{width:24px;height:24px;font-size:12px;border-radius:6px}
+    .header-actions{order:0;flex:0 0 auto;width:auto;margin-left:auto;gap:3px;flex-wrap:nowrap;justify-content:flex-end}
+    .header-actions .header-icon{flex:0 0 auto;width:30px;min-width:30px;height:34px;padding:5px 4px;font-size:14px;border-radius:9px}
+  }
+  @media(max-width:360px){
+    .topbar{gap:4px;padding-inline:7px}
+    .main-menu{gap:1px}
+    .nav-link{gap:2px;padding-inline:2px;font-size:10px}
+    .nav-icon{width:22px;height:22px;font-size:11px}
+    .header-actions{gap:2px}
+    .header-actions .header-icon{width:28px;min-width:28px;height:31px;font-size:13px}
+  }
+  </style>
 </head>
 <body>
 <header class="topbar"><a class="brand" href="video.html" title="Làm mới trang"><span class="brand-mark"><img src="../chung/LogoMCP.png" alt="MCP Siblings"></span><span>VIDEO TỰ HỌC</span></a><nav class="main-menu" aria-label="Menu chính"><a class="nav-link" href="../index.html"><span class="nav-icon home">🏠</span><span>Trang chủ</span></a><a class="nav-link" href="../nguphap/nguphapNew.html"><span class="nav-icon blue">▣</span><span>Ngữ pháp</span></a><a class="nav-link" href="../tuvung/tuvunghoc.html"><span class="nav-icon green">▦</span><span>Từ vựng</span></a></nav><div class="header-actions"><button id="nightMode" class="header-icon" type="button" aria-label="Bật chế độ ban đêm" title="Chế độ ban đêm">🌙</button><button id="pageFullscreen" class="header-icon" type="button" aria-label="Toàn màn hình trang" title="Toàn màn hình">⛶</button></div></header>
@@ -30,5 +97,5 @@
   <p class="footer-copy">✧ Bản quyền 2026 — Thiết kế bởi <strong>MCP Siblings</strong> với sự đồng hành của AI DeepSeek, Gemini, ChatGPT và các trợ lý thông minh khác. ✦</p>
   <div class="footer-signature"><span>Design by</span><img src="../chung/LogoMCP.png" alt="Logo MCP Siblings"></div>
 </footer>
-<script src="video-data.js?v=20260815-6"></script><script src="video.js?v=20260815-15"></script>
+<script src="video-data.js?v=20260815-6-new"></script><script src="video.js?v=20260815-15-new"></script>
 </body></html>
